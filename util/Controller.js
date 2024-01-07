@@ -12,7 +12,7 @@ module.exports = async (client, interaction) => {
 	if (!player) {
 		await interaction.reply({
 			embeds: [
-				client.Embed("❌ | **There is no player to control in this server.**"),
+				client.Embed("❌ | **Không có người chơi để kiểm soát trong máy chủ này.**"),
 			],
 		});
 		setTimeout(() => {
@@ -24,7 +24,7 @@ module.exports = async (client, interaction) => {
 		const joinEmbed = new MessageEmbed()
 			.setColor(client.config.embedColor)
 			.setDescription(
-				"❌ | **You must be in a voice channel to use this action!**",
+				"❌ | **Bạn phải ở trong một kênh thoại để sử dụng hành động này!**",
 			);
 		return interaction.reply({ embeds: [joinEmbed], ephemeral: true });
 	}
@@ -36,7 +36,7 @@ module.exports = async (client, interaction) => {
 		const sameEmbed = new MessageEmbed()
 			.setColor(client.config.embedColor)
 			.setDescription(
-				"❌ | **You must be in the same voice channel as me to use this action!**",
+				"❌ | **Bạn phải ở trong cùng một kênh thoại với bot để sử dụng lệnh này!**",
 			);
 		return await interaction.reply({ embeds: [sameEmbed], ephemeral: true });
 	}
@@ -45,11 +45,11 @@ module.exports = async (client, interaction) => {
 		player.queue.clear();
 		player.stop();
 		player.set("autoQueue", false);
-		client.warn(`Player: ${ player.options.guild } | Successfully stopped the player`);
+		client.warn(`Player: ${ player.options.guild } | Đã dừng trình phát nhạc.`);
 		const msg = await interaction.channel.send({
 			embeds: [
 				client.Embed(
-					"⏹️ | **Successfully stopped the player**",
+					"⏹️ | **Đã dừng trình phát nhạc**",
 				),
 			],
 		});
@@ -77,7 +77,7 @@ module.exports = async (client, interaction) => {
 			embeds: [
 				new MessageEmbed()
 					.setColor("RED")
-					.setDescription(`There is no previous song played.`),
+					.setDescription(`Không có bài hát trước đó được phát.`),
 			],
 		});
     }
@@ -95,7 +95,7 @@ module.exports = async (client, interaction) => {
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("There is no song playing right now."),
+						.setDescription("Hiện tại không có bài hát nào đang được phát."),
 				],
 			});
 			setTimeout(() => {
@@ -109,7 +109,7 @@ module.exports = async (client, interaction) => {
 			} else {
 				player.pause(true);
 			}
-			client.warn(`Player: ${ player.options.guild } | Successfully ${ player.paused? "paused" : "resumed" } the player`);
+			client.warn(`Người chơi: ${player.options.guild} | ${player.paused ? "Tạm dừng" : "Tiếp tục"} người chơi thành công`);
 
 			return interaction.update({
 				components: [client.createController(player.options.guild, player)],
@@ -126,7 +126,7 @@ module.exports = async (client, interaction) => {
 			embeds: [
 				new MessageEmbed()
 					.setColor("RED")
-					.setDescription(`There is nothing after [${ song.title }](${ song.uri }) in the queue.`),
+					.setDescription(`Không có gì sau [${song.title}](${song.uri}) trong hàng đợi.`),
 			],
 		})} else player.stop();
 		return interaction.deferUpdate
@@ -141,7 +141,7 @@ module.exports = async (client, interaction) => {
 		} else {
 			player.setTrackRepeat(true);
 		}
-		client.warn(`Player: ${player.options.guild} | Successfully toggled loop ${player.trackRepeat ? "on" : player.queueRepeat ? "queue on" : "off"} the player`);
+		client.warn(`Người chơi: ${player.options.guild} | Đã bật/tắt lặp ${player.trackRepeat ? "bài hát" : player.queueRepeat ? "hàng đợi" : "tất cả"} thành công`);
 
 		interaction.update({
 			components: [client.createController(player.options.guild, player)],
@@ -151,6 +151,6 @@ module.exports = async (client, interaction) => {
 
 	return interaction.reply({
 		ephemeral: true,
-		content: "❌ | **Unknown controller option**",
+		content: "❌ | **Lựa chọn điều khiển không rõ**",
 	});
 };
