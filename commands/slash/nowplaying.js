@@ -63,7 +63,7 @@ const command = new SlashCommand()
 				},
 				// show duration, if live show live
 				{
-					name: "Duration",
+					name: "Thời lượng",
 					value: song.isStream
 						? `\`LIVE\``
 						: `\`${ prettyMilliseconds(player.position, {
