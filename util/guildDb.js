@@ -30,7 +30,7 @@ try {
     try {
         mkdirSync(_guildDbDir);
     } catch (e) {
-        console.error("[ERROR] Can't create guild database folder, module might won't work properly.");
+        console.error("[ERROR] Không thể tạo thư mục cơ sở dữ liệu cho guild, có thể module sẽ không hoạt động đúng cách.");
     }
 }
 
@@ -49,11 +49,11 @@ const _getOrCreateGuildDb = (guild_id) => {
     try {
         d = get(dbName);
     } catch (e) {
-        if (e.message.startsWith("No database with name ")) {
+        if (e.message.startsWith("Không có cơ sở dữ liệu với tên đó ")) {
             create(dbName,_getGuildDbPath(guild_id));
             d = {};
         } else {
-            console.error("[ERROR] Unexpected error:");
+            console.error("[ERROR] Lỗi không mong đợi:");
             console.error(e);
         }
     }
