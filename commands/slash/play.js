@@ -113,7 +113,7 @@ const command = new SlashCommand()
             inline: true,
           },
           {
-            name: "Duration",
+            name: "Thời lượng",
             value: res.tracks[0].isStream
               ? `\`LIVE 🔴 \``
               : `\`${client.ms(res.tracks[0].duration, {
