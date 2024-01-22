@@ -166,8 +166,8 @@ const command = new SlashCommand()
         .setDescription(`[${res.playlist.name}](${query})`)
         .addFields(
           {
-            name: "Enqueued",
-            value: `\`${res.tracks.length}\` songs`,
+            name: "Hàng đợi đã thêm",
+            value: `\`${res.tracks.length}\` bài hát`,
             inline: true,
           },
           {

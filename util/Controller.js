@@ -45,7 +45,7 @@ module.exports = async (client, interaction) => {
 		player.queue.clear();
 		player.stop();
 		player.set("autoQueue", false);
-		client.warn(`Player: ${ player.options.guild } | Đã dừng trình phát nhạc.`);
+		client.warn(`Người chơi: ${ player.options.guild } | Đã dừng trình phát nhạc.`);
 		const msg = await interaction.channel.send({
 			embeds: [
 				client.Embed(

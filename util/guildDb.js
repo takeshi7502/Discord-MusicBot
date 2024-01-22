@@ -30,7 +30,7 @@ try {
     try {
         mkdirSync(_guildDbDir);
     } catch (e) {
-        console.error("[ERROR] Không thể tạo thư mục cơ sở dữ liệu cho guild, có thể module sẽ không hoạt động đúng cách.");
+        console.error("[ERROR] Không thể tạo thư mục cơ sở dữ liệu cho máy chủ, có thể module sẽ không hoạt động đúng cách.");
     }
 }
 

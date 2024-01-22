@@ -17,16 +17,16 @@ const rl = readline.createInterface({
 	});
 	
 	rl.question(
-		"Enter the guild id you wanted to deploy commands: ",
+		"Nhập ID server bạn muốn triển khai lệnh: ",
 		async (guild) => {
-			console.log("Deploying commands to guild...");
+			console.log("Đang triển khai lệnh cho server...");
 			await rest
 				.put(Routes.applicationGuildCommands(config.clientId, guild), {
 					body: commands,
 				})
 				.catch(console.log);
-			console.log("Successfully deployed commands!");
+			console.log("Đã triển khai lệnh thành công!");
 			rl.close();
 		},
-	);
+	);	
 })();

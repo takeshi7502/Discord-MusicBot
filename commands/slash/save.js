@@ -38,7 +38,7 @@ const command = new SlashCommand()
 		const sendtoDmEmbed = new MessageEmbed()
 			.setColor(client.config.embedColor)
 			.setAuthor({
-				name: "Saved track",
+				name: "Bài hát đã lưu",
 				iconURL: `${ interaction.user.displayAvatarURL({ dynamic: true }) }`,
 			})
 			.setDescription(
@@ -58,7 +58,7 @@ const command = new SlashCommand()
 					inline: true,
 				},
 				{
-					name: "Guild được yêu cầu",
+					name: "Server được yêu cầu",
 					value: `\`${ interaction.guild }\``,
 					inline: true,
 				},

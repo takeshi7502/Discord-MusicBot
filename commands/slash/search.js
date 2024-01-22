@@ -154,7 +154,7 @@ const command = new SlashCommand()
                     inline: true,
                   },
                   {
-                    name: "Duration",
+                    name: "Thời lượng",
                     value: res.tracks[0].isStream
                       ? `\`LIVE :red_circle:\``
                       : `\`${client.ms(res.tracks[0].duration, {

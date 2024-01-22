@@ -3,18 +3,18 @@ const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
   .setName("invite")
-  .setDescription("Mời tôi vào máy chủ của bạn")
+  .setDescription("Mời tớ vào máy chủ của bạn")
   .setRun(async (client, interaction, options) => {
     return interaction.reply({
       embeds: [
         new MessageEmbed()
           .setColor(client.config.embedColor)
-          .setTitle(`Mời tôi vào máy chủ của bạn!`),
+          .setTitle(`Mời tớ vào máy chủ của bạn!`),
       ],
       components: [
         new MessageActionRow().addComponents(
           new MessageButton()
-            .setLabel("Invite me")
+            .setLabel("Mời luôn")
             .setStyle("LINK")
             .setURL(
               `https://discord.com/oauth2/authorize?client_id=${
