@@ -10,7 +10,7 @@ const command = new SlashCommand()
 		if (!channel) {
 			return;
 		}
-		
+
 		let player;
 		if (client.manager) {
 			player = client.manager.players.get(interaction.guild.id);
@@ -23,7 +23,7 @@ const command = new SlashCommand()
 				],
 			});
 		}
-		
+
 		if (!player) {
 			return interaction.reply({
 				embeds: [
@@ -34,38 +34,38 @@ const command = new SlashCommand()
 				ephemeral: true,
 			});
 		}
-		
+
 		let twentyFourSevenEmbed = new MessageEmbed().setColor(
 			client.config.embedColor,
 		);
 		const twentyFourSeven = player.get("twentyFourSeven");
-		
+
 		if (!twentyFourSeven || twentyFourSeven === false) {
 			player.set("twentyFourSeven", true);
 		} else {
 			player.set("twentyFourSeven", false);
 		}
 		twentyFourSevenEmbed
-		  .setDescription(`**24/7 mode is** \`${!twentyFourSeven ? "ON" : "OFF"}\``)
-		  .setFooter({
-		    text: `Bot sẽ ${!twentyFourSeven ? "bây giờ" : "ko còn"} duy trì kết nối với kênh thoại 24/7.`
-      });
+			.setDescription(`**Chế độ 24/7 hiện tại là** \`${!twentyFourSeven ? "BẬT" : "TẮT"}\``)
+			.setFooter({
+				text: `Bot ${!twentyFourSeven ? "bây giờ sẽ" : " sẽ ko còn"} duy trì kết nối với kênh thoại 24/7.`
+			});
 		client.warn(
-			`Player: ${ player.options.guild } | [${ colors.blue(
+			`Bot: ${player.options.guild} | [${colors.blue(
 				"24/7",
-			) }] has been [${ colors.blue(
-				!twentyFourSeven? "ENABLED" : "DISABLED",
-			) }] in ${
-				client.guilds.cache.get(player.options.guild)
-					? client.guilds.cache.get(player.options.guild).name
-					: "a guild"
+			)}] đã được [${colors.blue(
+				!twentyFourSeven ? "BẬT" : "TẮT",
+			)}] trong ${client.guilds.cache.get(player.options.guild)
+				? client.guilds.cache.get(player.options.guild).name
+				: "một server"
 			}`,
 		);
-		
+
+
 		if (!player.playing && player.queue.totalSize === 0 && twentyFourSeven) {
 			player.destroy();
 		}
-		
+
 		return interaction.reply({ embeds: [twentyFourSevenEmbed] });
 	});
 

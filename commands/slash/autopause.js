@@ -42,19 +42,19 @@ const command = new SlashCommand()
       player.set("autoPause", false);
     }
     autoPauseEmbed
-			.setDescription(`**Auto Pause is** \`${!autoPause ? "ON" : "OFF"}\``)
+      .setDescription(`**Chế độ Tự Động Tạm Dừng** \`${!autoPause ? "BẬT" : "TẮT"}\``)
 			.setFooter({
 			  text: `Trình phát sẽ ${!autoPause ? "tự động" : "ko còn bị"} dừng khi mọi người rời khỏi kênh thoại.`
 			});
-    client.warn(
-      `Player: ${player.options.guild} | [${colors.blue(
-        "AUTOPAUSE"
-      )}] has been [${colors.blue(!autoPause ? "ENABLED" : "DISABLED")}] in ${
-        client.guilds.cache.get(player.options.guild)
-          ? client.guilds.cache.get(player.options.guild).name
-          : "a guild"
-      }`
-    );
+      client.warn(
+        `Bot: ${player.options.guild} | [${colors.blue(
+          "AUTOPAUSE"
+        )}] đã được [${colors.blue(!autoPause ? "BẬT" : "TẮT")}] trong ${
+          client.guilds.cache.get(player.options.guild)
+            ? client.guilds.cache.get(player.options.guild).name
+            : "một server"
+        }`
+      );      
 
     return interaction.reply({ embeds: [autoPauseEmbed] });
   });

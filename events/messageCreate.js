@@ -7,14 +7,18 @@ module.exports = async (client, message) => {
   const mention = new RegExp(refront + "$");
   const debugIdMention = new RegExp(refront + " debug-id ([^\\s]+)");
   const invite = `https://discord.com/oauth2/authorize?client_id=${
-    client.config.clientId
-  }&permissions=${client.config.inviteScopes.toString().replace(/,/g, "%20")}`;
+      client.config.clientId
+    }&permissions=${
+      client.config.permissions
+    }&scope=${client.config.inviteScopes
+      .toString()
+      .replace(/,/g, "%20")}`;
 
   const buttons = new MessageActionRow().addComponents(
-    new MessageButton().setStyle("LINK").setLabel("Invite me").setURL(invite),
+    new MessageButton().setStyle("LINK").setLabel("Mời tớ").setURL(invite),
     new MessageButton()
       .setStyle("LINK")
-      .setLabel("Support server")
+      .setLabel("Discord server")
       .setURL(`${client.config.supportServer}`)
   );
 
@@ -22,7 +26,7 @@ module.exports = async (client, message) => {
     const mentionEmbed = new MessageEmbed()
       .setColor(client.config.embedColor)
       .setDescription(
-        `Dùng \`/\` trong máy chủ để sử dụng lệnh (Slash Command).\nBạn có thể bắt đầu với \`/help\` để xem tất cả lệnh.\nNếu bạn không thể thấy nó, vui lòng liên hệ <@648036769769717760>.`
+        `Dùng \`/\` trong máy chủ để sử dụng lệnh.\nBạn có thể bắt đầu với \`/help\` để xem tất cả lệnh.\nNếu bạn thấy bot có vấn đề, hãy báo cáo cho <@648036769769717760>.\nCám ơn bạn đã sử dụng bot!`
       );
 
     message.channel.send({

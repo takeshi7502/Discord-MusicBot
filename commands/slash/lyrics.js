@@ -39,7 +39,7 @@ const command = new SlashCommand()
 			});
 		}
 
-		const args = interaction.options.getString("song");
+		const args = interaction.options.getString("bài hát");
 		if (!args && !player) {
 			return interaction.editReply({
 				embeds: [
@@ -82,7 +82,7 @@ const command = new SlashCommand()
 				const menu = new MessageActionRow().addComponents(
 					new MessageSelectMenu()
 						.setCustomId("choose-lyrics")
-						.setPlaceholder("Choose a song")
+						.setPlaceholder("Chọn một bài hát")
 						.addOptions(lyricsResults),
 				);
 
@@ -119,7 +119,7 @@ const command = new SlashCommand()
 										.setEmoji(`📌`)
 										.setStyle('SECONDARY'),
 									new MessageButton()
-										.setLabel('Source')
+										.setLabel('Nguồn')
 										.setURL(url)
 										.setStyle('LINK'),
 								);

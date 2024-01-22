@@ -10,11 +10,11 @@ const LoadCommands = require("../util/loadCommands");
 		return [].concat(cmds.slash).concat(cmds.context);
 	});
 	
-	console.log("Deploying commands to global...");
+	console.log("Triển khai lệnh ra toàn cầu...");
 	await rest
 		.put(Routes.applicationCommands(config.clientId), {
 			body: commands,
 		})
 		.catch(console.log);
-	console.log("Successfully deployed commands!");
+	console.log("Lệnh đã được triển khai thành công!");
 })();

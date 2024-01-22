@@ -59,7 +59,7 @@ const command = new SlashCommand()
 				.setDescription(`**♪ | Đang phát:** [${ title }](${ song.uri })`)
 				.addFields(
 					{
-						name: "Duration",
+						name: "Thời lượng",
 						value: song.isStream
 							? `\`LIVE\``
 							: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
@@ -69,7 +69,7 @@ const command = new SlashCommand()
 						inline: true,
 					},
 					{
-						name: "Volume",
+						name: "Âm lượng",
 						value: `\`${ player.volume }\``,
 						inline: true,
 					},
@@ -101,7 +101,7 @@ const command = new SlashCommand()
 			
 			const chunk = load.chunk(mapping, 10);
 			const pages = chunk.map((s) => s.join("\n"));
-			let page = interaction.options.getNumber("page");
+			let page = interaction.options.getNumber("trang");
 			if (!page) {
 				page = 0;
 			}

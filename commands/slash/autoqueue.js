@@ -45,17 +45,17 @@ const command = new SlashCommand()
 			player.set("autoQueue", false);
 		}
 		autoQueueEmbed
-		  .setDescription(`**Auto Queue is** \`${!autoQueue ? "ON" : "OFF"}\``)
+		.setDescription(`**Chế độ Tự Động Thêm vào Hàng Đợi** \`${!autoQueue ? "BẬT" : "TẮT"}\``)
 		  .setFooter({
 		    text: `Âm nhạc liên quan sẽ ${!autoQueue ? "tự động" : "không"} được thêm vào hàng đợi.`
       });
 		client.warn(
-			`Player: ${ player.options.guild } | [${ colors.blue(
+			`Bot: ${ player.options.guild } | [${ colors.blue(
 				"AUTOQUEUE",
-			) }] has been [${ colors.blue(!autoQueue? "ENABLED" : "DISABLED") }] in ${
+			) }] đã được [${ colors.blue(!autoQueue? "BẬT" : "TẮT")}] trong ${
 				client.guilds.cache.get(player.options.guild)
 					? client.guilds.cache.get(player.options.guild).name
-					: "a guild"
+					: "một server"
 			}`,
 		);
 		

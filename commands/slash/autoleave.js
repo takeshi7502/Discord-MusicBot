@@ -42,19 +42,19 @@ const command = new SlashCommand()
       player.set("autoLeave", false);
     }
     autoLeaveEmbed
-			.setDescription(`**Auto Leave is** \`${!autoLeave ? "ON" : "OFF"}\``)
+    .setDescription(`**Chế độ Tự Động Rời** \`${!autoLeave ? "BẬT" : "TẮT"}\``)
 			.setFooter({
 			  text: `Bot sẽ ${!autoLeave ? "tự động" : "không tự động"} rời đi khi kênh thoại trống.`
 			});
-    client.warn(
-      `Player: ${player.options.guild} | [${colors.blue(
-        "autoLeave"
-      )}] has been [${colors.blue(!autoLeave ? "ENABLED" : "DISABLED")}] in ${
-        client.guilds.cache.get(player.options.guild)
-          ? client.guilds.cache.get(player.options.guild).name
-          : "a guild"
-      }`
-    );
+      client.warn(
+        `Bot: ${player.options.guild} | [${colors.blue(
+          "autoLeave"
+        )}] đã được [${colors.blue(!autoLeave ? "BẬT" : "TẮT")}] trong ${
+          client.guilds.cache.get(player.options.guild)
+            ? client.guilds.cache.get(player.options.guild).name
+            : "một server"
+        }`
+      );      
 
     return interaction.reply({ embeds: [autoLeaveEmbed] });
   });

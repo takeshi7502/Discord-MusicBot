@@ -8,7 +8,7 @@ const command = new SlashCommand()
     let msg = await interaction.channel.send({
       embeds: [
         new MessageEmbed()
-          .setDescription("🏓 | Fetching ping...")
+          .setDescription("🏓 | Đang truy xuất ping...")
           .setColor("#6F8FAF"),
       ],
     });

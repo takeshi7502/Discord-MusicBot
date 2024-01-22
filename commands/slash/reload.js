@@ -48,12 +48,12 @@ const command = new SlashCommand()
 				
 				const totalCmds =
 					client.slashCommands.size + client.contextCommands.size;
-				client.log(`Reloaded ${ totalCmds } commands!`);
+					client.log(`Đã tải lại ${totalCmds} lệnh!`);
 				return interaction.reply({
 					embeds: [
 						new MessageEmbed()
 							.setColor(client.config.embedColor)
-							.setDescription(`Đã tải lại thành công \`${ totalCmds }\` Commands!`)
+							.setDescription(`Đã tải lại thành công \`${ totalCmds }\` Lệnh!`)
 							.setFooter({
 								text: `${ client.user.username } đã được tải lại bởi ${ interaction.user.username }`,
 							})
