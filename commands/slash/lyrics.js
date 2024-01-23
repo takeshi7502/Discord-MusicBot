@@ -39,7 +39,7 @@ const command = new SlashCommand()
 			});
 		}
 
-		const args = interaction.options.getString("bài hát");
+		const args = interaction.options.getString("song");
 		if (!args && !player) {
 			return interaction.editReply({
 				embeds: [
@@ -119,7 +119,7 @@ const command = new SlashCommand()
 										.setEmoji(`📌`)
 										.setStyle('SECONDARY'),
 									new MessageButton()
-										.setLabel('Nguồn')
+										.setLabel('Source')
 										.setURL(url)
 										.setStyle('LINK'),
 								);

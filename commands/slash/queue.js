@@ -101,7 +101,7 @@ const command = new SlashCommand()
 			
 			const chunk = load.chunk(mapping, 10);
 			const pages = chunk.map((s) => s.join("\n"));
-			let page = interaction.options.getNumber("trang");
+			let page = interaction.options.getNumber("page");
 			if (!page) {
 				page = 0;
 			}
