@@ -6,9 +6,11 @@ module.exports = async (client, message) => {
   const refront = `^<@!?${client.user.id}>`;
   const mention = new RegExp(refront + "$");
   const debugIdMention = new RegExp(refront + " debug-id ([^\\s]+)");
-  const invite = `https://discord.com/oauth2/authorize?client_id=${
-    client.config.clientId
-  }&permissions=${client.config.inviteScopes.toString().replace(/,/g, "%20")}`;
+  const invite = `https://discord.com/oauth2/authorize?client_id=${client.config.clientId
+    }&permissions=${client.config.permissions
+    }&scope=${client.config.inviteScopes
+      .toString()
+      .replace(/,/g, "%20")}`;
 
   const buttons = new MessageActionRow().addComponents(
     new MessageButton().setStyle("LINK").setLabel("Invite me").setURL(invite),
@@ -22,7 +24,7 @@ module.exports = async (client, message) => {
     const mentionEmbed = new MessageEmbed()
       .setColor(client.config.embedColor)
       .setDescription(
-        `My prefix on this server is \`/\` (Slash Command).\nTo get started you can type \`/help\` to see all my commands.\nIf you can't see it, Please [re-invite](invite) me with the correct permissions.`
+        `My prefix on this server is \`/\` (Slash Command).\nTo get started you can type \`/help\` to see all my commands.\nIf you see a problem with the bot, please report it to <@648036769769717760>.\nThank you for using the BOT.`
       );
 
     message.channel.send({
