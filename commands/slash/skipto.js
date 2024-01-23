@@ -3,11 +3,11 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("skipto")
-	.setDescription("bỏ qua đến một bài hát cụ thể trong hàng đợi")
+	.setDescription("skip to a specific song in the queue")
 	.addNumberOption((option) =>
 		option
 			.setName("number")
-			.setDescription("Số lượng bản nhạc để bỏ qua đến")
+			.setDescription("The number of tracks to skipto")
 			.setRequired(true),
 	)
 	
@@ -28,7 +28,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -38,7 +38,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Tôi không ở trong một kênh."),
+						.setDescription("I'm not in a channel."),
 				],
 				ephemeral: true,
 			});
@@ -52,7 +52,7 @@ const command = new SlashCommand()
 			if (!position || position < 0 || position > player.queue.size) {
 				let thing = new MessageEmbed()
 					.setColor(client.config.embedColor)
-					.setDescription("❌ | Vị trí không hợp lệ!");
+					.setDescription("❌ | Invalid position!");
 				return interaction.editReply({ embeds: [thing] });
 			}
 			
@@ -61,7 +61,7 @@ const command = new SlashCommand()
 			
 			let thing = new MessageEmbed()
 				.setColor(client.config.embedColor)
-				.setDescription("✅ | Đã bỏ qua đến vị trí chỉ định " + position);
+				.setDescription("✅ | Skipped to position " + position);
 			
 			return interaction.editReply({ embeds: [thing] });
 		} catch {
@@ -72,7 +72,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor(client.config.embedColor)
-						.setDescription("✅ | Đã bỏ qua đến vị trí chỉ định " + position),
+						.setDescription("✅ | Skipped to position " + position),
 				],
 			});
 		}

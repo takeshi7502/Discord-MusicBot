@@ -12,29 +12,29 @@ const rl = readline.createInterface({
 (async () => {
 	const config = await getConfig();
 	const rest = new REST({ version: "9" }).setToken(config.token);
-  
+	
 	if (!process.argv.includes("--global")) {
-	  rl.question(
-		"Nhập ID server bạn muốn xóa lệnh: ",
-		async (guild) => {
-		  console.log("Bot đã được khởi động để xóa lệnh...");
-		  await rest
-			.put(Routes.applicationGuildCommands(config.clientId, guild), {
-			  body: [],
+		rl.question(
+			"Enter the guild id you wanted to delete commands: ",
+			async (guild) => {
+				console.log("Evil bot has been started to delete commands...");
+				await rest
+					.put(Routes.applicationGuildCommands(config.clientId, guild), {
+						body: [],
+					})
+					.catch(console.log);
+				console.log("Evil bot has done the deed, exiting...");
+				rl.close();
+			},
+		);
+	} else {
+		console.log("Evil bot has been started to delete global commands...");
+		await rest
+			.put(Routes.applicationCommands(config.clientId), {
+				body: [],
 			})
 			.catch(console.log);
-		  console.log("Bot đã hoàn thành nhiệm vụ, đang thoát...");
-		  rl.close();
-		},
-	  );
-	} else {
-	  console.log("Bot đã được khởi động để xóa lệnh toàn cầu...");
-	  await rest
-		.put(Routes.applicationCommands(config.clientId), {
-		  body: [],
-		})
-		.catch(console.log);
-	  console.log("Bot đã hoàn thành nhiệm vụ, đang thoát...");
-	  process.exit();
+		console.log("Evil bot has done the deed, exiting...");
+		process.exit();
 	}
-  })();  
+})();

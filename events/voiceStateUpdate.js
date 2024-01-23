@@ -77,11 +77,11 @@ module.exports = async (client, oldState, newState) => {
 					player.pause(false);
 					let playerResumed = new MessageEmbed()
 						.setColor(client.config.embedColor)
-						.setTitle(`Tiếp Tục!`, client.config.iconURL)
+						.setTitle(`Resumed!`, client.config.iconURL)
 						.setDescription(
-							`Đang phát  [${ player.queue.current.title }](${ player.queue.current.uri })`,
+							`Playing  [${ player.queue.current.title }](${ player.queue.current.uri })`,
 						)
-						.setFooter({ text: `Bản nhạc hiện tại đã được tiếp tục` });
+						.setFooter({ text: `The current song has been resumed.` });
 					
 					let resumeMessage = await client.channels.cache
 						.get(player.textChannel)
@@ -106,9 +106,9 @@ module.exports = async (client, oldState, newState) => {
 					
 					let playerPaused = new MessageEmbed()
 						.setColor(client.config.embedColor)
-						.setTitle(`Tạm Dừng!`, client.config.iconURL)
+						.setTitle(`Paused!`, client.config.iconURL)
 						.setFooter({
-							text: `Bản nhạc hiện tại đã bị tạm dừng vì không có ai trong kênh thoại.`,
+							text: `The current song has been paused because theres no one in the voice channel.`,
 						});
 					
 					let pausedMessage = await client.channels.cache
@@ -125,10 +125,10 @@ module.exports = async (client, oldState, newState) => {
 								let leftEmbed = new MessageEmbed()
 									.setColor(client.config.embedColor)
 									.setAuthor({
-									name: "Đã ngắt kết nối!",
+									name: "Disconnected!",
 									iconURL: client.config.iconURL,
 									})
-									.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
+									.setFooter({ text: "Left because there is no one left in the voice channel." })
 									.setTimestamp();
 								let Disconnected = await client.channels.cache
 									.get(player.textChannel)
@@ -143,10 +143,10 @@ module.exports = async (client, oldState, newState) => {
 						let leftEmbed = new MessageEmbed()
 							.setColor(client.config.embedColor)
 							.setAuthor({
-							name: "Đã ngắt kết nối!",
+							name: "Disconnected!",
 							iconURL: client.config.iconURL,
 							})
-							.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
+							.setFooter({ text: "Left because there is no one left in the voice channel." })
 							.setTimestamp();
 						let Disconnected = await client.channels.cache
 							.get(player.textChannel)
@@ -162,9 +162,9 @@ module.exports = async (client, oldState, newState) => {
 					
 					let playerPaused = new MessageEmbed()
 						.setColor(client.config.embedColor)
-						.setTitle(`Tạm Dừng!`, client.config.iconURL)
+						.setTitle(`Paused!`, client.config.iconURL)
 						.setFooter({
-							text: `Bản nhạc hiện tại đã bị tạm dừng vì không có ai trong kênh thoại.`,
+							text: `The current song has been paused because theres no one in the voice channel.`,
 						});
 					
 					let pausedMessage = await client.channels.cache
@@ -177,10 +177,10 @@ module.exports = async (client, oldState, newState) => {
 							let leftEmbed = new MessageEmbed()
 								.setColor(client.config.embedColor)
 								.setAuthor({
-								name: "Đã ngắt kết nối!",
+								name: "Disconnected!",
 								iconURL: client.config.iconURL,
 								})
-								.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
+								.setFooter({ text: "Left because there is no one left in the voice channel." })
 								.setTimestamp();
 							let Disconnected = await client.channels.cache
 								.get(player.textChannel)
@@ -197,10 +197,10 @@ module.exports = async (client, oldState, newState) => {
 						let leftEmbed = new MessageEmbed()
 						.setColor(client.config.embedColor)
 						.setAuthor({
-						name: "Đã ngắt kết nối!",
+						name: "Disconnected!",
 						iconURL: client.config.iconURL,
 						})
-						.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
+						.setFooter({ text: "Left because there is no one left in the voice channel." })
 						.setTimestamp();
 						let Disconnected = await client.channels.cache
 							.get(player.textChannel)

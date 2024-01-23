@@ -10,11 +10,11 @@ const lyricsApi = new Rlyrics();
 
 const command = new SlashCommand()
 	.setName("lyrics")
-	.setDescription("Lấy lời bài hát của một bài hát")
+	.setDescription("Get the lyrics of a song")
 	.addStringOption((option) =>
 		option
 			.setName("song")
-			.setDescription("Bài hát để lấy lời bài hát")
+			.setDescription("The song to get lyrics for")
 			.setRequired(false),
 	)
 	.setRun(async (client, interaction, options) => {
@@ -22,7 +22,7 @@ const command = new SlashCommand()
 			embeds: [
 				new MessageEmbed()
 					.setColor(client.config.embedColor)
-					.setDescription("🔎 | **Đang tìm...**"),
+					.setDescription("🔎 | **Searching...**"),
 			],
 		});
 
@@ -34,7 +34,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -45,7 +45,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có bài hát nào đang phát."),
+						.setDescription("There's nothing playing"),
 				],
 			});
 		}
@@ -82,7 +82,7 @@ const command = new SlashCommand()
 				const menu = new MessageActionRow().addComponents(
 					new MessageSelectMenu()
 						.setCustomId("choose-lyrics")
-						.setPlaceholder("Chọn một bài hát")
+						.setPlaceholder("Choose a song")
 						.addOptions(lyricsResults),
 				);
 
@@ -91,7 +91,7 @@ const command = new SlashCommand()
 						new MessageEmbed()
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`Dưới đây là một số kết quả mà tôi tìm thấy cho \`${query}\`. Vui lòng chọn một bài hát để hiển thị lời trong \`30 giây\`.`
+								`Here are some of the results I found for \`${query}\`. Please choose a song to display lyrics within \`30 seconds\`.`
 							),
 					], components: [menu],
 				});
@@ -131,16 +131,16 @@ const command = new SlashCommand()
 								.setURL(url)
 								.setThumbnail(lyrics.icon)
 								.setFooter({
-									text: 'Lời bài hát được cung cấp bởi MusixMatch.',
+									text: 'Lyrics provided by MusixMatch.',
 									iconURL: musixmatch_icon
 								})
 								.setDescription(lyricsText);
 
 							if (lyricsText.length === 0) {
 								lyricsEmbed
-									.setDescription(`**Rất tiếc, chúng tôi không được ủy quyền để hiển thị lời bài hát này.**`)
+									.setDescription(`**Unfortunately we're not authorized to show these lyrics.**`)
 									.setFooter({
-										text: 'Lời bài hát bị hạn chế bởi MusixMatch.',
+										text: 'Lyrics is restricted by MusixMatch.',
 										iconURL: musixmatch_icon
 									})
 							}
@@ -148,7 +148,7 @@ const command = new SlashCommand()
 							if (lyricsText.length > 4096) {
 								lyricsText = lyricsText.substring(0, 4050) + "\n\n[...]";
 								lyricsEmbed
-									.setDescription(lyricsText + `\nBị cắt bớt, lời bài hát quá dài.`)
+									.setDescription(lyricsText + `\nTruncated, the lyrics were too long.`)
 							}
 
 							return interaction.editReply({
@@ -167,7 +167,7 @@ const command = new SlashCommand()
 							embeds: [
 								new MessageEmbed()
 									.setDescription(
-										`Không có bài hát được chọn. Bạn đã mất quá nhiều thời gian để chọn một bản nhạc.`
+										`No song is selected. You took too long to select a track.`
 									)
 									.setColor(client.config.embedColor),
 							], components: [],
@@ -189,7 +189,7 @@ const command = new SlashCommand()
 						new MessageEmbed()
 							.setColor("RED")
 							.setDescription(
-								`Không tìm thấy kết quả cho \`${query}\`!\nĐảm bảo bạn đã nhập đúng thông tin tìm kiếm.`,
+								`No results found for \`${query}\`!\nMake sure you typed in your search correctly.`,
 							),
 					], components: [button],
 				});
@@ -201,7 +201,7 @@ const command = new SlashCommand()
 					new MessageEmbed()
 						.setColor("RED")
 						.setDescription(
-							`Một lỗi không xác định đã xảy ra, vui lòng kiểm tra console của bạn.`,
+							`An unknown error has occured, please check your console.`,
 						),
 				],
 			});
@@ -217,15 +217,14 @@ const command = new SlashCommand()
 				await interaction.followUp({
 					embeds: [
 						new MessageEmbed()
-							.setTitle(`Mẹo Lấy Lời Bài Hát`)
+							.setTitle(`Lyrics Tips`)
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`Dưới đây là một số mẹo để lấy lời bài hát của bạn một cách chính xác \n\n\
-        						1. Thử thêm tên nghệ sĩ phía trước tên bài hát.\n\
-        						2. Thử tìm lời bài hát bằng cách nhập trực tiếp truy vấn bài hát bằng bàn phím.\n\
-        						3. Tránh tìm kiếm lời bài hát trong các ngôn ngữ khác ngoài tiếng Anh.`,
+								`Here is some tips to get your song lyrics correctly \n\n\
+                                1. Try to add the artist's name in front of the song name.\n\
+                                2. Try to search the lyrics manually by providing the song query using your keyboard.\n\
+                                3. Avoid searching lyrics in languages other than English.`,
 							),
-
 					], ephemeral: true, components: []
 				});
 			};

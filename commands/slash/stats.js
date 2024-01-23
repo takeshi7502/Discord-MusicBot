@@ -6,7 +6,7 @@ const os = require("os");
 
 const command = new SlashCommand()
 	.setName("stats")
-	.setDescription("Nhận thông tin về bot")
+	.setDescription("Get information about the bot")
 	.setRun(async (client, interaction) => {
 		// get OS info
 		const osver = os.platform() + " " + os.release();
@@ -17,7 +17,7 @@ const command = new SlashCommand()
 		// get the uptime in a human readable format
 		const runtime = moment
 			.duration(client.uptime)
-			.format("d[ Ngày]・h[ Giờ]・m[ Phút]・s[ Giây]");
+			.format("d[ Days]・h[ Hrs]・m[ Mins]・s[ Secs]");
 		// show lavalink uptime in a nice format
 		const lavauptime = moment
 			.duration(client.manager.nodes.values().next().value.stats.uptime)
@@ -37,7 +37,7 @@ const command = new SlashCommand()
 		// show system uptime
 		var sysuptime = moment
 			.duration(os.uptime() * 1000)
-			.format("d[ Ngày]・h[ Giờ]・m[ Phút]・s[ Giây]");
+			.format("d[ Days]・h[ Hrs]・m[ Mins]・s[ Secs]");
 		
 		// get commit hash and date
 		let gitHash = "unknown";
@@ -52,10 +52,10 @@ const command = new SlashCommand()
 		}
 		
 		const statsEmbed = new MessageEmbed()
-			.setTitle(`${ client.user.username } Thông tin`)
+			.setTitle(`${ client.user.username } Information`)
 			.setColor(client.config.embedColor)
 			.setDescription(
-				`\`\`\`yml\nTên: ${ client.user.username }#${ client.user.discriminator } [${ client.user.id }]\nAPI: ${ client.ws.ping }ms\nRuntime: ${ runtime }\`\`\``,
+				`\`\`\`yml\nName: ${ client.user.username }#${ client.user.discriminator } [${ client.user.id }]\nAPI: ${ client.ws.ping }ms\nRuntime: ${ runtime }\`\`\``,
 			)
 			.setFields([
 				{

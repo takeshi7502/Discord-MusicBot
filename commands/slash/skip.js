@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("skip")
-	.setDescription("Bỏ qua bài hát hiện tại")
+	.setDescription("Skip the current song")
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
@@ -18,7 +18,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -28,7 +28,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có gì để bỏ qua."),
+						.setDescription("There is nothing to skip."),
 				],
 				ephemeral: true,
 			});
@@ -40,7 +40,7 @@ const command = new SlashCommand()
 			embeds: [
 				new MessageEmbed()
 					.setColor("RED")
-					.setDescription(`Không có gì sau [${ song.title }](${ song.uri }) trong hàng đợi.`),
+					.setDescription(`There is nothing after [${ song.title }](${ song.uri }) in the queue.`),
 			],
 		})}
 		
@@ -51,7 +51,7 @@ const command = new SlashCommand()
 			embeds: [
 				new MessageEmbed()
 					.setColor(client.config.embedColor)
-					.setDescription("✅ | **Đã bỏ qua!**"),
+					.setDescription("✅ | **Skipped!**"),
 			],
 		});
 	});

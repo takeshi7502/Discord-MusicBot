@@ -6,7 +6,7 @@ const pms = require("pretty-ms");
 
 const command = new SlashCommand()
 	.setName("queue")
-	.setDescription("Hiển thị hàng đợi hiện tại")
+	.setDescription("Shows the current queue")
 	
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
@@ -22,7 +22,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -32,7 +32,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có bài hát nào trong hàng đợi."),
+						.setDescription("There are no songs in the queue."),
 				],
 				ephemeral: true,
 			});
@@ -41,7 +41,7 @@ const command = new SlashCommand()
 		if (!player.playing) {
 			const queueEmbed = new MessageEmbed()
 				.setColor(client.config.embedColor)
-				.setDescription("Không có bài hát nào đang phát.");
+				.setDescription("There's nothing playing.");
 			return interaction.reply({ embeds: [queueEmbed], ephemeral: true });
 		}
 		
@@ -56,10 +56,10 @@ const command = new SlashCommand()
             var title = title.replace(/\[/g,"")
 			const queueEmbed = new MessageEmbed()
 				.setColor(client.config.embedColor)
-				.setDescription(`**♪ | Đang phát:** [${ title }](${ song.uri })`)
+				.setDescription(`**♪ | Now playing:** [${ title }](${ song.uri })`)
 				.addFields(
 					{
-						name: "Thời lượng",
+						name: "Duration",
 						value: song.isStream
 							? `\`LIVE\``
 							: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
@@ -69,12 +69,12 @@ const command = new SlashCommand()
 						inline: true,
 					},
 					{
-						name: "Âm lượng",
+						name: "Volume",
 						value: `\`${ player.volume }\``,
 						inline: true,
 					},
 					{
-						name: "Tổng Số Bài Hát",
+						name: "Total Tracks",
 						value: `\`${ player.queue.totalSize - 1 }\``,
 						colonNotation: true,
 						inline: true,
@@ -123,11 +123,11 @@ const command = new SlashCommand()
 				const embedTwo = new MessageEmbed()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+						`**♪ | Now playing:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Queued Tracks**\n${ pages[page] }`,
 					)
 					.addFields(
 						{
-							name: "Thời lượng của bài hát",
+							name: "Track Duration",
 							value: song.isStream
 								? `\`LIVE\``
 								: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
@@ -137,21 +137,21 @@ const command = new SlashCommand()
 							inline: true,
 						},
 						{
-							name: "Tổng thời lượng của tất cả các bài hát",
+							name: "Total Tracks Duration",
 							value: `\`${ pms(queueDuration, {
 								colonNotation: true,
 							}) }\``,
 							inline: true,
 						},
 						{
-							name: "Tổng số bài hát",
+							name: "Total Tracks",
 							value: `\`${ player.queue.totalSize - 1 }\``,
 							colonNotation: true,
 							inline: true,
 						},
 					)
 					.setFooter({
-						text: `Trang ${ page + 1 }/${ pages.length }`,
+						text: `Page ${ page + 1 }/${ pages.length }`,
 					});
 				
 				await interaction
@@ -168,11 +168,11 @@ const command = new SlashCommand()
 				const embedThree = new MessageEmbed()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+						`**♪ | Now playing:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Queued Tracks**\n${ pages[page] }`,
 					)
 					.addFields(
 						{
-							name: "Thời lượng của bài hát",
+							name: "Track Duration",
 							value: song.isStream
 								? `\`LIVE\``
 								: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
@@ -182,21 +182,21 @@ const command = new SlashCommand()
 							inline: true,
 						},
 						{
-							name: "Tổng thời lượng của tất cả các bài hát",
+							name: "Total Tracks Duration",
 							value: `\`${ pms(queueDuration, {
 								colonNotation: true,
 							}) }\``,
 							inline: true,
 						},
 						{
-							name: "Tổng số bài hát",
+							name: "Total Tracks",
 							value: `\`${ player.queue.totalSize - 1 }\``,
 							colonNotation: true,
 							inline: true,
 						},
 					)
 					.setFooter({
-						text: `Trang ${ page + 1 }/${ pages.length }`,
+						text: `Page ${ page + 1 }/${ pages.length }`,
 					});
 				
 				const buttonOne = new MessageButton()
@@ -225,7 +225,7 @@ const command = new SlashCommand()
 						} else {
 							return b
 								.reply({
-									content: `Chỉ có **${interaction.user.tag}** mới có thể sử dụng nút này.`,
+									content: `Only **${ interaction.user.tag }** can use this button.`,
 									ephemeral: true,
 								})
 								.catch(() => {
@@ -248,11 +248,11 @@ const command = new SlashCommand()
 						const embedFour = new MessageEmbed()
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+								`**♪ | Now playing:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Queued Tracks**\n${ pages[page] }`,
 							)
 							.addFields(
 								{
-									name: "Thời lượng của bài hát",
+									name: "Track Duration",
 									value: song.isStream
 										? `\`LIVE\``
 										: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
@@ -262,21 +262,21 @@ const command = new SlashCommand()
 									inline: true,
 								},
 								{
-									name: "Tổng thời lượng của tất cả các bài hát",
+									name: "Total Tracks Duration",
 									value: `\`${ pms(queueDuration, {
 										colonNotation: true,
 									}) }\``,
 									inline: true,
 								},
 								{
-									name: "Tổng số bài hát",
+									name: "Total Tracks",
 									value: `\`${ player.queue.totalSize - 1 }\``,
 									colonNotation: true,
 									inline: true,
 								},
 							)
 							.setFooter({
-								text: `Trang ${ page + 1 }/${ pages.length }`,
+								text: `Page ${ page + 1 }/${ pages.length }`,
 							});
 						
 						await interaction.editReply({
@@ -296,11 +296,11 @@ const command = new SlashCommand()
 						const embedFive = new MessageEmbed()
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+								`**♪ | Now playing:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Queued Tracks**\n${ pages[page] }`,
 							)
 							.addFields(
 								{
-									name: "Thời lượng của bài hát",
+									name: "Track Duration",
 									value: song.isStream
 										? `\`LIVE\``
 										: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
@@ -310,21 +310,21 @@ const command = new SlashCommand()
 									inline: true,
 								},
 								{
-									name: "Tổng thời lượng của tất cả các bài hát",
+									name: "Total Tracks Duration",
 									value: `\`${ pms(queueDuration, {
 										colonNotation: true,
 									}) }\``,
 									inline: true,
 								},
 								{
-									name: "Tổng số bài hát",
+									name: "Total Tracks",
 									value: `\`${ player.queue.totalSize - 1 }\``,
 									colonNotation: true,
 									inline: true,
 								},
 							)
 							.setFooter({
-								text: `Trang ${ page + 1 }/${ pages.length }`,
+								text: `Page ${ page + 1 }/${ pages.length }`,
 							});
 						
 						await interaction

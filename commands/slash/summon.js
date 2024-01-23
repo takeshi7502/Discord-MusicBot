@@ -3,14 +3,14 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("summon")
-	.setDescription("Gọi bot vào kênh.")
+	.setDescription("Summons the bot to the channel.")
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!interaction.member.voice.channel) {
 			const joinEmbed = new MessageEmbed()
 				.setColor(client.config.embedColor)
 				.setDescription(
-					"❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này.**",
+					"❌ | **You must be in a voice channel to use this command.**",
 				);
 			return interaction.reply({ embeds: [joinEmbed], ephemeral: true });
 		}
@@ -28,7 +28,7 @@ const command = new SlashCommand()
 		
 		interaction.reply({
 			embeds: [
-				client.Embed(`:thumbsup: | **Đã tham gia thành công <#${ channel.id }>!**`),
+				client.Embed(`:thumbsup: | **Successfully joined <#${ channel.id }>!**`),
 			],
 		});
 	});

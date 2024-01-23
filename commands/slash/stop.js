@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("stop")
-	.setDescription("Dừng lại những gì bot đang phát và rời khỏi kênh thoại\n(Lưu ý: Lệnh này sẽ xóa toàn bộ hàng đợi)")
+	.setDescription("Stops whatever the bot is playing and leaves the voice channel\n(This command will clear the queue)")
 	
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
@@ -19,7 +19,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -29,7 +29,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Tôi không ở trong một kênh thoại."),
+						.setDescription("I'm not in a channel."),
 				],
 				ephemeral: true,
 			});
@@ -47,7 +47,7 @@ const command = new SlashCommand()
 			embeds: [
 				new MessageEmbed()
 					.setColor(client.config.embedColor)
-					.setDescription(`:wave: | **Tạm biệt nha!**`),
+					.setDescription(`:wave: | **Bye Bye!**`),
 			],
 		});
 	});

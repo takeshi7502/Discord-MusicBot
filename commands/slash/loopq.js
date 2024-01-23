@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("loopq")
-	.setDescription("Lặp lại hàng đợi bài hát hiện tại")
+	.setDescription("Loop the current song queue")
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
@@ -18,7 +18,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -28,7 +28,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có bài hát đang phát."),
+						.setDescription("There is no music playing."),
 				],
 				ephemeral: true,
 			});
@@ -44,7 +44,7 @@ const command = new SlashCommand()
 				new MessageEmbed()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`:thumbsup: | **Lặp hàng đợi đã kích hoạt \`${ queueRepeat }\`**`,
+						`:thumbsup: | **Loop queue is now \`${ queueRepeat }\`**`,
 					),
 			],
 		});

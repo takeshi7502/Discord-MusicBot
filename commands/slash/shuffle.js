@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("shuffle")
-	.setDescription("Ngẫu nhiên hoá hàng đợi")
+	.setDescription("Randomizes the queue")
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
@@ -18,7 +18,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -28,7 +28,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có bản nhạc đang phát."),
+						.setDescription("There is no music playing."),
 				],
 				ephemeral: true,
 			});
@@ -39,7 +39,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không đủ bài hát trong hàng đợi."),
+						.setDescription("There are not enough songs in the queue."),
 				],
 				ephemeral: true,
 			});
@@ -51,7 +51,7 @@ const command = new SlashCommand()
 			embeds: [
 				new MessageEmbed()
 					.setColor(client.config.embedColor)
-					.setDescription("🔀 | **Đã hoàn thành việc trộn ngẫu nhiên hàng đợi.**"),
+					.setDescription("🔀 | **Successfully shuffled the queue.**"),
 			],
 		});
 	});

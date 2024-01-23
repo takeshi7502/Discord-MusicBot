@@ -3,11 +3,11 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("remove")
-	.setDescription("Xóa bài hát bạn không muốn khỏi hàng đợi")
+	.setDescription("Remove track you don't want from queue")
 	.addNumberOption((option) =>
 		option
 			.setName("number")
-			.setDescription("Nhập số thứ tự của bài hát.")
+			.setDescription("Enter track number.")
 			.setRequired(true),
 	)
 	
@@ -27,7 +27,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -37,7 +37,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có bài hát để xóa."),
+						.setDescription("There are no songs to remove."),
 				],
 				ephemeral: true,
 			});
@@ -50,7 +50,7 @@ const command = new SlashCommand()
 			let thing = new MessageEmbed()
 				.setColor(client.config.embedColor)
 				.setDescription(
-					`Hàng đợi hiện tại chỉ có **${player.queue.size}** bài hát.`,
+					`Current queue has only **${ player.queue.size }** track`,
 				);
 			return interaction.editReply({ embeds: [thing] });
 		}
@@ -61,7 +61,7 @@ const command = new SlashCommand()
 		const number = position + 1;
 		let removeEmbed = new MessageEmbed()
 			.setColor(client.config.embedColor)
-			.setDescription(`Đã xóa bài hát số **${number}** khỏi hàng đợi.`);
+			.setDescription(`Removed track number **${ number }** from queue`);
 		return interaction.editReply({ embeds: [removeEmbed] });
 	});
 

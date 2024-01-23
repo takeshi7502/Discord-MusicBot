@@ -3,12 +3,12 @@ const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
   .setName("ping")
-  .setDescription("Xem độ trễ của bot")
+  .setDescription("View the bot's latency")
   .setRun(async (client, interaction, options) => {
     let msg = await interaction.channel.send({
       embeds: [
         new MessageEmbed()
-          .setDescription("🏓 | Đang truy xuất ping...")
+          .setDescription("🏓 | Fetching ping...")
           .setColor("#6F8FAF"),
       ],
     });
@@ -59,7 +59,7 @@ const command = new SlashCommand()
           )
           .setColor(client.config.embedColor)
           .setFooter({
-            text: `Được yêu cầu bởi ${interaction.user.tag}`,
+            text: `Requested by ${interaction.user.tag}`,
             iconURL: interaction.user.avatarURL(),
           }),
       ],

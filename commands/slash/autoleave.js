@@ -4,7 +4,7 @@ const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
   .setName("autoleave")
-  .setDescription("Tự động rời đi khi mọi người rời khỏi kênh thoại (bật/tắt)")
+  .setDescription("Automatically leaves when everyone leaves the voice channel (toggle)")
   .setRun(async (client, interaction) => {
     let channel = await client.getChannel(client, interaction);
     if (!channel) return;
@@ -17,7 +17,7 @@ const command = new SlashCommand()
         embeds: [
           new MessageEmbed()
             .setColor("RED")
-            .setDescription("Nút Lavalink không được kết nối"),
+            .setDescription("Lavalink node is not connected"),
         ],
       });
 
@@ -26,7 +26,7 @@ const command = new SlashCommand()
         embeds: [
           new MessageEmbed()
             .setColor("RED")
-            .setDescription("Không có gì đang phát trong hàng đợi"),
+            .setDescription("There's nothing playing in the queue"),
         ],
         ephemeral: true,
       });
@@ -42,19 +42,19 @@ const command = new SlashCommand()
       player.set("autoLeave", false);
     }
     autoLeaveEmbed
-    .setDescription(`**Chế độ Tự Động Rời** \`${!autoLeave ? "BẬT" : "TẮT"}\``)
+			.setDescription(`**Auto Leave is** \`${!autoLeave ? "ON" : "OFF"}\``)
 			.setFooter({
-			  text: `Bot sẽ ${!autoLeave ? "tự động" : "không tự động"} rời đi khi kênh thoại trống.`
+			  text: `The player will ${!autoLeave ? "now automatically" : "not automatically"} leave when the voice channel is empty.`
 			});
-      client.warn(
-        `Bot: ${player.options.guild} | [${colors.blue(
-          "autoLeave"
-        )}] đã được [${colors.blue(!autoLeave ? "BẬT" : "TẮT")}] trong ${
-          client.guilds.cache.get(player.options.guild)
-            ? client.guilds.cache.get(player.options.guild).name
-            : "một server"
-        }`
-      );      
+    client.warn(
+      `Player: ${player.options.guild} | [${colors.blue(
+        "autoLeave"
+      )}] has been [${colors.blue(!autoLeave ? "ENABLED" : "DISABLED")}] in ${
+        client.guilds.cache.get(player.options.guild)
+          ? client.guilds.cache.get(player.options.guild).name
+          : "a guild"
+      }`
+    );
 
     return interaction.reply({ embeds: [autoLeaveEmbed] });
   });

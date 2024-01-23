@@ -3,11 +3,11 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("volume")
-	.setDescription("Thay đổi âm lượng của bài hát hiện tại.")
+	.setDescription("Change the volume of the current song.")
 	.addNumberOption((option) =>
 		option
 			.setName("amount")
-			.setDescription("Lượng âm lượng mà bạn muốn thay đổi. Ví dụ: 10")
+			.setDescription("Amount of volume you want to change. Ex: 10")
 			.setRequired(false),
 	)
 	.setRun(async (client, interaction) => {
@@ -24,7 +24,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -34,7 +34,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có bản nhạc đang phát."),
+						.setDescription("There is no music playing."),
 				],
 				ephemeral: true,
 			});
@@ -47,7 +47,7 @@ const command = new SlashCommand()
 					new MessageEmbed()
 						.setColor(client.config.embedColor)
 						.setDescription(
-							`:loud_sound: | Âm lượng hiện tại **${ player.volume }**`,
+							`:loud_sound: | Current volume **${ player.volume }**`,
 						),
 				],
 			});
@@ -59,7 +59,7 @@ const command = new SlashCommand()
 				new MessageEmbed()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`:loud_sound: | Đã thiết lập âm lượng thành **${ player.volume }**`,
+						`:loud_sound: | Successfully set volume to **${ player.volume }**`,
 					),
 			],
 		});

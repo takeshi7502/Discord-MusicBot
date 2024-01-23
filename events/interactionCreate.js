@@ -13,7 +13,7 @@ module.exports = async (client, interaction) => {
         );
         if (!command || !command.run) {
             return interaction.reply(
-                "Xin lỗi, lệnh bạn đã sử dụng không có bất kỳ chức năng thực thi nào",
+                "Sorry the command you used doesn't have any run function",
             );
         }
         client.commandsRan++;
@@ -27,7 +27,7 @@ module.exports = async (client, interaction) => {
         );
         if (!command || !command.run) {
             return interaction.reply(
-                "Xin lỗi, lệnh bạn vừa sử dụng không có bất kỳ chức năng thực thi nào",
+                "Sorry the command you used doesn't have any run function",
             );
         }
         client.commandsRan++;

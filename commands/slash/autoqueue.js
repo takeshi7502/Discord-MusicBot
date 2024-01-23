@@ -4,7 +4,7 @@ const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
 	.setName("autoqueue")
-	.setDescription("Tự động thêm bài hát vào hàng đợi (bật/tắt)")
+	.setDescription("Automatically add songs to the queue (toggle)")
 	.setRun(async (client, interaction) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
@@ -19,7 +19,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -29,7 +29,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có gì đang phát trong hàng đợi."),
+						.setDescription("There's nothing playing in the queue"),
 				],
 				ephemeral: true,
 			});
@@ -45,17 +45,17 @@ const command = new SlashCommand()
 			player.set("autoQueue", false);
 		}
 		autoQueueEmbed
-		.setDescription(`**Chế độ Tự Động Thêm vào Hàng Đợi** \`${!autoQueue ? "BẬT" : "TẮT"}\``)
+		  .setDescription(`**Auto Queue is** \`${!autoQueue ? "ON" : "OFF"}\``)
 		  .setFooter({
-		    text: `Âm nhạc liên quan sẽ ${!autoQueue ? "tự động" : "không"} được thêm vào hàng đợi.`
+		    text: `Related music will ${!autoQueue ? "now be automatically" : "no longer be"} added to the queue.`
       });
 		client.warn(
-			`Bot: ${ player.options.guild } | [${ colors.blue(
+			`Player: ${ player.options.guild } | [${ colors.blue(
 				"AUTOQUEUE",
-			) }] đã được [${ colors.blue(!autoQueue? "BẬT" : "TẮT")}] trong ${
+			) }] has been [${ colors.blue(!autoQueue? "ENABLED" : "DISABLED") }] in ${
 				client.guilds.cache.get(player.options.guild)
 					? client.guilds.cache.get(player.options.guild).name
-					: "một server"
+					: "a guild"
 			}`,
 		);
 		

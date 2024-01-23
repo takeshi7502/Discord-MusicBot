@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("clear")
-	.setDescription("Xóa tất cả các bài hát khỏi hàng đợi.")
+	.setDescription("Clear all tracks from queue")
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
@@ -18,7 +18,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -28,7 +28,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Hiện tại không có bài hát nào đang phát."),
+						.setDescription("Nothing is playing right now."),
 				],
 				ephemeral: true,
 			});
@@ -37,7 +37,7 @@ const command = new SlashCommand()
 		if (!player.queue || !player.queue.length || player.queue.length === 0) {
 			let cembed = new MessageEmbed()
 				.setColor(client.config.embedColor)
-				.setDescription("❌ | **Không hợp lệ, không đủ bài hát để xóa.**");
+				.setDescription("❌ | **Invalid, Not enough track to be cleared.**");
 			
 			return interaction.reply({ embeds: [cembed], ephemeral: true });
 		}
@@ -46,7 +46,7 @@ const command = new SlashCommand()
 		
 		let clearEmbed = new MessageEmbed()
 			.setColor(client.config.embedColor)
-			.setDescription(`✅ | **Đã xóa hàng đợi!**`);
+			.setDescription(`✅ | **Cleared the queue!**`);
 		
 		return interaction.reply({ embeds: [clearEmbed] });
 	});

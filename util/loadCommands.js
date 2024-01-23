@@ -24,9 +24,9 @@ const LoadDirectory = (dir) => {
 				let cmd = require(CommandsDir + "/" + file);
 				if (!cmd || (dir == "context" && !cmd.command)) {
 					return console.log(
-						"Không thể tải lệnh: " +
+						"Unable to load Command: " +
 						file.split(".")[0] +
-						", Tệp không có lệnh nào",
+						", File doesn't have either command",
 					);
 				}
 				if (dir == "context") {

@@ -3,17 +3,17 @@ const { MessageEmbed } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("move")
-	.setDescription("Di chuyển bài hát đến một vị trí khác")
+	.setDescription("Moves track to a different position")
 	.addIntegerOption((option) =>
 		option
 			.setName("track")
-			.setDescription("Số thứ tự của bài hát để di chuyển")
+			.setDescription("The track number to move")
 			.setRequired(true),
 	)
 	.addIntegerOption((option) =>
 		option
 			.setName("position")
-			.setDescription("Vị trí để di chuyển bài hát đến")
+			.setDescription("The position to move the track to")
 			.setRequired(true),
 	)
 	
@@ -34,7 +34,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -44,7 +44,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có bài hát nào đang phát."),
+						.setDescription("There's nothing playing."),
 				],
 				ephemeral: true,
 			});
@@ -52,12 +52,12 @@ const command = new SlashCommand()
 		
 		let trackNum = Number(track) - 1;
 		if (trackNum < 0 || trackNum > player.queue.length - 1) {
-			return interaction.reply(":x: | **Số thứ tự bài hát không hợp lệ**");
+			return interaction.reply(":x: | **Invalid track number**");
 		}
 		
 		let dest = Number(position) - 1;
 		if (dest < 0 || dest > player.queue.length - 1) {
-			return interaction.reply(":x: | **Số thứ tự vị trí không hợp lệ**");
+			return interaction.reply(":x: | **Invalid position number**");
 		}
 		
 		const thing = player.queue[trackNum];
@@ -67,7 +67,7 @@ const command = new SlashCommand()
 			embeds: [
 				new MessageEmbed()
 					.setColor(client.config.embedColor)
-					.setDescription(":white_check_mark: | **Đã di chuyển bài hát**"),
+					.setDescription(":white_check_mark: | **Moved track**"),
 			],
 		});
 	});

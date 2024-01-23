@@ -3,11 +3,11 @@ const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
 	.setName("filters")
-	.setDescription("thêm hoặc xóa bộ lọc")
+	.setDescription("add or remove filters")
 	.addStringOption((option) =>
 		option
 			.setName("preset")
-			.setDescription("bộ cài đặt để thêm vào")
+			.setDescription("the preset to add")
 			.setRequired(true)
 			.addChoices(
 				{ name: "Nightcore", value: "nightcore" },
@@ -40,7 +40,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Nút Lavalink không được kết nối"),
+						.setDescription("Lavalink node is not connected"),
 				],
 			});
 		}
@@ -50,7 +50,7 @@ const command = new SlashCommand()
 				embeds: [
 					new MessageEmbed()
 						.setColor("RED")
-						.setDescription("Không có nhạc đang phát."),
+						.setDescription("There's no music playing."),
 				],
 				ephemeral: true,
 			});
@@ -60,42 +60,41 @@ const command = new SlashCommand()
 		let filtersEmbed = new MessageEmbed().setColor(client.config.embedColor);
 		
 		if (args == "nightcore") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Nightcore hiện đang hoạt động!");
+			filtersEmbed.setDescription("✅ | Nightcore filter is now active!");
 			player.nightcore = true;
 		} else if (args == "bassboost") {
-			filtersEmbed.setDescription("✅ | Bộ lọc BassBoost hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | BassBoost filter is now on!");
 			player.bassboost = true;
 		} else if (args == "vaporwave") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Vaporwave hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Vaporwave filter is now on!");
 			player.vaporwave = true;
 		} else if (args == "pop") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Pop hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Pop filter is now on!");
 			player.pop = true;
 		} else if (args == "soft") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Soft hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Soft filter is now on!");
 			player.soft = true;
 		} else if (args == "treblebass") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Treblebass hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Treblebass filter is now on!");
 			player.treblebass = true;
 		} else if (args == "eightD") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Eight Dimension hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Eight Dimension filter is now on!");
 			player.eightD = true;
 		} else if (args == "karaoke") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Karaoke hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Karaoke filter is now on!");
 			player.karaoke = true;
 		} else if (args == "vibrato") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Vibrato hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Vibrato filter is now on!");
 			player.vibrato = true;
 		} else if (args == "tremolo") {
-			filtersEmbed.setDescription("✅ | Bộ lọc Tremolo hiện đang được kích hoạt!");
+			filtersEmbed.setDescription("✅ | Tremolo filter is now on!");
 			player.tremolo = true;
 		} else if (args == "off") {
-			filtersEmbed.setDescription("✅ | EQ đã được xóa!");
+			filtersEmbed.setDescription("✅ | EQ has been cleared!");
 			player.reset();
 		} else {
-			filtersEmbed.setDescription("❌ | Bộ lọc không hợp lệ!");
+			filtersEmbed.setDescription("❌ | Invalid filter!");
 		}
-		
 		
 		return interaction.reply({ embeds: [filtersEmbed] });
 	});

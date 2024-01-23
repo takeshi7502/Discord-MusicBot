@@ -2,11 +2,11 @@ const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
 	.setName("clean")
-	.setDescription("Làm sạch 100 tin nhắn cuối cùng của bot từ kênh.")
+	.setDescription("Cleans the last 100 bot messages from channel.")
 	.addIntegerOption((option) =>
 		option
 			.setName("number")
-			.setDescription("Số lượng tin nhắn cần xóa.")
+			.setDescription("Number of messages to delete.")
 			.setMinValue(2).setMaxValue(100)
 			.setRequired(false),
 	)
@@ -31,13 +31,13 @@ const command = new SlashCommand()
 						!deletedMessages.some(deletedMsg => deletedMsg == msg);
 					});
 					if (messages.size > 0) {
-						client.log(`Đang xóa [${messages.size}] tin nhắn cũ hơn 14 ngày.`)
+						client.log(`Deleting [${ messages.size }] messages older than 14 days.`)
 						for (const msg of messages) {
 							await msg.delete();
 						}
 					}
 					
-					await interaction.editReply({ embeds: [client.Embed(`:white_check_mark: | Đã xóa ${botMessages.length} tin nhắn của bot.`)] });
+					await interaction.editReply({ embeds: [client.Embed(`:white_check_mark: | Deleted ${ botMessages.length } bot messages`)] });
 					setTimeout(() => {
 						interaction.deleteReply();
 					}, 5000);

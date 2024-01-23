@@ -11,7 +11,7 @@ const { filter } = require("lodash");
 
 const command = new SlashCommand()
   .setName("help")
-  .setDescription("Hiển thị danh sách này")
+  .setDescription("Shows this list")
   .setRun(async (client, interaction) => {
     await interaction.deferReply().catch((_) => {});
     // map the commands name and description to the embed
@@ -44,11 +44,11 @@ const command = new SlashCommand()
     const helpEmbed = new MessageEmbed()
       .setColor(client.config.embedColor)
       .setAuthor({
-        name: `Lệnh của ${client.user.username}`,
+        name: `Commands of ${client.user.username}`,
         iconURL: client.config.iconURL,
       })
       .setTimestamp()
-      .setFooter({ text: `Trang ${pageNo + 1} / ${maxPages}` });
+      .setFooter({ text: `Page ${pageNo + 1} / ${maxPages}` });
 
     // initial temporary array
     var tempArray = filteredCommands.slice(
@@ -62,11 +62,11 @@ const command = new SlashCommand()
     helpEmbed.addFields({
       name: "Credits",
       value:
-        `Phiên Bản Discord Music Bot: v${
+        `Discord Music Bot Version: v${
           require("../../package.json").version
         }; Build: ${gitHash}` +
         "\n" +
-        `[✨ Discord Server](${client.config.supportServer}) | [Vấn đề](${client.config.Issues}) | [Nguồn](https://github.com/SudhanPlayz/Discord-MusicBot/tree/v5) | [Mời tôi](https://discord.com/oauth2/authorize?client_id=${client.config.clientId}&permissions=${client.config.permissions}&scope=bot%20applications.commands)`,
+        `[✨ Support Server](${client.config.supportServer}) | [Issues](${client.config.Issues}) | [Source](https://github.com/SudhanPlayz/Discord-MusicBot/tree/v5) | [Invite Me](https://discord.com/oauth2/authorize?client_id=${client.config.clientId}&permissions=${client.config.permissions}&scope=bot%20applications.commands)`,
     });
 
     // Construction of the buttons for the embed
@@ -113,16 +113,16 @@ const command = new SlashCommand()
         //console.log(cmd);
         helpEmbed
           .addFields({ name: cmd.name, value: cmd.description })
-          .setFooter({ text: `Trang ${pageNo + 1} / ${maxPages}` });
+          .setFooter({ text: `Page ${pageNo + 1} / ${maxPages}` });
       });
       helpEmbed.addFields({
         name: "Credits",
         value:
-          `Phiên Bản Discord Music Bot: v${
+          `Discord Music Bot Version: v${
             require("../../package.json").version
           }; Build: ${gitHash}` +
           "\n" +
-          `[✨ Discord Server](${client.config.supportServer}) | [Vấn đề](${client.config.Issues}) | [Nguồn](https://github.com/SudhanPlayz/Discord-MusicBot/tree/v5) | [Mời tôi](https://discord.com/oauth2/authorize?client_id=${client.config.clientId}&permissions=${client.config.permissions}&scope=bot%20applications.commands)`,
+          `[✨ Support Server](${client.config.supportServer}) | [Issues](${client.config.Issues}) | [Source](https://github.com/SudhanPlayz/Discord-MusicBot/tree/v5) | [Invite Me](https://discord.com/oauth2/authorize?client_id=${client.config.clientId}&permissions=${client.config.permissions}&scope=bot%20applications.commands)`,
       });
       await iter.update({
         embeds: [helpEmbed],

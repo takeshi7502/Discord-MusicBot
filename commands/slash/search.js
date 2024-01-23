@@ -8,11 +8,11 @@ const {
 
 const command = new SlashCommand()
   .setName("search")
-  .setDescription("Tìm kiếm một bài hát")
+  .setDescription("Search for a song")
   .addStringOption((option) =>
     option
       .setName("query")
-      .setDescription("Bài hát để tìm kiếm")
+      .setDescription("The song to search for")
       .setRequired(true)
   )
   .setRun(async (client, interaction, options) => {
@@ -29,7 +29,7 @@ const command = new SlashCommand()
         embeds: [
           new MessageEmbed()
             .setColor("RED")
-            .setDescription("Nút Lavalink không được kết nối"),
+            .setDescription("Lavalink node is not connected"),
         ],
       });
     }
@@ -48,7 +48,7 @@ const command = new SlashCommand()
         return interaction.reply({
           embeds: [
             new MessageEmbed()
-              .setDescription("Có lỗi xảy ra khi tìm kiếm bài hát")
+              .setDescription("An error occured while searching for the song")
               .setColor("RED"),
           ],
           ephemeral: true,
@@ -59,7 +59,7 @@ const command = new SlashCommand()
         embeds: [
           new MessageEmbed()
             .setAuthor({
-              name: "Có lỗi xảy ra trong quá trình tìm kiếm bài hát",
+              name: "An error occured while searching for the song",
             })
             .setColor("RED"),
         ],
@@ -71,7 +71,7 @@ const command = new SlashCommand()
       return interaction.reply({
         embeds: [
           new MessageEmbed()
-            .setDescription(`Không tìm thấy kết quả cho \`${search}\``)
+            .setDescription(`No results found for \`${search}\``)
             .setColor("RED"),
         ],
         ephemeral: true,
@@ -99,7 +99,7 @@ const command = new SlashCommand()
       const menus = new MessageActionRow().addComponents(
         new MessageSelectMenu()
           .setCustomId("select")
-          .setPlaceholder("Chọn một bài hát")
+          .setPlaceholder("Select a song")
           .addOptions(resultFromSearch)
       );
 
@@ -108,7 +108,7 @@ const command = new SlashCommand()
           new MessageEmbed()
             .setColor(client.config.embedColor)
             .setDescription(
-              `Dưới đây là một số kết quả mà tôi tìm thấy cho \`${search}\`. Vui lòng chọn bài hát trong vòng \`30 giây\``
+              `Here are some of the results I found for \`${search}\`. Please select track within \`30 seconds\``
             ),
         ],
         components: [menus],
@@ -138,23 +138,23 @@ const command = new SlashCommand()
             embeds: [
               new MessageEmbed()
                 .setAuthor({
-                  name: "Đã thêm vào hàng đợi",
+                  name: "Added to queue",
                   iconURL: client.config.iconURL,
                 })
                 .setURL(res.tracks[0].uri)
                 .setThumbnail(res.tracks[0].displayThumbnail("maxresdefault"))
                 .setDescription(
                   `[${trackForPlay?.tracks[0]?.title}](${trackForPlay?.tracks[0].uri})` ||
-                    "Không có Tiêu đề"
+                    "No Title"
                 )
                 .addFields(
                   {
-                    name: "Đã thêm bởi",
+                    name: "Added by",
                     value: `<@${interaction.user.id}>`,
                     inline: true,
                   },
                   {
-                    name: "Thời lượng",
+                    name: "Duration",
                     value: res.tracks[0].isStream
                       ? `\`LIVE :red_circle:\``
                       : `\`${client.ms(res.tracks[0].duration, {
@@ -176,7 +176,7 @@ const command = new SlashCommand()
             embeds: [
               new MessageEmbed()
                 .setDescription(
-                  `Không có bài hát nào được chọn. Bạn đã mất quá nhiều thời gian để chọn một bài hát.`
+                  `No track selected. You took too long to select a track.`
                 )
                 .setColor(client.config.embedColor),
             ],
