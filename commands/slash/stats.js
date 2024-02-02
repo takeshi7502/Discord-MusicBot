@@ -8,6 +8,18 @@ const command = new SlashCommand()
 	.setName("stats")
 	.setDescription("Get information about the bot")
 	.setRun(async (client, interaction) => {
+		// Kiểm tra xem người dùng có phải là admin hay không
+		if (interaction.user.id !== client.config.adminId) {
+			return interaction.reply({
+				embeds: [
+					new MessageEmbed()
+						.setColor(client.config.embedColor)
+						.setDescription("You are not authorized to use this command!"),
+				],
+				ephemeral: true,
+			});
+		}
+
 		// get OS info
 		const osver = os.platform() + " " + os.release();
 		
