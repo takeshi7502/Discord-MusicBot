@@ -24,7 +24,7 @@ module.exports = async (client, message) => {
 
   if (message.content.match(mention)) {
     const mentionEmbed = new MessageEmbed()
-      .setColor(client.config.embedColor)
+      .setColor("YELLOW")
       .setDescription(
         `Dùng \`/\` trong máy chủ để sử dụng lệnh.\nBạn có thể bắt đầu với \`/help\` để xem tất cả lệnh.\nNếu bạn thấy bot có vấn đề, hãy báo cáo cho <@648036769769717760>.\nCám ơn bạn đã sử dụng bot!`
       );
