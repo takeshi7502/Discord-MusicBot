@@ -66,7 +66,7 @@ const command = new SlashCommand()
           require("../../package.json").version
         }; Build: ${gitHash}` +
         "\n" +
-        `[✨ Discord Server](${client.config.supportServer}) | [Vấn đề](${client.config.Issues}) | [Nguồn](https://github.com/SudhanPlayz/Discord-MusicBot/tree/v5) | [Mời tôi](https://discord.com/oauth2/authorize?client_id=${client.config.clientId}&permissions=${client.config.permissions}&scope=bot%20applications.commands)`,
+        `[✨ Discord Server](${client.config.supportServer}) | [Website](https://card.takeshi.dev) | [Source Mod](https://github.com/takeshi7502/Discord-MusicBot) | [Source](${client.config.Issues})`,
     });
 
     // Construction of the buttons for the embed
@@ -122,7 +122,7 @@ const command = new SlashCommand()
             require("../../package.json").version
           }; Build: ${gitHash}` +
           "\n" +
-          `[✨ Discord Server](${client.config.supportServer}) | [Vấn đề](${client.config.Issues}) | [Nguồn](https://github.com/SudhanPlayz/Discord-MusicBot/tree/v5) | [Mời tôi](https://discord.com/oauth2/authorize?client_id=${client.config.clientId}&permissions=${client.config.permissions}&scope=bot%20applications.commands)`,
+          `[✨ Discord Server](${client.config.supportServer}) | [Website](https://card.takeshi.dev) | [Source Mod](https://github.com/takeshi7502/Discord-MusicBot) | [Source](${client.config.Issues})`,
       });
       await iter.update({
         embeds: [helpEmbed],
