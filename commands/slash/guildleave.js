@@ -1,56 +1,57 @@
-const { MessageEmbed, message } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
-const fs = require("fs");
-const path = require("path");
-const { forEach } = require("lodash");
 
 const command = new SlashCommand()
-	.setName("guildleave")
-	.setDescription("rời khỏi máy chủ")
-    .addStringOption((option) =>
+  .setName("guildleave")
+  .setDescription("Rời khỏi máy chủ")
+  .addStringOption((option) =>
     option
       .setName("id")
       .setDescription("Nhập ID của máy chủ để rời đi (gõ `list` để hiển thị danh sách ID của máy chủ).")
       .setRequired(true)
   )
   .setRun(async (client, interaction, options) => {
-		if (interaction.user.id === client.config.adminId) {
-		    try{
-			const id = interaction.options.getString('id');
+    try {
+      if (interaction.user.id !== client.config.adminId) {
+        return interaction.reply({
+          embeds: [
+            new MessageEmbed()
+              .setColor(client.config.embedColor)
+              .setDescription("Bạn không được ủy quyền để sử dụng lệnh này!"),
+          ],
+          ephemeral: true,
+        });
+      }
 
-			if (id.toLowerCase() === 'list'){
-			    client.guilds.cache.forEach((guild) => {
-				console.log(`${guild.name} | ${guild.id}`);
-			    });
-			    const guild = client.guilds.cache.map(guild => ` ${guild.name} | ${guild.id}`);
-			    try{
-				return interaction.reply({content:`Server:\n\`${guild}\``, ephemeral: true});
-			    }catch{
-				return interaction.reply({content:`kiểm tra console để xem danh sách các máy chủ`, ephemeral: true});
-			    }
-			}
+      const id = interaction.options.getString('id');
 
-			const guild = client.guilds.cache.get(id);
+      if (id.toLowerCase() === 'list') {
+        const guildListEmbed = new MessageEmbed()
+          .setColor(client.config.embedColor)
+          .setTitle("Danh sách ID máy chủ")
+          .setDescription(
+            client.guilds.cache.map(guild => `**${guild.name}**: ${guild.id}`).join('\n')
+          );
 
-			if(!guild){
-			    return interaction.reply({content: `\`${id}\` ko phải là một ID máy chủ hợp lệ`, ephemeral:true});
-			}
+        console.log("Danh sách ID máy chủ:", client.guilds.cache.map(guild => guild.id).join(', '));
 
-			await guild.leave().then(c => console.log(`rời khỏi máy chủ ${id}`)).catch((err) => {console.log(err)});
-			return interaction.reply({content:`rời khỏi máy chủ. \`${id}\``, ephemeral: true});
-		    }catch (error){
-			console.log(`có lỗi khi cố gắng rời khỏi máy chủ ${id}`, error);
-		    }
-		}else {
-			return interaction.reply({
-				embeds: [
-					new MessageEmbed()
-						.setColor(client.config.embedColor)
-						.setDescription("Bạn không được ủy quyền để sử dụng lệnh này!"),
-				],
-				ephemeral: true,
-			});
-		}
-	});
+        return interaction.reply({ embeds: [guildListEmbed], ephemeral: true });
+      }
+
+      const guild = client.guilds.cache.get(id);
+
+      if (!guild) {
+        console.error(`[${client.user.tag}] Máy chủ không tồn tại: ${id}`);
+        return interaction.reply({ content: `\`${id}\` không phải là một ID máy chủ hợp lệ`, ephemeral: true });
+      }
+
+      await guild.leave();
+      console.log(`[${client.user.tag}] Rời khỏi máy chủ: ${id}`);
+      return interaction.reply({ content: `Rời khỏi máy chủ \`${id}\``, ephemeral: true });
+    } catch (error) {
+      console.error(`[${client.user.tag}] Có lỗi khi thực hiện lệnh:`, error);
+      return interaction.reply({ content: "Có lỗi xảy ra khi thực hiện lệnh.", ephemeral: true });
+    }
+  });
 
 module.exports = command;
