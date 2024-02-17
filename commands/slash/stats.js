@@ -95,7 +95,7 @@ const command = new SlashCommand()
 				},
 			])
 			.setFooter({ text: `Build: ${ gitHash }` });
-		return interaction.reply({ embeds: [statsEmbed], ephemeral: false });
+		return interaction.reply({ embeds: [statsEmbed], ephemeral: true });
 	});
 
 module.exports = command;
