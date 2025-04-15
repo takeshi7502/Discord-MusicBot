@@ -5,3 +5,4 @@ COPY . .
 RUN npm install
 RUN npm run deploy
 CMD [ "node", "index.js" ]
+
