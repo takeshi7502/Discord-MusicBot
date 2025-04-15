@@ -5,24 +5,18 @@ const command = new SlashCommand()
   .setName("ping")
   .setDescription("Xem độ trễ của bot")
   .setRun(async (client, interaction, options) => {
-    let msg = await interaction.channel.send({
-      embeds: [
-        new MessageEmbed()
-          .setDescription("🏓 | Đang truy xuất ping...")
-          .setColor("#6F8FAF"),
-      ],
-    });
+    // Tính bot latency dựa trên thời gian hiện tại và thời điểm nhận tương tác
+    const botPing = Date.now() - interaction.createdTimestamp;
+    const apiPing = client.ws.ping;
 
-    let zap = "⚡";
-    let green = "🟢";
-    let red = "🔴";
-    let yellow = "🟡";
+    // Các biểu tượng trạng thái
+    const zap = "⚡";
+    const green = "🟢";
+    const red = "🔴";
+    const yellow = "🟡";
 
-    var botState = zap;
-    var apiState = zap;
-
-    let apiPing = client.ws.ping;
-    let botPing = Math.floor(msg.createdAt - interaction.createdAt);
+    let botState = zap;
+    let apiState = zap;
 
     if (apiPing >= 40 && apiPing < 200) {
       apiState = green;
@@ -40,29 +34,22 @@ const command = new SlashCommand()
       botState = red;
     }
 
-    msg.delete();
+    // Chọn màu cho viền embed: dùng client.config.embedColor nếu có, nếu không mặc định "#0099ff"
+    const embedColor = client.config.embedColor || "blue";
+
+    // Tạo embed với bố cục gọn gàng
+    const embed = new MessageEmbed()
+      .setColor(embedColor)
+      .setTitle("🏓 | Pong!")
+      .setDescription(
+        `**API Latency:** ${apiState} | ${apiPing}ms\n` +
+        `**Bot Latency:** ${botState} | ${botPing}ms`
+      );
+
+    // Gửi kết quả dưới dạng ephemeral (chỉ hiển thị cho người dùng gửi lệnh)
     interaction.reply({
-      embeds: [
-        new MessageEmbed()
-          .setTitle("🏓 | Pong!")
-          .addFields(
-            {
-              name: "API Latency",
-              value: `\`\`\`yml\n${apiState} | ${apiPing}ms\`\`\``,
-              inline: true,
-            },
-            {
-              name: "Bot Latency",
-              value: `\`\`\`yml\n${botState} | ${botPing}ms\`\`\``,
-              inline: true,
-            }
-          )
-          .setColor(client.config.embedColor)
-          .setFooter({
-            text: `Được yêu cầu bởi ${interaction.user.tag}`,
-            iconURL: interaction.user.avatarURL(),
-          }),
-      ],
+      embeds: [embed],
+      ephemeral: true,
     });
   });
 
