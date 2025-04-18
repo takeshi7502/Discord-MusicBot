@@ -34,14 +34,15 @@ What do you gain from it? Let us explain:
 
 ### Hướng dẫn tạo server lavlink
 > Tài liệu cài ở đây [Lavalink](https://blog.darrennathanael.com/post/how-to-lavalink/).
-> Chú ý: source này chỉ hỗ trợ lavalink v3.x.x
-1. Cài Azul Zulu java 16 or 17 cho ubuntu [docs](https://docs.azul.com/core/zulu-openjdk/install/debian).
-2. Tạo thư mục lavalink, lệnh `mkdir lavalink`, cd vào thư mục.
-3. Tải lavalink, lệnh: `wget <link lavlaink v3 mới nhât>`
-4. Tạo thư mục plugins, lệnh `mkdir plugins`, cd vào thư mục.
-5. Tải plugin lavalink, lệnh: `wget <ver youtube-source mới nhất>`, lệnh `cd ..` để quay lại thư mục lavalink.
-6. Tạo file `application.yml`, lệnh `nano application.yml`, lấy nội dung trong [link](https://gist.github.com/takeshi7502/9633c51ef4a82151beefd5c9afe2587d) dán vào. Ctrl + X, Y Enter lưu.
-7. Tạo tmux, lệnh `tmux new -s lavalink`, cd vào lavalink, tiếp lệnh `java -jar Lavalink.jar` để chạy lavalink.
+> Chú ý: source bot này chỉ hỗ trợ lavalink v3.x.x
+> 1. Cài Azul Zulu java 16 or 17 cho ubuntu [docs](https://docs.azul.com/core/zulu-openjdk/install/debian).
+> 2. Tạo thư mục lavalink, lệnh `mkdir lavalink`, cd vào thư mục.
+> 3. Tải lavalink, lệnh: `wget <link lavlaink v3 mới nhât>`
+> 4. Tạo thư mục plugins, lệnh `mkdir plugins`, cd vào thư mục.
+> 5. Tải plugin lavalink, lệnh: `wget <ver youtube-source mới nhất>`, lệnh `cd ..` để quay lại thư mục lavalink.
+> 6. Tạo file `application.yml`, lệnh `nano application.yml`, lấy nội dung trong [link](https://gist.github.com/takeshi7502/9633c51ef4a82151beefd5c9afe2587d) dán vào. Ctrl + X, Y Enter lưu.
+> 7. Tạo tmux, lệnh `tmux new -s lavalink`, cd vào lavalink, tiếp lệnh `java -jar Lavalink.jar` để chạy lavalink.
+> Bấm Ctr + B, D để thoát tmux. Để vào lại tmux bấm lệnh `tmux a -t lavalink`.
 > Mẹo: chạy lavalink v4 rồi lấy token youtube sau đó thêm vào file `application.yml`.
 
 ### 🐳 Cài Docker cho vps nếu chưa có
