@@ -30,15 +30,29 @@ What do you gain from it? Let us explain:
    scopes. [Example Invite URL (Change CLIENT_ID)](https://discord.com/oauth2/authorize?client_id=CLIENT_ID&permissions=277083450689&scope=bot%20applications.commands)
 4. Run `npm run deploy` or `yarn deploy` to initialize the slash commands. _You can do this on your pc locally_
 
-## 📝 | Tutorial
+## 📝 | Deploy bot lên VPS Ubuntu với Docker
 
-### 🐳 Docker
-> The `config.js` file should be configured with the host `"lavalink"`, and you should use the same `password` as in `docker/application.yml`.
+### 🐳 Cài Docker cho vps nếu chưa có
+> Tài liệu cài ở đây [Install Docker on Ubuntu](https://docs.docker.com/engine/install/ubuntu/).
 
-Build and start bot and lavalink
+Bot cần chạy thông qua server lavalink
+1. Lấy server free ở đây [Link](https://lavalink.darrennathanael.com/NoSSL/lavalink-without-ssl/)
+2. Tự host server lavalink [Link](https://blog.darrennathanael.com/post/how-to-lavalink/)
+
+Chạy bot với docker:
+1. Git clone repo về
 ```sh
-docker-compose up -d --build
+git clone https://github.com/takeshi7502/Discord-MusicBot.git musicbot/ && cd musicbot
 ```
+2. Mở file `config.js` và sửa các thông số phù hợp.
+```sh
+nano config.js
+```
+3. Chạy lệnh sau để build và chạy bot
+```sh
+bash build.sh
+```
+
 ### 💪🏻 Non-Docker
 > The `config.js` file should be configured first. Don't forget to add a lavalink host
 
