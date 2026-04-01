@@ -10,12 +10,12 @@ echo "========================================================"
 echo "📥 Đang tải mã nguồn mới nhất từ Github..."
 git pull || echo "⚠️  Git pull gặp vấn đề, vẫn tiếp tục..."
 
-# Đảm bảo config.js đang trỏ về lavalink
-if grep -q 'host: "127.0.0.1"' config.js 2>/dev/null; then
-    sed -i 's/host: "127.0.0.1"/host: "lavalink"/g' config.js
+# Đảm bảo config.js trỏ về 127.0.0.1 (host networking mode)
+if grep -q 'host: "lavalink"' config.js 2>/dev/null; then
+    sed -i 's/host: "lavalink"/host: "127.0.0.1"/g' config.js
 fi
-if grep -q 'host:"127.0.0.1"' config.js 2>/dev/null; then
-    sed -i 's/host:"127.0.0.1"/host:"lavalink"/g' config.js
+if grep -q 'host:"lavalink"' config.js 2>/dev/null; then
+    sed -i 's/host:"lavalink"/host:"127.0.0.1"/g' config.js
 fi
 
 echo "🛑 Đang khởi động lại container..."
