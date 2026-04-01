@@ -1,27 +1,40 @@
-version: "3"
-
 services:
-  discord-musicbot:
-    build: .
-    image: discord-musicbot:latest
-    container_name: discord-musicbot
+  # --------------------------------
+  # Lavalink (Audio node)
+  # --------------------------------
+  lavalink:
+    profiles: [lavalink, all]
+    container_name: discordmusicbot-lavalink
+    image: ghcr.io/lavalink-devs/lavalink:latest
     restart: unless-stopped
+    environment:
+      - _JAVA_OPTIONS=-Xmx2G
+      - SERVER_PORT=2333
+      - LAVALINK_SERVER_PASSWORD=youshallnotpass
+      - LAVALINK_SERVER_SOURCES_YOUTUBE=false
+    volumes:
+      - ./Lavalink/application.yml:/opt/Lavalink/application.yml
+      - ./Lavalink/plugins/:/opt/Lavalink/plugins/
     networks:
-      - lavalink-net
-    depends_on:
-      - lavalink
+      - discordmusicbot-net
+    ports:
+      - "2333:2333"
+
+  # --------------------------------
+  # Discord-MusicBot
+  # --------------------------------
+  discordmusicbot:
+    container_name: discordmusicbot
+    build: .
+    image: discordmusicbot:local
+    restart: always
     volumes:
       - ./config.js:/usr/src/app/config.js:ro
-
-  lavalink:
-    image: fredboat/lavalink:439f122
-    container_name: music-lavalink
-    hostname: lavalink
-    restart: unless-stopped
+    depends_on:
+      - lavalink
     networks:
-      - lavalink-net
-    volumes:
-      - ./docker/application.yml:/opt/Lavalink/application.yml:ro
+      - discordmusicbot-net
 
 networks:
-  lavalink-net:
+  discordmusicbot-net:
+    name: discordmusicbot-net
