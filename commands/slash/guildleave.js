@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
@@ -15,7 +15,7 @@ const command = new SlashCommand()
       if (interaction.user.id !== client.config.adminId) {
         return interaction.reply({
           embeds: [
-            new MessageEmbed()
+            new EmbedBuilder()
               .setColor(client.config.embedColor)
               .setDescription("Bạn không được ủy quyền để sử dụng lệnh này!"),
           ],
@@ -26,7 +26,7 @@ const command = new SlashCommand()
       const id = interaction.options.getString('id');
 
       if (id.toLowerCase() === 'list') {
-        const guildListEmbed = new MessageEmbed()
+        const guildListEmbed = new EmbedBuilder()
           .setColor(client.config.embedColor)
           .setTitle("Danh sách ID máy chủ")
           .setDescription(

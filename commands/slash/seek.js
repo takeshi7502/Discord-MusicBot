@@ -1,5 +1,5 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const ms = require("ms");
 
 const command = new SlashCommand()
@@ -19,12 +19,12 @@ const command = new SlashCommand()
 		
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -33,8 +33,8 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Không có bài hát nào đang phát."),
 				],
 				ephemeral: true,
@@ -51,16 +51,16 @@ const command = new SlashCommand()
 		}
 		const time = rawTime.reduce((a,b) => a + b, 0);
 		const position = player.position;
-		const duration = player.queue.current.duration;
+		const duration = player.queue.current.info.duration;
 		
 		if (time <= duration) {
 			player.seek(time);
 			return interaction.editReply({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setColor(client.config.embedColor)
 						.setDescription(
-							`⏩ | **${player.queue.current.title}** đã được ${
+							`⏩ | **${player.queue.current.info.title}** đã được ${
 								time < position ? "quay lại" : "chuyển đến"
 							} tới **${ms(time)}**`,
 						),
@@ -69,7 +69,7 @@ const command = new SlashCommand()
 		} else {
 			return interaction.editReply({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setColor(client.config.embedColor)
 						.setDescription(
 							`Không thể chuyển đến một thời điểm cụ thể của bài hát đang phát hiện tại. Điều này có thể do vượt quá thời lượng của bài hát hoặc định dạng thời gian không đúng. Hãy kiểm tra và thử lại.`,

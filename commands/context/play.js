@@ -1,6 +1,5 @@
-const { ContextMenuCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
-const escapeMarkdown = require("discord.js").Util.escapeMarkdown;
+const { ContextMenuCommandBuilder } = require("discord.js");
+const { EmbedBuilder, escapeMarkdown } = require("discord.js");
 
 module.exports = {
   command: new ContextMenuCommandBuilder().setName("Phát Bài Hát").setType(3),
@@ -8,7 +7,7 @@ module.exports = {
   /**
    * This function will handle context menu interaction
    * @param {import("../lib/DiscordMusicBot")} client
-   * @param {import("discord.js").GuildContextMenuInteraction} interaction
+   * @param {import("discord.js").ContextMenuCommandInteraction} interaction
    */
   run: async (client, interaction, options) => {
     let channel = await client.getChannel(client, interaction);
@@ -23,27 +22,30 @@ module.exports = {
       });
     }
 
-    let player = client.createPlayer(interaction.channel, channel);
-
-    if (player.state !== "CONNECTED") {
-      player.connect();
+    let player = client.manager.getPlayer(interaction.guild.id);
+    if (!player) {
+      player = client.createPlayer(interaction.channel, channel);
     }
 
-    if (channel.type == "GUILD_STAGE_VOICE") {
+    if (!player.connected) {
+      await player.connect();
+    }
+
+    if (channel.type == 13) { // GUILD_STAGE_VOICE
       setTimeout(() => {
-        if (interaction.guild.me.voice.suppress == true) {
+        if (interaction.guild.members.me.voice.suppress == true) {
           try {
-            interaction.guild.me.voice.setSuppressed(false);
+            interaction.guild.members.me.voice.setSuppressed(false);
           } catch (e) {
-            interaction.guild.me.voice.setRequestToSpeak(true);
+            interaction.guild.members.me.voice.setRequestToSpeak(true);
           }
         }
-      }, 2000); // Need this because discord api is buggy asf, and without this the bot will not request to speak on a stage - Darren
+      }, 2000);
     }
 
     const ret = await interaction.reply({
       embeds: [
-        new MessageEmbed()
+        new EmbedBuilder()
           .setColor(client.config.embedColor)
           .setDescription(":mag_right: **Đang tìm...**"),
       ],
@@ -51,59 +53,59 @@ module.exports = {
     });
 
     const query =
-      interaction.channel.messages.cache.get(interaction.targetId).content ??
-      (await interaction.channel.messages.fetch(interaction.targetId));
-    let res = await player.search(query, interaction.user).catch((err) => {
+      interaction.channel.messages.cache.get(interaction.targetId)?.content ??
+      (await interaction.channel.messages.fetch(interaction.targetId))?.content ?? "";
+    let res = await player.search({ query }, interaction.user).catch((err) => {
       client.error(err);
       return {
-        loadType: "LOAD_FAILED",
+        loadType: "error",
       };
     });
 
-    if (res.loadType === "LOAD_FAILED") {
+    if (res.loadType === "error") {
       if (!player.queue.current) {
         player.destroy();
       }
       await interaction
         .editReply({
           embeds: [
-            new MessageEmbed()
-              .setColor("RED")
+            new EmbedBuilder()
+              .setColor(0xFF0000)
               .setDescription("Có lỗi xảy ra trong quá trình tìm kiếm"),
           ],
         })
-        .catch(this.warn);
+        .catch(() => {});
     }
 
-    if (res.loadType === "NO_MATCHES") {
+    if (res.loadType === "empty") {
       if (!player.queue.current) {
         player.destroy();
       }
       await interaction
         .editReply({
           embeds: [
-            new MessageEmbed()
-              .setColor("RED")
+            new EmbedBuilder()
+              .setColor(0xFF0000)
               .setDescription("Không tìm thấy kết quả nào"),
           ],
         })
-        .catch(this.warn);
+        .catch(() => {});
     }
 
-    if (res.loadType === "TRACK_LOADED" || res.loadType === "SEARCH_RESULT") {
-      player.queue.add(res.tracks[0]);
+    if (res.loadType === "track" || res.loadType === "search") {
+      await player.queue.add(res.tracks[0]);
 
-      if (!player.playing && !player.paused && !player.queue.size) {
-        player.play();
+      if (!player.playing && !player.paused && player.queue.tracks.length > 0) {
+        await player.play({ paused: false });
       }
-      var title = escapeMarkdown(res.tracks[0].title);
-      var title = title.replace(/\]/g, "");
-      var title = title.replace(/\[/g, "");
-      let addQueueEmbed = new MessageEmbed()
+      var title = escapeMarkdown(res.tracks[0].info.title);
+      title = title.replace(/\]/g, "");
+      title = title.replace(/\[/g, "");
+      let addQueueEmbed = new EmbedBuilder()
         .setColor(client.config.embedColor)
         .setAuthor({ name: "Đã thêm vào hàng đợi", iconURL: client.config.iconURL })
-        .setDescription(`[${title}](${res.tracks[0].uri})` || "Không có tiêu đề")
-        .setURL(res.tracks[0].uri)
+        .setDescription(`[${title}](${res.tracks[0].info.uri})` || "Không có tiêu đề")
+        .setURL(res.tracks[0].info.uri)
         .addFields(
           {
             name: "Đã thêm bởi",
@@ -112,9 +114,9 @@ module.exports = {
           },
           {
             name: "Thời lượng",
-            value: res.tracks[0].isStream
+            value: res.tracks[0].info.isStream
               ? `\`LIVE 🔴 \``
-              : `\`${client.ms(res.tracks[0].duration, {
+              : `\`${client.ms(res.tracks[0].info.duration, {
                   colonNotation: true,
                   secondsDecimalDigits: 0,
                 })}\``,
@@ -122,46 +124,43 @@ module.exports = {
           }
         );
 
-      try {
-        addQueueEmbed.setThumbnail(
-          res.tracks[0].displayThumbnail("maxresdefault")
-        );
-      } catch (err) {
-        addQueueEmbed.setThumbnail(res.tracks[0].thumbnail);
+      if (res.tracks[0].info.artworkUrl) {
+        addQueueEmbed.setThumbnail(res.tracks[0].info.artworkUrl);
       }
 
-      if (player.queue.totalSize > 1) {
+      const totalSize = player.queue.tracks.length + (player.queue.current ? 1 : 0);
+      if (totalSize > 1) {
         addQueueEmbed.addFields({
           name: "Vị trí trong hàng đợi",
-          value: `${player.queue.size}`,
+          value: `${player.queue.tracks.length}`,
           inline: true,
         });
-      } else {
-        player.queue.previous = player.queue.current;
       }
 
-      await interaction.editReply({ embeds: [addQueueEmbed] }).catch(this.warn);
+      await interaction.editReply({ embeds: [addQueueEmbed] }).catch(() => {});
     }
 
-    if (res.loadType === "PLAYLIST_LOADED") {
-      player.queue.add(res.tracks);
+    if (res.loadType === "playlist") {
+      await player.queue.add(res.tracks);
 
+      const totalSize = player.queue.tracks.length + (player.queue.current ? 1 : 0);
       if (
         !player.playing &&
         !player.paused &&
-        player.queue.totalSize === res.tracks.length
+        player.queue.tracks.length > 0
       ) {
-        player.play();
+        await player.play({ paused: false });
       }
 
-      let playlistEmbed = new MessageEmbed()
+      const playlistDuration = res.tracks.reduce((a, t) => a + (t.info.duration || 0), 0);
+      let playlistEmbed = new EmbedBuilder()
         .setColor(client.config.embedColor)
         .setAuthor({
           name: "Danh sách phát đã được thêm vào hàng đợi",
           iconURL: client.config.iconURL,
         })
-        .setThumbnail(res.tracks[0].thumbnail)
-        .setDescription(`[${res.playlist.name}](${query})`)
+        .setThumbnail(res.tracks[0].info.artworkUrl || null)
+        .setDescription(`[${res.playlist?.name || "Playlist"}](${query})`)
         .addFields(
           {
             name: "Đã thêm vào hàng đợi",
@@ -170,7 +169,7 @@ module.exports = {
           },
           {
             name: "Thời lượng của danh sách phát",
-            value: `\`${client.ms(res.playlist.duration, {
+            value: `\`${client.ms(playlistDuration, {
               colonNotation: true,
               secondsDecimalDigits: 0,
             })}\``,
@@ -178,10 +177,10 @@ module.exports = {
           }
         );
 
-      await interaction.editReply({ embeds: [playlistEmbed] }).catch(this.warn);
+      await interaction.editReply({ embeds: [playlistEmbed] }).catch(() => {});
     }
 
-    if (ret) setTimeout(() => ret.delete().catch(this.warn), 20000);
+    if (ret) setTimeout(() => ret.delete().catch(() => {}), 20000);
     return ret;
   },
 };

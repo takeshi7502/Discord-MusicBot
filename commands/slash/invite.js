@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
@@ -7,23 +7,21 @@ const command = new SlashCommand()
   .setRun(async (client, interaction, options) => {
     return interaction.reply({
       embeds: [
-        new MessageEmbed()
+        new EmbedBuilder()
           .setColor(client.config.embedColor)
           .setTitle(`Mời tớ vào máy chủ của bạn!`),
       ],
       components: [
-        new MessageActionRow().addComponents(
-          new MessageButton()
+        new ActionRowBuilder().addComponents(
+          new ButtonBuilder()
             .setLabel("Mời luôn")
-            .setStyle("LINK")
+            .setStyle(ButtonStyle.Link)
             .setURL(
               `https://discord.com/oauth2/authorize?client_id=${
                 client.config.clientId
               }&permissions=${
                 client.config.permissions
-              }&scope=${client.config.inviteScopes
-                .toString()
-                .replace(/,/g, "%20")}`
+              }&scope=bot%20applications.commands`
             )
         ),
       ],

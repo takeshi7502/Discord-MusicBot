@@ -1,7 +1,6 @@
 //Deletes every commands from every server yikes!!1!!11!!
 const readline = require("readline");
-const { REST } = require("@discordjs/rest");
-const { Routes } = require("discord-api-types/v9");
+const { REST, Routes } = require("discord.js");
 const getConfig = require("../util/getConfig");
 
 const rl = readline.createInterface({
@@ -11,7 +10,7 @@ const rl = readline.createInterface({
 
 (async () => {
 	const config = await getConfig();
-	const rest = new REST({ version: "9" }).setToken(config.token);
+	const rest = new REST({ version: "10" }).setToken(config.token);
   
 	if (!process.argv.includes("--global")) {
 	  rl.question(

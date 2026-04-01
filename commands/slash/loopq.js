@@ -1,5 +1,5 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("loopq")
@@ -12,12 +12,12 @@ const command = new SlashCommand()
 		
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -26,22 +26,25 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Không có bài hát đang phát."),
 				],
 				ephemeral: true,
 			});
 		}
 		
-		if (player.setQueueRepeat(!player.queueRepeat)) {
-			;
+		const currentMode = player.repeatMode;
+		if (currentMode === "queue") {
+			player.setRepeatMode("off");
+		} else {
+			player.setRepeatMode("queue");
 		}
-		const queueRepeat = player.queueRepeat? "enabled" : "disabled";
+		const queueRepeat = player.repeatMode === "queue" ? "enabled" : "disabled";
 		
 		interaction.reply({
 			embeds: [
-				new MessageEmbed()
+				new EmbedBuilder()
 					.setColor(client.config.embedColor)
 					.setDescription(
 						`:thumbsup: | **Lặp hàng đợi đã kích hoạt \`${ queueRepeat }\`**`,

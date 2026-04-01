@@ -1,9 +1,10 @@
 const SlashCommand = require("../../lib/SlashCommand");
 const {
-	MessageActionRow,
-	MessageSelectMenu,
-	MessageButton,
-	MessageEmbed
+	ActionRowBuilder,
+	StringSelectMenuBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	EmbedBuilder
 } = require("discord.js");
 const { Rlyrics } = require("rlyrics");
 const lyricsApi = new Rlyrics();
@@ -20,7 +21,7 @@ const command = new SlashCommand()
 	.setRun(async (client, interaction, options) => {
 		await interaction.reply({
 			embeds: [
-				new MessageEmbed()
+				new EmbedBuilder()
 					.setColor(client.config.embedColor)
 					.setDescription("🔎 | **Đang tìm...**"),
 			],
@@ -28,12 +29,12 @@ const command = new SlashCommand()
 
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.editReply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -43,8 +44,8 @@ const command = new SlashCommand()
 		if (!args && !player) {
 			return interaction.editReply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Không có bài hát nào đang phát."),
 				],
 			});
@@ -59,10 +60,10 @@ const command = new SlashCommand()
 			"Instrumental", "Live", "Acoustic", "Cover", "\\(feat\\. .*\\)"
 		];
 		if (!args) {
-			currentTitle = player.queue.current.title;
+			currentTitle = player.queue.current.info.title;
 			currentTitle = currentTitle
 				.replace(new RegExp(phrasesToRemove.join('|'), 'gi'), '')
-				.replace(/\s*([\[\(].*?[\]\)])?\s*(\|.*)?\s*(\*.*)?$/, '');
+				.replace(/\s*([\[\(].*?[\]\)])?\\s*(\\|.*)?\\s*(\\*.*)?$/, '');
 		}
 		let query = args ? args : currentTitle;
 		let lyricsResults = [];
@@ -72,15 +73,15 @@ const command = new SlashCommand()
 				for (let i = 0; i < client.config.lyricsMaxResults; i++) {
 					if (lyricsData[i]) {
 						lyricsResults.push({
-							label: `${lyricsData[i].title}`,
-							description: `${lyricsData[i].artist}`,
+							label: `${lyricsData[i].title}`.substring(0, 100),
+							description: `${lyricsData[i].artist}`.substring(0, 100),
 							value: i.toString()
 						});
 					} else { break }
 				}
 
-				const menu = new MessageActionRow().addComponents(
-					new MessageSelectMenu()
+				const menu = new ActionRowBuilder().addComponents(
+					new StringSelectMenuBuilder()
 						.setCustomId("choose-lyrics")
 						.setPlaceholder("Chọn một bài hát")
 						.addOptions(lyricsResults),
@@ -88,7 +89,7 @@ const command = new SlashCommand()
 
 				let selectedLyrics = await interaction.editReply({
 					embeds: [
-						new MessageEmbed()
+						new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setDescription(
 								`Dưới đây là một số kết quả mà tôi tìm thấy cho \`${query}\`. Vui lòng chọn một bài hát để hiển thị lời trong \`30 giây\`.`
@@ -103,29 +104,29 @@ const command = new SlashCommand()
 					time: 30000,
 				});
 
-				collector.on("collect", async (interaction) => {
-					if (interaction.isSelectMenu()) {
-						await interaction.deferUpdate();
-						const url = lyricsData[parseInt(interaction.values[0])].url;
+				collector.on("collect", async (i) => {
+					if (i.isStringSelectMenu()) {
+						await i.deferUpdate();
+						const url = lyricsData[parseInt(i.values[0])].url;
 
 						lyricsApi.find(url).then((lyrics) => {
 							let lyricsText = lyrics.lyrics;
 
-							const button = new MessageActionRow()
+							const button = new ActionRowBuilder()
 								.addComponents(
-									new MessageButton()
+									new ButtonBuilder()
 										.setCustomId('tipsbutton')
 										.setLabel('Tips')
 										.setEmoji(`📌`)
-										.setStyle('SECONDARY'),
-									new MessageButton()
+										.setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder()
 										.setLabel('Source')
 										.setURL(url)
-										.setStyle('LINK'),
+										.setStyle(ButtonStyle.Link),
 								);
 
 							const musixmatch_icon = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Musixmatch_logo_icon_only.svg/480px-Musixmatch_logo_icon_only.svg.png';
-							let lyricsEmbed = new MessageEmbed()
+							let lyricsEmbed = new EmbedBuilder()
 								.setColor(client.config.embedColor)
 								.setTitle(`${lyrics.name}`)
 								.setURL(url)
@@ -151,7 +152,7 @@ const command = new SlashCommand()
 									.setDescription(lyricsText + `\nBị cắt bớt, lời bài hát quá dài.`)
 							}
 
-							return interaction.editReply({
+							return i.editReply({
 								embeds: [lyricsEmbed],
 								components: [button],
 							});
@@ -160,12 +161,12 @@ const command = new SlashCommand()
 					}
 				});
 
-				collector.on("end", async (i) => {
-					if (i.size == 0) {
+				collector.on("end", async (collected) => {
+					if (collected.size == 0) {
 						selectedLyrics.edit({
 							content: null,
 							embeds: [
-								new MessageEmbed()
+								new EmbedBuilder()
 									.setDescription(
 										`Không có bài hát được chọn. Bạn đã mất quá nhiều thời gian để chọn một bản nhạc.`
 									)
@@ -176,18 +177,18 @@ const command = new SlashCommand()
 				});
 
 			} else {
-				const button = new MessageActionRow()
+				const button = new ActionRowBuilder()
 					.addComponents(
-						new MessageButton()
+						new ButtonBuilder()
 							.setEmoji(`📌`)
 							.setCustomId('tipsbutton')
 							.setLabel('Tips')
-							.setStyle('SECONDARY'),
+							.setStyle(ButtonStyle.Secondary),
 					);
 				return interaction.editReply({
 					embeds: [
-						new MessageEmbed()
-							.setColor("RED")
+						new EmbedBuilder()
+							.setColor(0xFF0000)
 							.setDescription(
 								`Không tìm thấy kết quả cho \`${query}\`!\nĐảm bảo bạn đã nhập đúng thông tin tìm kiếm.`,
 							),
@@ -198,8 +199,8 @@ const command = new SlashCommand()
 			console.error(err);
 			return interaction.editReply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription(
 							`Một lỗi không xác định đã xảy ra, vui lòng kiểm tra console của bạn.`,
 						),
@@ -207,16 +208,16 @@ const command = new SlashCommand()
 			});
 		});
 
-		const collector = interaction.channel.createMessageComponentCollector({
+		const tipsCollector = interaction.channel.createMessageComponentCollector({
 			time: 1000 * 3600
 		});
 
-		collector.on('collect', async interaction => {
-			if (interaction.customId === 'tipsbutton') {
-				await interaction.deferUpdate();
-				await interaction.followUp({
+		tipsCollector.on('collect', async (btnInteraction) => {
+			if (btnInteraction.customId === 'tipsbutton') {
+				await btnInteraction.deferUpdate();
+				await btnInteraction.followUp({
 					embeds: [
-						new MessageEmbed()
+						new EmbedBuilder()
 							.setTitle(`Mẹo Lấy Lời Bài Hát`)
 							.setColor(client.config.embedColor)
 							.setDescription(

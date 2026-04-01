@@ -1,5 +1,5 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const command = new SlashCommand()
 .setName("previous")
@@ -12,12 +12,12 @@ const command = new SlashCommand()
 
 	let player;
 	if (client.manager) {
-		player = client.manager.players.get(interaction.guild.id);
+		player = client.manager.getPlayer(interaction.guild.id);
 	} else {
 		return interaction.reply({
 			embeds: [
-				new MessageEmbed()
-					.setColor("RED")
+				new EmbedBuilder()
+					.setColor(0xFF0000)
 					.setDescription("Nút Lavalink không được kết nối"),
 			],
 		});
@@ -26,39 +26,41 @@ const command = new SlashCommand()
 	if (!player) {
 		return interaction.reply({
 			embeds: [
-				new MessageEmbed()
-					.setColor("RED")
+				new EmbedBuilder()
+					.setColor(0xFF0000)
 					.setDescription("Không có bài hát trước đó cho phiên này."),
 			],
 			ephemeral: true,
 		});
 	}
 
-	const previousSong = player.queue.previous;
+	const previousSongs = player.queue.previous;
+	const previousSong = previousSongs && previousSongs.length > 0 ? previousSongs[0] : null;
 	const currentSong = player.queue.current;
-	const nextSong = player.queue[0]
+	const nextSong = player.queue.tracks[0];
 
 	if (!previousSong
 		|| previousSong === currentSong
 		|| previousSong === nextSong) {
 		return interaction.reply({
 			embeds: [
-				new MessageEmbed()
-					.setColor("RED")
+				new EmbedBuilder()
+					.setColor(0xFF0000)
 					.setDescription("Không có bài hát trước đó trong hàng đợi."),
 			],
-		})}
+		});
+	}
 
 	if (previousSong !== currentSong && previousSong !== nextSong) {
-		player.queue.splice(0, 0, currentSong)
-		player.play(previousSong);
+		player.queue.splice(0, 0, currentSong);
+		player.play({ clientTrack: previousSong });
 	}
 	interaction.reply({
 		embeds: [
-			new MessageEmbed()
+			new EmbedBuilder()
 				.setColor(client.config.embedColor)
 				.setDescription(
-					`⏮ | Bài hát trước đó: **${ previousSong.title }**`,
+					`⏮ | Bài hát trước đó: **${ previousSong.info.title }**`,
 				),
 		],
 	});

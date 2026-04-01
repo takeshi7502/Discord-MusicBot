@@ -2,9 +2,10 @@ const SlashCommand = require("../../lib/SlashCommand");
 const {
   Client,
   Interaction,
-  MessageActionRow,
-  MessageButton,
-  MessageEmbed,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
 } = require("discord.js");
 const LoadCommands = require("../../util/loadCommands");
 const { filter } = require("lodash");
@@ -22,7 +23,6 @@ const command = new SlashCommand()
     const filteredCommands = commands.filter(
       (cmd) => cmd.description != "null"
     );
-    //console.log(filteredCommands);
     const totalCmds = filteredCommands.length;
     let maxPages = Math.ceil(totalCmds / client.config.helpCmdPerPage);
 
@@ -34,14 +34,13 @@ const command = new SlashCommand()
         .toString()
         .trim();
     } catch (e) {
-      // do nothing
       gitHash = "unknown";
     }
 
     // default Page No.
     let pageNo = 0;
 
-    const helpEmbed = new MessageEmbed()
+    const helpEmbed = new EmbedBuilder()
       .setColor(client.config.embedColor)
       .setAuthor({
         name: `Lệnh của ${client.user.username}`,
@@ -71,16 +70,16 @@ const command = new SlashCommand()
 
     // Construction of the buttons for the embed
     const getButtons = (pageNo) => {
-      return new MessageActionRow().addComponents(
-        new MessageButton()
+      return new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
           .setCustomId("help_cmd_but_2_app")
           .setEmoji("◀️")
-          .setStyle("PRIMARY")
+          .setStyle(ButtonStyle.Primary)
           .setDisabled(pageNo == 0),
-        new MessageButton()
+        new ButtonBuilder()
           .setCustomId("help_cmd_but_1_app")
           .setEmoji("▶️")
-          .setStyle("PRIMARY")
+          .setStyle(ButtonStyle.Primary)
           .setDisabled(pageNo == maxPages - 1)
       );
     };
@@ -92,7 +91,6 @@ const command = new SlashCommand()
     });
     const collector = tempMsg.createMessageComponentCollector({
       time: 600000,
-      componentType: "BUTTON",
     });
 
     collector.on("collect", async (iter) => {
@@ -102,7 +100,7 @@ const command = new SlashCommand()
         pageNo--;
       }
 
-      helpEmbed.fields = [];
+      helpEmbed.data.fields = [];
 
       var tempArray = filteredCommands.slice(
         pageNo * client.config.helpCmdPerPage,
@@ -110,7 +108,6 @@ const command = new SlashCommand()
       );
 
       tempArray.forEach((cmd) => {
-        //console.log(cmd);
         helpEmbed
           .addFields({ name: cmd.name, value: cmd.description })
           .setFooter({ text: `Trang ${pageNo + 1} / ${maxPages}` });

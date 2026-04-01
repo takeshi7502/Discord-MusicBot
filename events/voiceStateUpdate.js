@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 /**
  *
@@ -10,14 +10,14 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async (client, oldState, newState) => {
 	// get guild and player
 	let guildId = newState.guild.id;
-	const player = client.manager.get(guildId);
+	const player = client.manager.getPlayer(guildId);
 	
 	// check if the bot is active (playing, paused or empty does not matter (return otherwise)
-	if (!player || player.state !== "CONNECTED") {
+	if (!player || !player.connected) {
 		return;
 	}
 	
-	// prepreoces the data
+	// preprocess the data
 	const stateChange = {};
 	// get the state change
 	if (oldState.channel === null && newState.channel !== null) {
@@ -37,21 +37,21 @@ module.exports = async (client, oldState, newState) => {
 		oldState.serverMute == false &&
 		newState.id === client.config.clientId
 	) {
-		return player.pause(true);
+		return player.pause();
 	}
 	if (
 		newState.serverMute == false &&
 		oldState.serverMute == true &&
 		newState.id === client.config.clientId
 	) {
-		return player.pause(false);
+		return player.resume();
 	}
 	// move check first as it changes type
 	if (stateChange.type === "MOVE") {
-		if (oldState.channel.id === player.voiceChannel) {
+		if (oldState.channel.id === player.voiceChannelId) {
 			stateChange.type = "LEAVE";
 		}
-		if (newState.channel.id === player.voiceChannel) {
+		if (newState.channel.id === player.voiceChannelId) {
 			stateChange.type = "JOIN";
 		}
 	}
@@ -64,7 +64,7 @@ module.exports = async (client, oldState, newState) => {
 	}
 	
 	// check if the bot's voice channel is involved (return otherwise)
-	if (!stateChange.channel || stateChange.channel.id !== player.voiceChannel) {
+	if (!stateChange.channel || stateChange.channel.id !== player.voiceChannelId) {
 		return;
 	}
         player.prevMembers = player.members
@@ -73,24 +73,31 @@ module.exports = async (client, oldState, newState) => {
 		case "JOIN":
 			if (player.get("autoPause") === true) {
                          var members = stateChange.channel.members.filter(member => !member.user.bot).size
-		            if (members === 1 && player.paused && members !== player.prevMembers){
-					player.pause(false);
-					let playerResumed = new MessageEmbed()
+			    if (members === 1 && player.paused && members !== player.prevMembers){
+					player.resume();
+					let playerResumed = new EmbedBuilder()
 						.setColor(client.config.embedColor)
 						.setTitle(`Tiếp Tục!`, client.config.iconURL)
 						.setDescription(
-							`Đang phát  [${ player.queue.current.title }](${ player.queue.current.uri })`,
+							`Đang phát  [${ player.queue.current.info.title }](${ player.queue.current.info.uri })`,
 						)
 						.setFooter({ text: `Bản nhạc hiện tại đã được tiếp tục` });
 					
 					let resumeMessage = await client.channels.cache
-						.get(player.textChannel)
+						.get(player.textChannelId)
 						.send({ embeds: [playerResumed] });
-					player.setResumeMessage(client, resumeMessage);
+					player.set("resumeMessage", resumeMessage);
+					
+					// Delete previous paused message
+					const pausedMsg = player.get("pausedMessage");
+					if (pausedMsg && !client.isMessageDeleted(pausedMsg)) {
+						pausedMsg.delete().catch(() => {});
+						client.markMessageAsDeleted(pausedMsg);
+					}
 					
 					setTimeout(() => {
 						if (!client.isMessageDeleted(resumeMessage)) {
-							resumeMessage.delete();
+							resumeMessage.delete().catch(() => {});
 							client.markMessageAsDeleted(resumeMessage);
 						}
 					}, 5000);
@@ -102,9 +109,9 @@ module.exports = async (client, oldState, newState) => {
 			const twentyFourSeven = player.get("twentyFourSeven");
 			if (player.get("autoPause") === true && player.get("autoLeave") === false) {
 				if (members === 0 && !player.paused && player.playing) {
-					player.pause(true);
+					player.pause();
 					
-					let playerPaused = new MessageEmbed()
+					let playerPaused = new EmbedBuilder()
 						.setColor(client.config.embedColor)
 						.setTitle(`Tạm Dừng!`, client.config.iconURL)
 						.setFooter({
@@ -112,17 +119,24 @@ module.exports = async (client, oldState, newState) => {
 						});
 					
 					let pausedMessage = await client.channels.cache
-						.get(player.textChannel)
+						.get(player.textChannelId)
 						.send({ embeds: [playerPaused] });
-					player.setPausedMessage(client, pausedMessage);
+					player.set("pausedMessage", pausedMessage);
+					
+					// Delete previous resume message
+					const resumeMsg = player.get("resumeMessage");
+					if (resumeMsg && !client.isMessageDeleted(resumeMsg)) {
+						resumeMsg.delete().catch(() => {});
+						client.markMessageAsDeleted(resumeMsg);
+					}
 				}
-			}else if (player.get("autoLeave") === true && player.get("autoPause") === false) {
+			} else if (player.get("autoLeave") === true && player.get("autoPause") === false) {
 				if (members === 0) {
 					if (twentyFourSeven){
 						setTimeout(async () => {
 							var members = stateChange.channel.members.filter(member => !member.user.bot).size
-							if (members === 0 && player.state !== 'DISCONNECTED'){
-								let leftEmbed = new MessageEmbed()
+							if (members === 0 && player.connected){
+								let leftEmbed = new EmbedBuilder()
 									.setColor(client.config.embedColor)
 									.setAuthor({
 									name: "Đã ngắt kết nối!",
@@ -131,16 +145,16 @@ module.exports = async (client, oldState, newState) => {
 									.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
 									.setTimestamp();
 								let Disconnected = await client.channels.cache
-									.get(player.textChannel)
+									.get(player.textChannelId)
 									.send({ embeds: [leftEmbed] });
-								setTimeout(() => Disconnected.delete(true), 5000);
+								setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
 								player.queue.clear();
 								player.destroy();
 								player.set("autoQueue", false);
 							}
 						}, client.config.disconnectTime);
 					} else{
-						let leftEmbed = new MessageEmbed()
+						let leftEmbed = new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setAuthor({
 							name: "Đã ngắt kết nối!",
@@ -149,18 +163,18 @@ module.exports = async (client, oldState, newState) => {
 							.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
 							.setTimestamp();
 						let Disconnected = await client.channels.cache
-							.get(player.textChannel)
+							.get(player.textChannelId)
 							.send({ embeds: [leftEmbed] });
-						setTimeout(() => Disconnected.delete(true), 5000);
+						setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
 						player.destroy();	
 					}
 					
 				}
-			}else if (player.get("autoLeave") === true && player.get("autoPause") === true){
+			} else if (player.get("autoLeave") === true && player.get("autoPause") === true){
 				if (members === 0 && !player.paused && player.playing && twentyFourSeven) {
-					player.pause(true);
+					player.pause();
 					
-					let playerPaused = new MessageEmbed()
+					let playerPaused = new EmbedBuilder()
 						.setColor(client.config.embedColor)
 						.setTitle(`Tạm Dừng!`, client.config.iconURL)
 						.setFooter({
@@ -168,13 +182,13 @@ module.exports = async (client, oldState, newState) => {
 						});
 					
 					let pausedMessage = await client.channels.cache
-						.get(player.textChannel)
+						.get(player.textChannelId)
 						.send({ embeds: [playerPaused] });
-					player.setPausedMessage(client, pausedMessage);
+					player.set("pausedMessage", pausedMessage);
 					setTimeout(async () => {
 						var members = stateChange.channel.members.filter(member => !member.user.bot).size
-						if (members === 0 && player.state !== 'DISCONNECTED'){
-							let leftEmbed = new MessageEmbed()
+						if (members === 0 && player.connected){
+							let leftEmbed = new EmbedBuilder()
 								.setColor(client.config.embedColor)
 								.setAuthor({
 								name: "Đã ngắt kết nối!",
@@ -183,18 +197,18 @@ module.exports = async (client, oldState, newState) => {
 								.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
 								.setTimestamp();
 							let Disconnected = await client.channels.cache
-								.get(player.textChannel)
+								.get(player.textChannelId)
 								.send({ embeds: [leftEmbed] });
-							setTimeout(() => Disconnected.delete(true), 5000);
-							pausedMessage.delete(true);
+							setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
+							pausedMessage.delete().catch(() => {});
 							player.queue.clear();
 							player.destroy();
 							player.set("autoQueue", false);
 						}
 					}, client.config.disconnectTime);
-				}else{
-					if (members === 0 && player.state !== 'DISCONNECTED'){
-						let leftEmbed = new MessageEmbed()
+				} else{
+					if (members === 0 && player.connected){
+						let leftEmbed = new EmbedBuilder()
 						.setColor(client.config.embedColor)
 						.setAuthor({
 						name: "Đã ngắt kết nối!",
@@ -203,9 +217,9 @@ module.exports = async (client, oldState, newState) => {
 						.setFooter({ text: "Rời đi vì không còn ai ở trong kênh thoại." })
 						.setTimestamp();
 						let Disconnected = await client.channels.cache
-							.get(player.textChannel)
+							.get(player.textChannelId)
 							.send({ embeds: [leftEmbed] });
-						setTimeout(() => Disconnected.delete(true), 5000);
+						setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
 						player.destroy();
 					}
 				}

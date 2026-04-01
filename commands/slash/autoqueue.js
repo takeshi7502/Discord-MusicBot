@@ -1,5 +1,5 @@
 const colors = require("colors");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
@@ -13,12 +13,12 @@ const command = new SlashCommand()
 		
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -27,15 +27,15 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Không có gì đang phát trong hàng đợi."),
 				],
 				ephemeral: true,
 			});
 		}
 		
-		let autoQueueEmbed = new MessageEmbed().setColor(client.config.embedColor);
+		let autoQueueEmbed = new EmbedBuilder().setColor(client.config.embedColor);
 		const autoQueue = player.get("autoQueue");
 		player.set("requester", interaction.guild.members.me);
 		
@@ -50,11 +50,11 @@ const command = new SlashCommand()
 		    text: `Âm nhạc liên quan sẽ ${!autoQueue ? "tự động" : "không"} được thêm vào hàng đợi.`
       });
 		client.warn(
-			`Bot: ${ player.options.guild } | [${ colors.blue(
+			`Bot: ${ player.guildId } | [${ colors.blue(
 				"AUTOQUEUE",
 			) }] đã được [${ colors.blue(!autoQueue? "BẬT" : "TẮT")}] trong ${
-				client.guilds.cache.get(player.options.guild)
-					? client.guilds.cache.get(player.options.guild).name
+				client.guilds.cache.get(player.guildId)
+					? client.guilds.cache.get(player.guildId).name
 					: "một server"
 			}`,
 		);

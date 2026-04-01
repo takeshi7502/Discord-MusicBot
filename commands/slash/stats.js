@@ -1,7 +1,7 @@
 const SlashCommand = require("../../lib/SlashCommand");
 const moment = require("moment");
 require("moment-duration-format");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const os = require("os");
 
 const command = new SlashCommand()
@@ -12,7 +12,7 @@ const command = new SlashCommand()
     if (interaction.user.id !== client.config.adminId) {
       return interaction.reply({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setColor(client.config.embedColor)
             .setDescription("Bạn không được ủy quyền để sử dụng lệnh này!"),
         ],
@@ -32,7 +32,7 @@ const command = new SlashCommand()
       .format("D[d]・H[h]・m[m]・s[s]", { trim: "all" });
 
     // Lấy node Lavalink đang sử dụng
-    const lavaNode = client.manager.nodes.values().next().value;
+    const lavaNode = client.manager.nodeManager.leastUsedNodes()[0];
     // Định dạng thời gian Lavalink chạy
     const lavauptime = moment
       .duration(lavaNode.stats.uptime)
@@ -59,7 +59,7 @@ const command = new SlashCommand()
     }
 
     // Tạo embed
-    const statsEmbed = new MessageEmbed()
+    const statsEmbed = new EmbedBuilder()
       .setColor(client.config.embedColor)
       .setTitle(`${client.user.username} Thông Tin`)
       .setDescription(

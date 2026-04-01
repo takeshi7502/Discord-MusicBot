@@ -1,4 +1,4 @@
-const { MessageEmbed, message } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
 const fs = require("fs");
 const path = require("path");
@@ -51,7 +51,7 @@ const command = new SlashCommand()
 					client.log(`Đã tải lại ${totalCmds} lệnh!`);
 				return interaction.reply({
 					embeds: [
-						new MessageEmbed()
+						new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setDescription(`Đã tải lại thành công \`${ totalCmds }\` Lệnh!`)
 							.setFooter({
@@ -65,7 +65,7 @@ const command = new SlashCommand()
 				console.log(err);
 				return interaction.reply({
 					embeds: [
-						new MessageEmbed()
+						new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setDescription(
 								"Đã xảy ra một lỗi. Để biết thêm chi tiết, vui lòng kiểm tra console.",
@@ -77,7 +77,7 @@ const command = new SlashCommand()
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
+					new EmbedBuilder()
 						.setColor(client.config.embedColor)
 						.setDescription("Bạn không được ủy quyền để sử dụng lệnh này!"),
 				],

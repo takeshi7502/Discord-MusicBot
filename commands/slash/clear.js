@@ -1,5 +1,5 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("clear")
@@ -12,12 +12,12 @@ const command = new SlashCommand()
 		
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -26,16 +26,16 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Hiện tại không có bài hát nào đang phát."),
 				],
 				ephemeral: true,
 			});
 		}
 		
-		if (!player.queue || !player.queue.length || player.queue.length === 0) {
-			let cembed = new MessageEmbed()
+		if (!player.queue || !player.queue.tracks.length || player.queue.tracks.length === 0) {
+			let cembed = new EmbedBuilder()
 				.setColor(client.config.embedColor)
 				.setDescription("❌ | **Không hợp lệ, không đủ bài hát để xóa.**");
 			
@@ -44,7 +44,7 @@ const command = new SlashCommand()
 		
 		player.queue.clear();
 		
-		let clearEmbed = new MessageEmbed()
+		let clearEmbed = new EmbedBuilder()
 			.setColor(client.config.embedColor)
 			.setDescription(`✅ | **Đã xóa hàng đợi!**`);
 		

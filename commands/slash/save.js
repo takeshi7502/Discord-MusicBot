@@ -1,5 +1,5 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const prettyMilliseconds = require("pretty-ms");
 
 const command = new SlashCommand()
@@ -13,12 +13,12 @@ const command = new SlashCommand()
 		
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -27,34 +27,34 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Hiện tại không có bài hát nào đang phát."),
 				],
 				ephemeral: true,
 			});
 		}
 		
-		const sendtoDmEmbed = new MessageEmbed()
+		const sendtoDmEmbed = new EmbedBuilder()
 			.setColor(client.config.embedColor)
 			.setAuthor({
 				name: "Bài hát đã lưu",
 				iconURL: `${ interaction.user.displayAvatarURL({ dynamic: true }) }`,
 			})
 			.setDescription(
-				`**Đã lưu [${player.queue.current.title}](${player.queue.current.uri}) vào tin nhắn riêng của bạn.**`,
+				`**Đã lưu [${player.queue.current.info.title}](${player.queue.current.info.uri}) vào tin nhắn riêng của bạn.**`,
 			)
 			.addFields(
 				{
 					name: "Thời lượng của bài hát",
-					value: `\`${ prettyMilliseconds(player.queue.current.duration, {
+					value: `\`${ prettyMilliseconds(player.queue.current.info.duration, {
 						colonNotation: true,
 					}) }\``,
 					inline: true,
 				},
 				{
 					name: "Tác giả của bài hát",
-					value: `\`${ player.queue.current.author }\``,
+					value: `\`${ player.queue.current.info.author }\``,
 					inline: true,
 				},
 				{
@@ -68,7 +68,7 @@ const command = new SlashCommand()
 		
 		return interaction.reply({
 			embeds: [
-				new MessageEmbed()
+				new EmbedBuilder()
 					.setColor(client.config.embedColor)
 					.setDescription(
 						"Vui lòng kiểm tra **DMs** của bạn. Nếu bạn không nhận được bất kỳ tin nhắn nào từ tôi, hãy đảm bảo rằng **DMs** của bạn đang mở.",

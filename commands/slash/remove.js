@@ -1,5 +1,5 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const command = new SlashCommand()
 	.setName("remove")
@@ -21,12 +21,12 @@ const command = new SlashCommand()
 		
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -35,8 +35,8 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Không có bài hát để xóa."),
 				],
 				ephemeral: true,
@@ -46,20 +46,20 @@ const command = new SlashCommand()
 		await interaction.deferReply();
 		
 		const position = Number(args) - 1;
-		if (position > player.queue.size) {
-			let thing = new MessageEmbed()
+		if (position > player.queue.tracks.length) {
+			let thing = new EmbedBuilder()
 				.setColor(client.config.embedColor)
 				.setDescription(
-					`Hàng đợi hiện tại chỉ có **${player.queue.size}** bài hát.`,
+					`Hàng đợi hiện tại chỉ có **${player.queue.tracks.length}** bài hát.`,
 				);
 			return interaction.editReply({ embeds: [thing] });
 		}
 		
-		const song = player.queue[position];
-		player.queue.remove(position);
+		const song = player.queue.tracks[position];
+		player.queue.splice(position, 1);
 		
 		const number = position + 1;
-		let removeEmbed = new MessageEmbed()
+		let removeEmbed = new EmbedBuilder()
 			.setColor(client.config.embedColor)
 			.setDescription(`Đã xóa bài hát số **${number}** khỏi hàng đợi.`);
 		return interaction.editReply({ embeds: [removeEmbed] });

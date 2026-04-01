@@ -1,5 +1,5 @@
 const colors = require("colors");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
@@ -13,12 +13,12 @@ const command = new SlashCommand()
 
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -27,15 +27,15 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Không có gì để phát 24/7."),
 				],
 				ephemeral: true,
 			});
 		}
 
-		let twentyFourSevenEmbed = new MessageEmbed().setColor(
+		let twentyFourSevenEmbed = new EmbedBuilder().setColor(
 			client.config.embedColor,
 		);
 		const twentyFourSeven = player.get("twentyFourSeven");
@@ -51,18 +51,18 @@ const command = new SlashCommand()
 				text: `Bot ${!twentyFourSeven ? "bây giờ sẽ" : " sẽ ko còn"} duy trì kết nối với kênh thoại 24/7.`
 			});
 		client.warn(
-			`Bot: ${player.options.guild} | [${colors.blue(
+			`Bot: ${player.guildId} | [${colors.blue(
 				"24/7",
 			)}] đã được [${colors.blue(
 				!twentyFourSeven ? "BẬT" : "TẮT",
-			)}] trong ${client.guilds.cache.get(player.options.guild)
-				? client.guilds.cache.get(player.options.guild).name
+			)}] trong ${client.guilds.cache.get(player.guildId)
+				? client.guilds.cache.get(player.guildId).name
 				: "một server"
 			}`,
 		);
 
 
-		if (!player.playing && player.queue.totalSize === 0 && twentyFourSeven) {
+		if (!player.playing && (player.queue.tracks.length + (player.queue.current ? 1 : 0)) === 0 && twentyFourSeven) {
 			player.destroy();
 		}
 

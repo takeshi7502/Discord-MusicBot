@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
@@ -38,7 +38,7 @@ const command = new SlashCommand()
     const embedColor = client.config.embedColor || "blue";
 
     // Tạo embed với bố cục gọn gàng
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor(embedColor)
       .setTitle("🏓 | Pong!")
       .setDescription(

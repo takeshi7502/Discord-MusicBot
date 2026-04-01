@@ -1,9 +1,9 @@
 const SlashCommand = require("../../lib/SlashCommand");
 const prettyMilliseconds = require("pretty-ms");
 const {
-  MessageEmbed,
-  MessageActionRow,
-  MessageSelectMenu,
+  EmbedBuilder,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
 } = require("discord.js");
 
 const command = new SlashCommand()
@@ -23,58 +23,58 @@ const command = new SlashCommand()
 
     let player;
     if (client.manager) {
-      player = client.createPlayer(interaction.channel, channel);
+      player = client.manager.getPlayer(interaction.guild.id);
+      if (!player) {
+        player = client.createPlayer(interaction.channel, channel);
+      }
     } else {
       return interaction.reply({
         embeds: [
-          new MessageEmbed()
-            .setColor("RED")
+          new EmbedBuilder()
+            .setColor(0xFF0000)
             .setDescription("Nút Lavalink không được kết nối"),
         ],
       });
     }
     await interaction.deferReply().catch((_) => {});
 
-    if (player.state !== "CONNECTED") {
-      player.connect();
+    if (!player.connected) {
+      await player.connect();
     }
 
     const search = interaction.options.getString("query");
     let res;
 
     try {
-      res = await player.search(search, interaction.user);
-      if (res.loadType === "LOAD_FAILED") {
-        return interaction.reply({
+      res = await player.search({ query: search, source: "youtube" }, interaction.user);
+      if (res.loadType === "error") {
+        return interaction.editReply({
           embeds: [
-            new MessageEmbed()
+            new EmbedBuilder()
               .setDescription("Có lỗi xảy ra khi tìm kiếm bài hát")
-              .setColor("RED"),
+              .setColor(0xFF0000),
           ],
-          ephemeral: true,
         });
       }
     } catch (err) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setAuthor({
               name: "Có lỗi xảy ra trong quá trình tìm kiếm bài hát",
             })
-            .setColor("RED"),
+            .setColor(0xFF0000),
         ],
-        ephemeral: true,
       });
     }
 
-    if (res.loadType == "NO_MATCHES") {
-      return interaction.reply({
+    if (res.loadType === "empty") {
+      return interaction.editReply({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setDescription(`Không tìm thấy kết quả cho \`${search}\``)
-            .setColor("RED"),
+            .setColor(0xFF0000),
         ],
-        ephemeral: true,
       });
     } else {
       let max = 10;
@@ -86,18 +86,18 @@ const command = new SlashCommand()
 
       res.tracks.slice(0, max).map((track) => {
         resultFromSearch.push({
-          label: `${track.title}`,
-          value: `${track.uri}`,
-          description: track.isStream
+          label: `${track.info.title}`.substring(0, 100),
+          value: `${track.info.uri}`,
+          description: track.info.isStream
             ? `LIVE`
-            : `${prettyMilliseconds(track.duration, {
+            : `${prettyMilliseconds(track.info.duration, {
                 secondsDecimalDigits: 0,
-              })} - ${track.author}`,
+              })} - ${track.info.author}`,
         });
       });
 
-      const menus = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
+      const menus = new ActionRowBuilder().addComponents(
+        new StringSelectMenuBuilder()
           .setCustomId("select")
           .setPlaceholder("Chọn một bài hát")
           .addOptions(resultFromSearch)
@@ -105,7 +105,7 @@ const command = new SlashCommand()
 
       let choosenTracks = await interaction.editReply({
         embeds: [
-          new MessageEmbed()
+          new EmbedBuilder()
             .setColor(client.config.embedColor)
             .setDescription(
               `Dưới đây là một số kết quả mà tôi tìm thấy cho \`${search}\`. Vui lòng chọn bài hát trong vòng \`30 giây\``
@@ -120,31 +120,31 @@ const command = new SlashCommand()
         time: 30000,
       });
       tracksCollector.on("collect", async (i) => {
-        if (i.isSelectMenu()) {
+        if (i.isStringSelectMenu()) {
           await i.deferUpdate();
           let uriFromCollector = i.values[0];
           let trackForPlay;
 
           trackForPlay = await player?.search(
-            uriFromCollector,
+            { query: uriFromCollector },
             interaction.user
           );
-          player?.queue?.add(trackForPlay.tracks[0]);
-          if (!player?.playing && !player?.paused && !player?.queue?.size) {
-            player?.play();
+          await player?.queue?.add(trackForPlay.tracks[0]);
+          if (!player?.playing && !player?.paused && player?.queue?.tracks?.length > 0) {
+            await player?.play({ paused: false });
           }
           i.editReply({
             content: null,
             embeds: [
-              new MessageEmbed()
+              new EmbedBuilder()
                 .setAuthor({
                   name: "Đã thêm vào hàng đợi",
                   iconURL: client.config.iconURL,
                 })
-                .setURL(res.tracks[0].uri)
-                .setThumbnail(res.tracks[0].displayThumbnail("maxresdefault"))
+                .setURL(trackForPlay.tracks[0].info.uri)
+                .setThumbnail(trackForPlay.tracks[0].info.artworkUrl || null)
                 .setDescription(
-                  `[${trackForPlay?.tracks[0]?.title}](${trackForPlay?.tracks[0].uri})` ||
+                  `[${trackForPlay?.tracks[0]?.info?.title}](${trackForPlay?.tracks[0]?.info?.uri})` ||
                     "Không có Tiêu đề"
                 )
                 .addFields(
@@ -155,9 +155,9 @@ const command = new SlashCommand()
                   },
                   {
                     name: "Thời lượng",
-                    value: res.tracks[0].isStream
+                    value: trackForPlay.tracks[0].info.isStream
                       ? `\`LIVE :red_circle:\``
-                      : `\`${client.ms(res.tracks[0].duration, {
+                      : `\`${client.ms(trackForPlay.tracks[0].info.duration, {
                           colonNotation: true,
                         })}\``,
                     inline: true,
@@ -174,7 +174,7 @@ const command = new SlashCommand()
           choosenTracks.edit({
             content: null,
             embeds: [
-              new MessageEmbed()
+              new EmbedBuilder()
                 .setDescription(
                   `Không có bài hát nào được chọn. Bạn đã mất quá nhiều thời gian để chọn một bài hát.`
                 )

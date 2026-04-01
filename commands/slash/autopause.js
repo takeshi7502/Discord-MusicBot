@@ -1,5 +1,5 @@
 const colors = require("colors");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const SlashCommand = require("../../lib/SlashCommand");
 
 const command = new SlashCommand()
@@ -11,12 +11,12 @@ const command = new SlashCommand()
 
     let player;
     if (client.manager)
-      player = client.manager.players.get(interaction.guild.id);
+      player = client.manager.getPlayer(interaction.guild.id);
     else
       return interaction.reply({
         embeds: [
-          new MessageEmbed()
-            .setColor("RED")
+          new EmbedBuilder()
+            .setColor(0xFF0000)
             .setDescription("Nút Lavalink không được kết nối"),
         ],
       });
@@ -24,15 +24,15 @@ const command = new SlashCommand()
     if (!player) {
       return interaction.reply({
         embeds: [
-          new MessageEmbed()
-            .setColor("RED")
+          new EmbedBuilder()
+            .setColor(0xFF0000)
             .setDescription("Không có gì đang phát trong hàng đợi"),
         ],
         ephemeral: true,
       });
     }
 
-    let autoPauseEmbed = new MessageEmbed().setColor(client.config.embedColor);
+    let autoPauseEmbed = new EmbedBuilder().setColor(client.config.embedColor);
     const autoPause = player.get("autoPause");
     player.set("requester", interaction.guild.members.me);
 
@@ -47,11 +47,11 @@ const command = new SlashCommand()
 			  text: `Trình phát sẽ ${!autoPause ? "tự động" : "ko còn bị"} dừng khi mọi người rời khỏi kênh thoại.`
 			});
       client.warn(
-        `Bot: ${player.options.guild} | [${colors.blue(
+        `Bot: ${player.guildId} | [${colors.blue(
           "AUTOPAUSE"
         )}] đã được [${colors.blue(!autoPause ? "BẬT" : "TẮT")}] trong ${
-          client.guilds.cache.get(player.options.guild)
-            ? client.guilds.cache.get(player.options.guild).name
+          client.guilds.cache.get(player.guildId)
+            ? client.guilds.cache.get(player.guildId).name
             : "một server"
         }`
       );      

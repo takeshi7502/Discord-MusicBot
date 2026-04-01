@@ -1,6 +1,6 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
-const escapeMarkdown = require('discord.js').Util.escapeMarkdown;
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require("discord.js");
+const { escapeMarkdown } = require('discord.js');
 const load = require("lodash");
 const pms = require("pretty-ms");
 
@@ -16,12 +16,12 @@ const command = new SlashCommand()
 		
 		let player;
 		if (client.manager) {
-			player = client.manager.players.get(interaction.guild.id);
+			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Nút Lavalink không được kết nối"),
 				],
 			});
@@ -30,8 +30,8 @@ const command = new SlashCommand()
 		if (!player) {
 			return interaction.reply({
 				embeds: [
-					new MessageEmbed()
-						.setColor("RED")
+					new EmbedBuilder()
+						.setColor(0xFF0000)
 						.setDescription("Không có bài hát nào trong hàng đợi."),
 				],
 				ephemeral: true,
@@ -39,7 +39,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player.playing) {
-			const queueEmbed = new MessageEmbed()
+			const queueEmbed = new EmbedBuilder()
 				.setColor(client.config.embedColor)
 				.setDescription("Không có bài hát nào đang phát.");
 			return interaction.reply({ embeds: [queueEmbed], ephemeral: true });
@@ -49,21 +49,21 @@ const command = new SlashCommand()
 		});
         
 		
-		if (!player.queue.size || player.queue.size === 0) {
+		if (!player.queue.tracks.length || player.queue.tracks.length === 0) {
             let song = player.queue.current;
-            var title = escapeMarkdown(song.title)
-            var title = title.replace(/\]/g,"")
-            var title = title.replace(/\[/g,"")
-			const queueEmbed = new MessageEmbed()
+            var title = escapeMarkdown(song.info.title)
+            title = title.replace(/\]/g,"")
+            title = title.replace(/\[/g,"")
+			const queueEmbed = new EmbedBuilder()
 				.setColor(client.config.embedColor)
-				.setDescription(`**♪ | Đang phát:** [${ title }](${ song.uri })`)
+				.setDescription(`**♪ | Đang phát:** [${ title }](${ song.info.uri })`)
 				.addFields(
 					{
 						name: "Thời lượng",
-						value: song.isStream
+						value: song.info.isStream
 							? `\`LIVE\``
 							: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
-								player.queue.current.duration,
+								song.info.duration,
 								{ colonNotation: true },
 							) }\``,
 						inline: true,
@@ -75,7 +75,7 @@ const command = new SlashCommand()
 					},
 					{
 						name: "Tổng Số Bài Hát",
-						value: `\`${ player.queue.totalSize - 1 }\``,
+						value: `\`${ player.queue.tracks.length }\``,
 						colonNotation: true,
 						inline: true,
 					},
@@ -85,18 +85,16 @@ const command = new SlashCommand()
 				embeds: [queueEmbed],
 			});
 		} else {
-			let queueDuration = player.queue.duration.valueOf()
-			if (player.queue.current.isStream) {
-				queueDuration -= player.queue.current.duration
-			}
-			for (let i = 0; i < player.queue.length; i++) {
-				if (player.queue[i].isStream) {
-					queueDuration -= player.queue[i].duration
+			let queueDuration = player.queue.tracks.reduce((a, t) => a + (t.info.duration || 0), 0);
+			// Don't count streams in total duration
+			for (let i = 0; i < player.queue.tracks.length; i++) {
+				if (player.queue.tracks[i].info.isStream) {
+					queueDuration -= player.queue.tracks[i].info.duration
 				}
 			}
 			
-			const mapping = player.queue.map(
-				(t, i) => `\` ${ ++i } \` [${ t.title }](${ t.uri }) [${ t.requester }]`,
+			const mapping = player.queue.tracks.map(
+				(t, i) => `\` ${ i + 1 } \` [${ t.info.title }](${ t.info.uri }) [${t.requester ? `<@${t.requester.id || t.requester}>` : 'Unknown'}]`,
 			);
 			
 			const chunk = load.chunk(mapping, 10);
@@ -115,23 +113,23 @@ const command = new SlashCommand()
 				page = 0;
 			}
 			
-			if (player.queue.size < 11 || player.queue.totalSize < 11) {
+			if (player.queue.tracks.length < 11) {
                 let song = player.queue.current;
-                var title = escapeMarkdown(song.title)
-                var title = title.replace(/\]/g,"")
-                var title = title.replace(/\[/g,"")
-				const embedTwo = new MessageEmbed()
+                var title = escapeMarkdown(song.info.title)
+                title = title.replace(/\]/g,"")
+                title = title.replace(/\[/g,"")
+				const embedTwo = new EmbedBuilder()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+						`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
 					)
 					.addFields(
 						{
 							name: "Thời lượng của bài hát",
-							value: song.isStream
+							value: song.info.isStream
 								? `\`LIVE\``
 								: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
-									player.queue.current.duration,
+									song.info.duration,
 									{ colonNotation: true },
 								) }\``,
 							inline: true,
@@ -145,7 +143,7 @@ const command = new SlashCommand()
 						},
 						{
 							name: "Tổng số bài hát",
-							value: `\`${ player.queue.totalSize - 1 }\``,
+							value: `\`${ player.queue.tracks.length }\``,
 							colonNotation: true,
 							inline: true,
 						},
@@ -162,21 +160,21 @@ const command = new SlashCommand()
 					});
 			} else {
 				let song = player.queue.current;
-                var title = escapeMarkdown(song.title)
-                var title = title.replace(/\]/g,"")
-                var title = title.replace(/\[/g,"")
-				const embedThree = new MessageEmbed()
+                var title = escapeMarkdown(song.info.title)
+                title = title.replace(/\]/g,"")
+                title = title.replace(/\[/g,"")
+				const embedThree = new EmbedBuilder()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+						`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
 					)
 					.addFields(
 						{
 							name: "Thời lượng của bài hát",
-							value: song.isStream
+							value: song.info.isStream
 								? `\`LIVE\``
 								: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
-									player.queue.current.duration,
+									song.info.duration,
 									{ colonNotation: true },
 								) }\``,
 							inline: true,
@@ -190,7 +188,7 @@ const command = new SlashCommand()
 						},
 						{
 							name: "Tổng số bài hát",
-							value: `\`${ player.queue.totalSize - 1 }\``,
+							value: `\`${ player.queue.tracks.length }\``,
 							colonNotation: true,
 							inline: true,
 						},
@@ -199,20 +197,20 @@ const command = new SlashCommand()
 						text: `Trang ${ page + 1 }/${ pages.length }`,
 					});
 				
-				const buttonOne = new MessageButton()
+				const buttonOne = new ButtonBuilder()
 					.setCustomId("queue_cmd_but_1_app")
 					.setEmoji("⏭️")
-					.setStyle("PRIMARY");
-				const buttonTwo = new MessageButton()
+					.setStyle(ButtonStyle.Primary);
+				const buttonTwo = new ButtonBuilder()
 					.setCustomId("queue_cmd_but_2_app")
 					.setEmoji("⏮️")
-					.setStyle("PRIMARY");
+					.setStyle(ButtonStyle.Primary);
 				
 				await interaction
 					.editReply({
 						embeds: [embedThree],
 						components: [
-							new MessageActionRow().addComponents([buttonTwo, buttonOne]),
+							new ActionRowBuilder().addComponents(buttonTwo, buttonOne),
 						],
 					})
 					.catch(() => {
@@ -242,21 +240,21 @@ const command = new SlashCommand()
 						});
 						page = page + 1 < pages.length? ++page : 0;
                         let song = player.queue.current;
-                        var title = escapeMarkdown(song.title)
-                        var title = title.replace(/\]/g,"")
-                        var title = title.replace(/\[/g,"")
-						const embedFour = new MessageEmbed()
+                        var title = escapeMarkdown(song.info.title)
+                        title = title.replace(/\]/g,"")
+                        title = title.replace(/\[/g,"")
+						const embedFour = new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+								`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
 							)
 							.addFields(
 								{
 									name: "Thời lượng của bài hát",
-									value: song.isStream
+									value: song.info.isStream
 										? `\`LIVE\``
 										: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
-											player.queue.current.duration,
+											song.info.duration,
 											{ colonNotation: true },
 										) }\``,
 									inline: true,
@@ -270,7 +268,7 @@ const command = new SlashCommand()
 								},
 								{
 									name: "Tổng số bài hát",
-									value: `\`${ player.queue.totalSize - 1 }\``,
+									value: `\`${ player.queue.tracks.length }\``,
 									colonNotation: true,
 									inline: true,
 								},
@@ -282,7 +280,7 @@ const command = new SlashCommand()
 						await interaction.editReply({
 							embeds: [embedFour],
 							components: [
-								new MessageActionRow().addComponents([buttonTwo, buttonOne]),
+								new ActionRowBuilder().addComponents(buttonTwo, buttonOne),
 							],
 						});
 					} else if (button.customId === "queue_cmd_but_2_app") {
@@ -290,21 +288,21 @@ const command = new SlashCommand()
 						});
 						page = page > 0? --page : pages.length - 1;
                         let song = player.queue.current;
-                        var title = escapeMarkdown(song.title)
-                        var title = title.replace(/\]/g,"")
-                        var title = title.replace(/\[/g,"")
-						const embedFive = new MessageEmbed()
+                        var title = escapeMarkdown(song.info.title)
+                        title = title.replace(/\]/g,"")
+                        title = title.replace(/\[/g,"")
+						const embedFive = new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`**♪ | Đang phát:** [${ title }](${ song.uri }) [${ player.queue.current.requester }]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+								`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
 							)
 							.addFields(
 								{
 									name: "Thời lượng của bài hát",
-									value: song.isStream
+									value: song.info.isStream
 										? `\`LIVE\``
 										: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
-											player.queue.current.duration,
+											song.info.duration,
 											{ colonNotation: true },
 										) }\``,
 									inline: true,
@@ -318,7 +316,7 @@ const command = new SlashCommand()
 								},
 								{
 									name: "Tổng số bài hát",
-									value: `\`${ player.queue.totalSize - 1 }\``,
+									value: `\`${ player.queue.tracks.length }\``,
 									colonNotation: true,
 									inline: true,
 								},
@@ -331,7 +329,7 @@ const command = new SlashCommand()
 							.editReply({
 								embeds: [embedFive],
 								components: [
-									new MessageActionRow().addComponents([buttonTwo, buttonOne]),
+									new ActionRowBuilder().addComponents(buttonTwo, buttonOne),
 								],
 							})
 							.catch(() => {
