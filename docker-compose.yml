@@ -3,7 +3,6 @@ services:
   # Lavalink (Audio node)
   # --------------------------------
   lavalink:
-    profiles: [lavalink, all]
     container_name: discordmusicbot-lavalink
     image: ghcr.io/lavalink-devs/lavalink:latest
     restart: unless-stopped

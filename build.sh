@@ -84,7 +84,7 @@ fi
 
 # Bước 6: Dừng container cũ
 echo "🛑 Đang dừng các container cũ..."
-sudo docker compose --profile lavalink down --remove-orphans 2>/dev/null || true
+sudo docker compose down --remove-orphans 2>/dev/null || true
 
 # Bước 7: Build image
 echo "⚙️  Đang build docker image cho bot..."
@@ -95,7 +95,7 @@ fi
 
 # Bước 8: Khởi động container
 echo "🚀 Đang khởi động Bot và Lavalink..."
-if ! sudo docker compose --profile lavalink up -d; then
+if ! sudo docker compose up -d; then
     echo "❌ Khởi động container thất bại!"
     exit 1
 fi
