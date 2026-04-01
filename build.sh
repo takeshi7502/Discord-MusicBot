@@ -30,14 +30,14 @@ if [ ! -f config.js ]; then
 fi
 
 # Bước 3: Tự động sửa host thành "lavalink" cho Docker networking trong file config.js
-if grep -q '"host": "127.0.0.1"' config.js 2>/dev/null; then
+if grep -q 'host: "127.0.0.1"' config.js 2>/dev/null; then
     echo "⚠️  Phát hiện host đang là '127.0.0.1', tự động đổi sang 'lavalink' cho Docker..."
-    sed -i 's/"host": "127.0.0.1"/"host": "lavalink"/g' config.js
+    sed -i 's/host: "127.0.0.1"/host: "lavalink"/g' config.js
     echo "✅ Đã cập nhật host thành 'lavalink'."
 fi
 
-if grep -q '"host":"127.0.0.1"' config.js 2>/dev/null; then
-    sed -i 's/"host":"127.0.0.1"/"host":"lavalink"/g' config.js
+if grep -q 'host:"127.0.0.1"' config.js 2>/dev/null; then
+    sed -i 's/host:"127.0.0.1"/host:"lavalink"/g' config.js
 fi
 
 # Bước 4: Chuyển đổi line endings
