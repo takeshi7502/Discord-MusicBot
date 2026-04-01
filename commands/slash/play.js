@@ -66,6 +66,7 @@ const command = new SlashCommand()
     });
 
     if (res.loadType === "error") {
+      console.log("Lavlink Search Error:", res.error || res.exception || res);
       if (!player.queue.current) {
         player.destroy();
       }
