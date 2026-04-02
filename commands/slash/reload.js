@@ -49,7 +49,7 @@ const command = new SlashCommand()
 				const totalCmds =
 					client.slashCommands.size + client.contextCommands.size;
 					client.log(`Đã tải lại ${totalCmds} lệnh!`);
-				return interaction.reply({
+				return interaction.reply({ ephemeral: true, 
 					embeds: [
 						new EmbedBuilder()
 							.setColor(client.config.embedColor)
@@ -63,7 +63,7 @@ const command = new SlashCommand()
 				});
 			} catch (err) {
 				console.log(err);
-				return interaction.reply({
+				return interaction.reply({ ephemeral: true, 
 					embeds: [
 						new EmbedBuilder()
 							.setColor(client.config.embedColor)
@@ -75,7 +75,7 @@ const command = new SlashCommand()
 				});
 			}
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(client.config.embedColor)

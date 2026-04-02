@@ -21,7 +21,7 @@ const command = new SlashCommand()
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -31,7 +31,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -41,7 +41,7 @@ const command = new SlashCommand()
 			});
 		}
 		
-		await interaction.deferReply();
+		await interaction.deferReply({ ephemeral: true });
 
 		const rawArgs = interaction.options.getString("time");
 		const args = rawArgs.split(' ');

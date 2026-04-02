@@ -7,7 +7,7 @@
 module.exports = async (client, interaction) => {
 	return new Promise(async (resolve) => {
 		if (!interaction.member.voice.channel) {
-			await interaction.reply({
+			await interaction.reply({ ephemeral: true, 
 				embeds: [
 					client.ErrorEmbed(
 						"Bạn phải ở trong một kênh thoại để sử dụng lệnh này!",
@@ -21,7 +21,7 @@ module.exports = async (client, interaction) => {
 			interaction.member.voice.channel.id !==
 			interaction.guild.members.me.voice.channel.id
 		) {
-			await interaction.reply({
+			await interaction.reply({ ephemeral: true, 
 				embeds: [
 					client.ErrorEmbed(
 						"Bạn phải ở trong cùng một kênh thoại với tôi để sử dụng lệnh này!",
@@ -31,7 +31,7 @@ module.exports = async (client, interaction) => {
 			return resolve(false);
 		}
 		if (!interaction.member.voice.channel.joinable) {
-			await interaction.reply({
+			await interaction.reply({ ephemeral: true, 
 				embeds: [
 					client.ErrorEmbed(
 						"Tôi không có đủ quyền để tham gia vào kênh thoại của bạn!",

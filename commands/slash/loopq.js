@@ -14,7 +14,7 @@ const command = new SlashCommand()
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -24,7 +24,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -42,7 +42,7 @@ const command = new SlashCommand()
 		}
 		const queueRepeat = player.repeatMode === "queue" ? "enabled" : "disabled";
 		
-		interaction.reply({
+		interaction.reply({ ephemeral: true, 
 			embeds: [
 				new EmbedBuilder()
 					.setColor(client.config.embedColor)

@@ -12,7 +12,7 @@ const command = new SlashCommand()
 	)
 	.setRun(async (client, interaction, options) => {
 		
-		await interaction.deferReply();
+		await interaction.deferReply({ ephemeral: true });
 		let number = interaction.options.getInteger("number");
 		number = number && number < 100? ++number : 100;
 		

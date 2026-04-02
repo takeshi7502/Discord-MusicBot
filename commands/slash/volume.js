@@ -20,7 +20,7 @@ const command = new SlashCommand()
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -30,7 +30,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -42,7 +42,7 @@ const command = new SlashCommand()
 		
 		let vol = interaction.options.getNumber("amount");
 		if (!vol || vol < 1 || vol > 125) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(client.config.embedColor)
@@ -54,7 +54,7 @@ const command = new SlashCommand()
 		}
 		
 		player.setVolume(vol);
-		return interaction.reply({
+		return interaction.reply({ ephemeral: true, 
 			embeds: [
 				new EmbedBuilder()
 					.setColor(client.config.embedColor)

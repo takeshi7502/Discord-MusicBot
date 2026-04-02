@@ -14,7 +14,7 @@ const command = new SlashCommand()
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -24,7 +24,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -36,7 +36,7 @@ const command = new SlashCommand()
         	const song = player.queue.current;
 	        const autoQueue = player.get("autoQueue");
                 if (player.queue.tracks[0] == undefined && (!autoQueue || autoQueue === false)) {
-		return interaction.reply({
+		return interaction.reply({ ephemeral: true, 
 			embeds: [
 				new EmbedBuilder()
 					.setColor(0xFF0000)
@@ -46,7 +46,7 @@ const command = new SlashCommand()
 		
 		player.stopPlaying(false, false);
 		
-		interaction.reply({
+		interaction.reply({ ephemeral: true, 
 			embeds: [
 				new EmbedBuilder()
 					.setColor(client.config.embedColor)

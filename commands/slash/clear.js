@@ -14,7 +14,7 @@ const command = new SlashCommand()
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -24,7 +24,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -39,7 +39,7 @@ const command = new SlashCommand()
 				.setColor(client.config.embedColor)
 				.setDescription("❌ | **Không hợp lệ, không đủ bài hát để xóa.**");
 			
-			return interaction.reply({ embeds: [cembed], ephemeral: true });
+			return interaction.reply({ ephemeral: true,  embeds: [cembed], ephemeral: true });
 		}
 		
 		player.queue.splice(0);
@@ -48,7 +48,7 @@ const command = new SlashCommand()
 			.setColor(client.config.embedColor)
 			.setDescription(`✅ | **Đã xóa hàng đợi!**`);
 		
-		return interaction.reply({ embeds: [clearEmbed] });
+		return interaction.reply({ ephemeral: true,  embeds: [clearEmbed] });
 	});
 
 module.exports = command;

@@ -14,7 +14,7 @@ const command = new SlashCommand()
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -24,7 +24,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -35,7 +35,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player.queue || !player.queue.tracks.length || player.queue.tracks.length === 0) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -47,7 +47,7 @@ const command = new SlashCommand()
 		
 		//  if the queue is not empty, shuffle the entire queue
 		player.queue.shuffle();
-		return interaction.reply({
+		return interaction.reply({ ephemeral: true, 
 			embeds: [
 				new EmbedBuilder()
 					.setColor(client.config.embedColor)

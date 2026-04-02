@@ -12,7 +12,7 @@ const command = new SlashCommand()
 				.setDescription(
 					"❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này.**",
 				);
-			return interaction.reply({ embeds: [joinEmbed], ephemeral: true });
+			return interaction.reply({ ephemeral: true,  embeds: [joinEmbed], ephemeral: true });
 		}
 		
 		let player = client.manager.getPlayer(interaction.guild.id);
@@ -26,7 +26,7 @@ const command = new SlashCommand()
 			player.connect();
 		}
 		
-		interaction.reply({
+		interaction.reply({ ephemeral: true, 
 			embeds: [
 				client.Embed(`:thumbsup: | **Đã tham gia thành công <#${ channel.id }>!**`),
 			],

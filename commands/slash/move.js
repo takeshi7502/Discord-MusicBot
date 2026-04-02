@@ -30,7 +30,7 @@ const command = new SlashCommand()
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -40,7 +40,7 @@ const command = new SlashCommand()
 		}
 		
 		if (!player) {
-			return interaction.reply({
+			return interaction.reply({ ephemeral: true, 
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -63,7 +63,7 @@ const command = new SlashCommand()
 		const thing = player.queue.tracks[trackNum];
 		player.queue.splice(trackNum, 1);
 		player.queue.splice(dest, 0, thing);
-		return interaction.reply({
+		return interaction.reply({ ephemeral: true, 
 			embeds: [
 				new EmbedBuilder()
 					.setColor(client.config.embedColor)

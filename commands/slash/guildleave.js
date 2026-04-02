@@ -13,7 +13,7 @@ const command = new SlashCommand()
   .setRun(async (client, interaction, options) => {
     try {
       if (interaction.user.id !== client.config.adminId) {
-        return interaction.reply({
+        return interaction.reply({ ephemeral: true, 
           embeds: [
             new EmbedBuilder()
               .setColor(client.config.embedColor)
@@ -35,22 +35,22 @@ const command = new SlashCommand()
 
         console.log("Danh sách ID máy chủ:", client.guilds.cache.map(guild => guild.id).join(', '));
 
-        return interaction.reply({ embeds: [guildListEmbed], ephemeral: true });
+        return interaction.reply({ ephemeral: true,  embeds: [guildListEmbed], ephemeral: true });
       }
 
       const guild = client.guilds.cache.get(id);
 
       if (!guild) {
         console.error(`[${client.user.tag}] Máy chủ không tồn tại: ${id}`);
-        return interaction.reply({ content: `\`${id}\` không phải là một ID máy chủ hợp lệ`, ephemeral: true });
+        return interaction.reply({ ephemeral: true,  content: `\`${id}\` không phải là một ID máy chủ hợp lệ`, ephemeral: true });
       }
 
       await guild.leave();
       console.log(`[${client.user.tag}] Rời khỏi máy chủ: ${id}`);
-      return interaction.reply({ content: `Rời khỏi máy chủ \`${id}\``, ephemeral: true });
+      return interaction.reply({ ephemeral: true,  content: `Rời khỏi máy chủ \`${id}\``, ephemeral: true });
     } catch (error) {
       console.error(`[${client.user.tag}] Có lỗi khi thực hiện lệnh:`, error);
-      return interaction.reply({ content: "Có lỗi xảy ra khi thực hiện lệnh.", ephemeral: true });
+      return interaction.reply({ ephemeral: true,  content: "Có lỗi xảy ra khi thực hiện lệnh.", ephemeral: true });
     }
   });
 
