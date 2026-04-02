@@ -44,19 +44,18 @@ plugins:
       - deezer
       - yandexMusic
   youtube:
-    enabled: true
+    enabled: false # Disabled - all clients broken in v1.18.0, using yt-dlp via lavasrc instead
     oauth:
-      enabled: true
+      enabled: false
       refreshToken: ""
     allowSearch: true
     allowDirectVideoIds: true
     allowDirectPlaylistIds: true
     clients:
-      - MUSIC
       - TVHTML5_SIMPLY
-      - TV
-      - IOS
       - WEB
+    WEB:
+      playback: false
   lavasrc:
     providers:
       - 'ytsearch:"%ISRC%"'
@@ -80,7 +79,7 @@ plugins:
       tidal: false # Disabled - requires token
       vkmusic: false # Disabled - requires userToken
       qobuz: false # Disabled - requires userOauthToken
-      ytdlp: false # Disabled to fix missing executable crash
+      ytdlp: true # Enabled as fallback for YouTube playback
     lyrics-sources:
       spotify: false # Disabled
       deezer: false # Disabled
@@ -127,8 +126,8 @@ plugins:
     ytdlp:
       path: "./yt-dlp.exe" # the path to the yt-dlp executable.
       searchLimit: 10 # How many search results should be returned
-      # customLoadArgs: ["-q", "--no-warnings", "--flat-playlist", "--skip-download", "-J"] # Custom arguments to pass to yt-dlp
-      customPlaybackArgs: ["-q", "--no-warnings", "-f", "bestaudio", "--js-runtimes", "node", "-J"] # Custom arguments for yt-dlp
+      customLoadArgs: ["-q", "--no-warnings", "--flat-playlist", "--skip-download", "--js-runtimes", "node", "-J"] # Custom arguments to pass to yt-dlp
+      customPlaybackArgs: ["-q", "--no-warnings", "--js-runtimes", "node", "-J"] # Custom arguments for yt-dlp
     jiosaavn:
       decryption: # The decryption configuration for the JioSaavn tracks
         secretKey: "your_key" # The required secret key used for decryption (Find your own secret key)

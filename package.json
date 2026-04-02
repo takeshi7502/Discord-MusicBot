@@ -42,6 +42,7 @@
     "jsoning": "^0.13.0",
     "lavalink-client": "^2.9.7",
     "lodash": "^4.17.21",
+    "magmastream": "^2.10.1",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "ms": "^2.1.3",

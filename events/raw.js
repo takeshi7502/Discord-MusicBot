@@ -4,5 +4,7 @@
  * @param {*} data
  */
 module.exports = (client, data) => {
-	client.manager.sendRawData(data);
+	if (client.manager && typeof client.manager.sendRawData === "function") {
+		client.manager.sendRawData(data);
+	}
 };
