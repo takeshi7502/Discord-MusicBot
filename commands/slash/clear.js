@@ -42,7 +42,7 @@ const command = new SlashCommand()
 			return interaction.reply({ embeds: [cembed], ephemeral: true });
 		}
 		
-		player.queue.clear();
+		player.queue.splice(0);
 		
 		let clearEmbed = new EmbedBuilder()
 			.setColor(client.config.embedColor)

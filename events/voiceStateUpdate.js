@@ -148,7 +148,7 @@ module.exports = async (client, oldState, newState) => {
 									.get(player.textChannelId)
 									.send({ embeds: [leftEmbed] });
 								setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
-								player.queue.clear();
+								player.queue.splice(0);
 								player.destroy();
 								player.set("autoQueue", false);
 							}
@@ -201,7 +201,7 @@ module.exports = async (client, oldState, newState) => {
 								.send({ embeds: [leftEmbed] });
 							setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
 							pausedMessage.delete().catch(() => {});
-							player.queue.clear();
+							player.queue.splice(0);
 							player.destroy();
 							player.set("autoQueue", false);
 						}

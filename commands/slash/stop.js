@@ -36,7 +36,7 @@ const command = new SlashCommand()
 		}
 		
 		if (player.get("twentyFourSeven")) {
-			player.queue.clear();
+			player.queue.splice(0);
 			player.stopPlaying(false, false);
 			player.set("autoQueue", false);
 		} else {

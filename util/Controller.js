@@ -42,7 +42,7 @@ module.exports = async (client, interaction) => {
 	}
 
 	if (property === "Stop") {
-		player.queue.clear();
+		player.queue.splice(0);
 		player.stopPlaying(false, false);
 		player.set("autoQueue", false);
 		client.warn(`Người chơi: ${ player.guildId } | Đã dừng trình phát nhạc.`);
