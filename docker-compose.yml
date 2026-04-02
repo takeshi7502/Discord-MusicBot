@@ -1,11 +1,11 @@
 services:
   # --------------------------------
-  # Lavalink (Audio node)
+  # Lavalink (Audio node) - host network for IPv6 rotation
   # --------------------------------
   lavalink:
-    profiles: [lavalink, all]
     container_name: discordmusicbot-lavalink
     image: ghcr.io/lavalink-devs/lavalink:latest
+    network_mode: host
     restart: unless-stopped
     environment:
       - _JAVA_OPTIONS=-Xmx2G
@@ -15,26 +15,24 @@ services:
     volumes:
       - ./Lavalink/application.yml:/opt/Lavalink/application.yml
       - ./Lavalink/plugins/:/opt/Lavalink/plugins/
-    networks:
-      - discordmusicbot-net
-    ports:
-      - "2333:2333"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- -S --header='Authorization: youshallnotpass' http://localhost:2333/version 2>&1 | grep -q '200' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   # --------------------------------
-  # Discord-MusicBot
+  # Discord-MusicBot - host network to connect to Lavalink
   # --------------------------------
   discordmusicbot:
     container_name: discordmusicbot
     build: .
     image: discordmusicbot:local
+    network_mode: host
     restart: always
     volumes:
       - ./config.js:/usr/src/app/config.js:ro
     depends_on:
-      - lavalink
-    networks:
-      - discordmusicbot-net
-
-networks:
-  discordmusicbot-net:
-    name: discordmusicbot-net
+      lavalink:
+        condition: service_healthy
