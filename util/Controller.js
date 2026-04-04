@@ -42,7 +42,7 @@ module.exports = async (client, interaction) => {
 	}
 
 	if (property === "Stop") {
-		player.queue.splice(0);
+		player.queue.tracks.splice(0);
 		player.stopPlaying(false, false);
 		player.set("autoQueue", false);
 		client.warn(`Người chơi: ${ player.guildId } | Đã dừng trình phát nhạc.`);
@@ -83,7 +83,7 @@ module.exports = async (client, interaction) => {
 		});
     }
 		if (previousSong !== currentSong && previousSong !== nextSong) {
-			player.queue.splice(0, 0, currentSong);
+			player.queue.tracks.splice(0, 0, currentSong);
 			player.play({ clientTrack: previousSong });
 			return interaction.deferUpdate();
 		}

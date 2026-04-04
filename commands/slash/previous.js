@@ -52,18 +52,18 @@ const command = new SlashCommand()
 	}
 
 	if (previousSong !== currentSong && previousSong !== nextSong) {
-		player.queue.splice(0, 0, currentSong);
+		player.queue.tracks.splice(0, 0, currentSong);
 		player.play({ clientTrack: previousSong });
-	}
-	interaction.reply({ ephemeral: true, 
-		embeds: [
+		return interaction.reply({ ephemeral: true, 
+			embeds: [
 			new EmbedBuilder()
 				.setColor(client.config.embedColor)
 				.setDescription(
 					`⏮ | Bài hát trước đó: **${ previousSong.info.title }**`,
 				),
 		],
-	});
+		});
+	}
 });
 
 module.exports = command;

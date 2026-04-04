@@ -4,16 +4,19 @@ const { escapeMarkdown } = require('discord.js');
 const load = require("lodash");
 const pms = require("pretty-ms");
 
+const truncate = (str, max) => str.length > max ? str.slice(0, max) + '...' : str;
+
+
 const command = new SlashCommand()
 	.setName("queue")
 	.setDescription("Hiển thị hàng đợi hiện tại")
-	
+
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
 			return;
 		}
-		
+
 		let player;
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
@@ -26,7 +29,7 @@ const command = new SlashCommand()
 				],
 			});
 		}
-		
+
 		if (!player) {
 			return interaction.reply({
 				embeds: [
@@ -37,54 +40,56 @@ const command = new SlashCommand()
 				ephemeral: true,
 			});
 		}
-		
+
 		if (!player.playing) {
 			const queueEmbed = new EmbedBuilder()
 				.setColor(client.config.embedColor)
 				.setDescription("Không có bài hát nào đang phát.");
 			return interaction.reply({ embeds: [queueEmbed], ephemeral: true });
 		}
-		
-		await interaction.deferReply().catch(() => {
-		});
-        
-		
+
 		if (!player.queue.tracks.length || player.queue.tracks.length === 0) {
-            let song = player.queue.current;
-            var title = escapeMarkdown(song.info.title)
-            title = title.replace(/\]/g,"")
-            title = title.replace(/\[/g,"")
+			let song = player.queue.current;
+			var title = escapeMarkdown(song.info.title)
+			title = title.replace(/\]/g, "")
+			title = title.replace(/\[/g, "")
 			const queueEmbed = new EmbedBuilder()
 				.setColor(client.config.embedColor)
-				.setDescription(`**♪ | Đang phát:** [${ title }](${ song.info.uri })`)
+				.setDescription(`**♪ | Đang phát:** [${title}](${song.info.uri})`)
 				.addFields(
 					{
 						name: "Thời lượng",
 						value: song.info.isStream
 							? `\`LIVE\``
-							: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
+							: `\`${pms(player.position, { colonNotation: true })} / ${pms(
 								song.info.duration,
 								{ colonNotation: true },
-							) }\``,
+							)}\``,
 						inline: true,
 					},
 					{
 						name: "Âm lượng",
-						value: `\`${ player.volume }\``,
+						value: `\`${player.volume}\``,
 						inline: true,
 					},
 					{
 						name: "Tổng Số Bài Hát",
-						value: `\`${ player.queue.tracks.length }\``,
+						value: `\`${player.queue.tracks.length}\``,
 						colonNotation: true,
 						inline: true,
 					},
 				);
-			
-			await interaction.editReply({
+
+			return interaction.reply({
 				embeds: [queueEmbed],
+				ephemeral: true,
 			});
-		} else {
+		}
+
+		await interaction.deferReply().catch(() => {
+		});
+
+
 			let queueDuration = player.queue.tracks.reduce((a, t) => a + (t.info.duration || 0), 0);
 			// Don't count streams in total duration
 			for (let i = 0; i < player.queue.tracks.length; i++) {
@@ -92,11 +97,11 @@ const command = new SlashCommand()
 					queueDuration -= player.queue.tracks[i].info.duration
 				}
 			}
-			
+
 			const mapping = player.queue.tracks.map(
-				(t, i) => `\` ${ i + 1 } \` [${ t.info.title }](${ t.info.uri }) [${t.requester ? `<@${t.requester.id || t.requester}>` : 'Unknown'}]`,
+				(t, i) => `\` ${i + 1} \` [${truncate(t.info.title, 35)}](${t.info.uri}) [${t.requester ? `<@${t.requester.id || t.requester}>` : 'Unknown'}]`,
 			);
-			
+
 			const chunk = load.chunk(mapping, 10);
 			const pages = chunk.map((s) => s.join("\n"));
 			let page = interaction.options.getNumber("page");
@@ -112,91 +117,111 @@ const command = new SlashCommand()
 			if (page < 0) {
 				page = 0;
 			}
-			
+
 			if (player.queue.tracks.length < 11) {
-                let song = player.queue.current;
-                var title = escapeMarkdown(song.info.title)
-                title = title.replace(/\]/g,"")
-                title = title.replace(/\[/g,"")
+				let song = player.queue.current;
+				var title = escapeMarkdown(song.info.title)
+				title = title.replace(/\]/g, "")
+				title = title.replace(/\[/g, "")
 				const embedTwo = new EmbedBuilder()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+						`**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${pages[page]}`,
 					)
 					.addFields(
 						{
 							name: "Thời lượng của bài hát",
 							value: song.info.isStream
 								? `\`LIVE\``
-								: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
+								: `\`${pms(player.position, { colonNotation: true })} / ${pms(
 									song.info.duration,
 									{ colonNotation: true },
-								) }\``,
+								)}\``,
 							inline: true,
 						},
 						{
 							name: "Tổng thời lượng của tất cả các bài hát",
-							value: `\`${ pms(queueDuration, {
+							value: `\`${pms(queueDuration, {
 								colonNotation: true,
-							}) }\``,
+							})}\``,
 							inline: true,
 						},
 						{
 							name: "Tổng số bài hát",
-							value: `\`${ player.queue.tracks.length }\``,
+							value: `\`${player.queue.tracks.length}\``,
 							colonNotation: true,
 							inline: true,
 						},
 					)
 					.setFooter({
-						text: `Trang ${ page + 1 }/${ pages.length }`,
+						text: `Trang ${page + 1}/${pages.length}`,
 					});
-				
+
+				const closeButton = new ButtonBuilder()
+					.setCustomId("queue_cmd_but_close_app")
+					.setEmoji("❌")
+					.setStyle(ButtonStyle.Secondary);
+
 				await interaction
 					.editReply({
 						embeds: [embedTwo],
+						components: [
+							new ActionRowBuilder().addComponents(closeButton),
+						],
 					})
-					.catch(() => {
-					});
+					.catch(() => { });
+
+				const shortCollector = interaction.channel.createMessageComponentCollector({
+					filter: (b) => b.user.id === interaction.user.id,
+					time: 60000 * 5,
+					idle: 30e3,
+				});
+				shortCollector.on("collect", async (button) => {
+					if (button.customId === "queue_cmd_but_close_app") {
+						shortCollector.stop();
+						await button.deferUpdate().catch(() => {});
+						await interaction.deleteReply().catch(() => {});
+					}
+				});
 			} else {
 				let song = player.queue.current;
-                var title = escapeMarkdown(song.info.title)
-                title = title.replace(/\]/g,"")
-                title = title.replace(/\[/g,"")
+				var title = escapeMarkdown(song.info.title)
+				title = title.replace(/\]/g, "")
+				title = title.replace(/\[/g, "")
 				const embedThree = new EmbedBuilder()
 					.setColor(client.config.embedColor)
 					.setDescription(
-						`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+						`**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${pages[page]}`,
 					)
 					.addFields(
 						{
 							name: "Thời lượng của bài hát",
 							value: song.info.isStream
 								? `\`LIVE\``
-								: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
+								: `\`${pms(player.position, { colonNotation: true })} / ${pms(
 									song.info.duration,
 									{ colonNotation: true },
-								) }\``,
+								)}\``,
 							inline: true,
 						},
 						{
 							name: "Tổng thời lượng của tất cả các bài hát",
-							value: `\`${ pms(queueDuration, {
+							value: `\`${pms(queueDuration, {
 								colonNotation: true,
-							}) }\``,
+							})}\``,
 							inline: true,
 						},
 						{
 							name: "Tổng số bài hát",
-							value: `\`${ player.queue.tracks.length }\``,
+							value: `\`${player.queue.tracks.length}\``,
 							colonNotation: true,
 							inline: true,
 						},
 					)
 					.setFooter({
-						text: `Trang ${ page + 1 }/${ pages.length }`,
+						text: `Trang ${page + 1}/${pages.length}`,
 					});
-				
+
 				const buttonOne = new ButtonBuilder()
 					.setCustomId("queue_cmd_but_1_app")
 					.setEmoji("⏭️")
@@ -205,17 +230,21 @@ const command = new SlashCommand()
 					.setCustomId("queue_cmd_but_2_app")
 					.setEmoji("⏮️")
 					.setStyle(ButtonStyle.Primary);
-				
+
+				const buttonClose = new ButtonBuilder()
+					.setCustomId("queue_cmd_but_close_app")
+					.setEmoji("❌")
+					.setStyle(ButtonStyle.Secondary);
+
 				await interaction
 					.editReply({
 						embeds: [embedThree],
 						components: [
-							new ActionRowBuilder().addComponents(buttonTwo, buttonOne),
+							new ActionRowBuilder().addComponents(buttonTwo, buttonOne, buttonClose),
 						],
 					})
-					.catch(() => {
-					});
-				
+					.catch(() => { });
+
 				const collector = interaction.channel.createMessageComponentCollector({
 					filter: (b) => {
 						if (b.user.id === interaction.user.id) {
@@ -233,113 +262,117 @@ const command = new SlashCommand()
 					time: 60000 * 5,
 					idle: 30e3,
 				});
-				
+
 				collector.on("collect", async (button) => {
-					if (button.customId === "queue_cmd_but_1_app") {
+					if (button.customId === "queue_cmd_but_close_app") {
+						collector.stop();
+						await button.deferUpdate().catch(() => {});
+						await interaction.deleteReply().catch(() => {});
+						return;
+					} else if (button.customId === "queue_cmd_but_1_app") {
 						await button.deferUpdate().catch(() => {
 						});
-						page = page + 1 < pages.length? ++page : 0;
-                        let song = player.queue.current;
-                        var title = escapeMarkdown(song.info.title)
-                        title = title.replace(/\]/g,"")
-                        title = title.replace(/\[/g,"")
+						page = page + 1 < pages.length ? ++page : 0;
+						let song = player.queue.current;
+						var title = escapeMarkdown(song.info.title)
+						title = title.replace(/\]/g, "")
+						title = title.replace(/\[/g, "")
 						const embedFour = new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+								`**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${pages[page]}`,
 							)
 							.addFields(
 								{
 									name: "Thời lượng của bài hát",
 									value: song.info.isStream
 										? `\`LIVE\``
-										: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
+										: `\`${pms(player.position, { colonNotation: true })} / ${pms(
 											song.info.duration,
 											{ colonNotation: true },
-										) }\``,
+										)}\``,
 									inline: true,
 								},
 								{
 									name: "Tổng thời lượng của tất cả các bài hát",
-									value: `\`${ pms(queueDuration, {
+									value: `\`${pms(queueDuration, {
 										colonNotation: true,
-									}) }\``,
+									})}\``,
 									inline: true,
 								},
 								{
 									name: "Tổng số bài hát",
-									value: `\`${ player.queue.tracks.length }\``,
+									value: `\`${player.queue.tracks.length}\``,
 									colonNotation: true,
 									inline: true,
 								},
 							)
 							.setFooter({
-								text: `Trang ${ page + 1 }/${ pages.length }`,
+								text: `Trang ${page + 1}/${pages.length}`,
 							});
-						
+
 						await interaction.editReply({
 							embeds: [embedFour],
 							components: [
-								new ActionRowBuilder().addComponents(buttonTwo, buttonOne),
+								new ActionRowBuilder().addComponents(buttonTwo, buttonOne, buttonClose),
 							],
 						});
 					} else if (button.customId === "queue_cmd_but_2_app") {
 						await button.deferUpdate().catch(() => {
 						});
-						page = page > 0? --page : pages.length - 1;
-                        let song = player.queue.current;
-                        var title = escapeMarkdown(song.info.title)
-                        title = title.replace(/\]/g,"")
-                        title = title.replace(/\[/g,"")
+						page = page > 0 ? --page : pages.length - 1;
+						let song = player.queue.current;
+						var title = escapeMarkdown(song.info.title)
+						title = title.replace(/\]/g, "")
+						title = title.replace(/\[/g, "")
 						const embedFive = new EmbedBuilder()
 							.setColor(client.config.embedColor)
 							.setDescription(
-								`**♪ | Đang phát:** [${ title }](${ song.info.uri }) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${ pages[page] }`,
+								`**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? `<@${song.requester.id || song.requester}>` : 'Unknown'}]\n\n**Số bài hát trong hàng đợi**\n${pages[page]}`,
 							)
 							.addFields(
 								{
 									name: "Thời lượng của bài hát",
 									value: song.info.isStream
 										? `\`LIVE\``
-										: `\`${ pms(player.position, { colonNotation: true }) } / ${ pms(
+										: `\`${pms(player.position, { colonNotation: true })} / ${pms(
 											song.info.duration,
 											{ colonNotation: true },
-										) }\``,
+										)}\``,
 									inline: true,
 								},
 								{
 									name: "Tổng thời lượng của tất cả các bài hát",
-									value: `\`${ pms(queueDuration, {
+									value: `\`${pms(queueDuration, {
 										colonNotation: true,
-									}) }\``,
+									})}\``,
 									inline: true,
 								},
 								{
 									name: "Tổng số bài hát",
-									value: `\`${ player.queue.tracks.length }\``,
+									value: `\`${player.queue.tracks.length}\``,
 									colonNotation: true,
 									inline: true,
 								},
 							)
 							.setFooter({
-								text: `Trang ${ page + 1 }/${ pages.length }`,
+								text: `Trang ${page + 1}/${pages.length}`,
 							});
-						
+
 						await interaction
 							.editReply({
 								embeds: [embedFive],
 								components: [
-									new ActionRowBuilder().addComponents(buttonTwo, buttonOne),
+									new ActionRowBuilder().addComponents(buttonTwo, buttonOne, buttonClose),
 								],
 							})
-							.catch(() => {
-							});
+							.catch(() => { });
 					} else {
 						return;
 					}
 				});
 			}
-		}
+
 	});
 
 module.exports = command;

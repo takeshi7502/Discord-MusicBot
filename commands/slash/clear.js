@@ -42,11 +42,12 @@ const command = new SlashCommand()
 			return interaction.reply({ ephemeral: true,  embeds: [cembed], ephemeral: true });
 		}
 		
-		player.queue.splice(0);
+		const count = player.queue.tracks.length;
+		player.queue.tracks.splice(0);
 		
 		let clearEmbed = new EmbedBuilder()
 			.setColor(client.config.embedColor)
-			.setDescription(`✅ | **Đã xóa hàng đợi!**`);
+			.setDescription(`✅ | **Đã xóa tất cả ${count} bài trong hàng đợi!**`);
 		
 		return interaction.reply({ ephemeral: true,  embeds: [clearEmbed] });
 	});

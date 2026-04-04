@@ -80,7 +80,11 @@ const command = new SlashCommand()
           .setCustomId("help_cmd_but_1_app")
           .setEmoji("▶️")
           .setStyle(ButtonStyle.Primary)
-          .setDisabled(pageNo == maxPages - 1)
+          .setDisabled(pageNo == maxPages - 1),
+        new ButtonBuilder()
+          .setCustomId("help_cmd_but_close_app")
+          .setEmoji("❌")
+          .setStyle(ButtonStyle.Secondary)
       );
     };
 
@@ -94,6 +98,12 @@ const command = new SlashCommand()
     });
 
     collector.on("collect", async (iter) => {
+      if (iter.customId === "help_cmd_but_close_app") {
+        collector.stop();
+        await iter.deferUpdate().catch(() => {});
+        await interaction.deleteReply().catch(() => {});
+        return;
+      }
       if (iter.customId === "help_cmd_but_1_app") {
         pageNo++;
       } else if (iter.customId === "help_cmd_but_2_app") {
