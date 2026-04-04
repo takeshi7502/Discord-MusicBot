@@ -10,7 +10,7 @@ module.exports = {
 	supportServer: "https://discord.gg/eGkwfAQKMF", //- Support Server Link
 	Issues: "https://github.com/SudhanPlayz/Discord-MusicBot", //- Bug Report Link
 	permissions: 277083450689, //- Bot Inviting Permissions
-	disconnectTime: 180000, //- How long should the bot wait before disconnecting from the voice channel (in miliseconds). Set to 1 for instant disconnect.
+	disconnectTime: 60000, //- How long should the bot wait before disconnecting from the voice channel (in miliseconds). Set to 1 for instant disconnect.
 	twentyFourSeven: false, //- When set to true, the bot will never disconnect from the voice channel
 	autoQueue: true, //- When set to true, related songs will automatically be added to the queue
 	autoPause: true, //- When set to true, music will automatically be paused if everyone leaves the voice channel
