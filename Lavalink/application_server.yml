@@ -10,7 +10,7 @@ lavalink:
     frameBufferDurationMs: 10000
     youtubePlaylistLoadLimit: 3
     opusEncodingQuality: 10
-    resamplingQuality: HIGH
+    resamplingQuality: MEDIUM
     trackStuckThresholdMs: 20000
     playerUpdateInterval: 3
     useSeekGhosting: true
