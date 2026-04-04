@@ -4,17 +4,17 @@ server:
 lavalink:
   server:
     sources:
-      youtube: false # Using Youtube nativly on lavalink is deprecated, disable it and use https://github.com/lavalink-devs/youtube-source instead.
+      youtube: false # MUST be false to let the youtube-plugin handle OAuth and Proxy
     password: "youshallnotpass"
     bufferDurationMs: 225
-    frameBufferDurationMs: 5000
+    frameBufferDurationMs: 10000
     youtubePlaylistLoadLimit: 3
-    opusEncodingQuality: 5
-    resamplingQuality: MEDIUM
-    trackStuckThresholdMs: 5000
+    opusEncodingQuality: 10
+    resamplingQuality: HIGH
+    trackStuckThresholdMs: 20000
     playerUpdateInterval: 3
     useSeekGhosting: true
-    youtubeSearchEnabled: true
+    youtubeSearchEnabled: false
     soundcloudSearchEnabled: true
     gc-warnings: true
   plugins:
@@ -26,8 +26,6 @@ lavalink:
       repository: "https://maven.lavalink.dev/releases"
     - dependency: "com.github.devoxin:lavadspx-plugin:0.0.5" # https://github.com/devoxin/LavaDSPX-Plugin
       repository: "https://jitpack.io"
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.18.0" # https://github.com/lavalink-devs/youtube-source
-      snapshot: false
     - dependency: "com.github.topi314.lavalyrics:lavalyrics-plugin:1.1.0" # https://github.com/topi314/LavaLyrics
       repository: "https://maven.lavalink.dev/releases"
     - dependency: "me.duncte123:java-lyrics-plugin:1.6.6" # https://github.com/DuncteBot/java-timed-lyrics
@@ -40,22 +38,10 @@ plugins:
     sources:
       - genius
       - spotify
-      - youtube
       - deezer
       - yandexMusic
-  youtube:
-    enabled: false # Disabled - all clients broken in v1.18.0, using yt-dlp via lavasrc instead
-    oauth:
-      enabled: false
-      refreshToken: ""
-    allowSearch: true
-    allowDirectVideoIds: true
-    allowDirectPlaylistIds: true
-    clients:
-      - TVHTML5_SIMPLY
-      - WEB
-    WEB:
-      playback: false
+
+
   lavasrc:
     providers:
       - 'ytsearch:"%ISRC%"'
@@ -75,15 +61,15 @@ plugins:
       pandora: false # Disabled - requires csrfToken
       yandexmusic: false # Disabled - requires accessToken
       flowerytts: false # Disabled
-      youtube: true # Enable YouTube search source (https://github.com/topi314/LavaSearch)
+      youtube: false # Disabled because it requires youtube-plugin which is broken
       tidal: false # Disabled - requires token
       vkmusic: false # Disabled - requires userToken
       qobuz: false # Disabled - requires userOauthToken
-      ytdlp: true # Enabled as fallback for YouTube playback
+      ytdlp: true # Enabled to bypass youtube cipher issues
     lyrics-sources:
       spotify: false # Disabled
       deezer: false # Disabled
-      youtube: true # Enable YouTube lyrics source
+      youtube: false # Disabled due to missing youtube-plugin
       yandexmusic: false # Disabled
       vkmusic: false # Disabled
       lrcLib: true # Enable LRC Library lyrics source (https://lrclib.net)
@@ -127,8 +113,8 @@ plugins:
       path: "./yt-dlp" # the path to the yt-dlp executable (Linux).
       searchLimit: 10 # How many search results should be returned
       # Using Tailscale Proxy from phone (100.90.237.11:8080)
-      customLoadArgs: ["--proxy", "http://100.90.237.11:8080", "-q", "--no-warnings", "--flat-playlist", "--skip-download", "--js-runtimes", "node", "-J"] 
-      customPlaybackArgs: ["--proxy", "http://100.90.237.11:8080", "-q", "--no-warnings", "--js-runtimes", "node", "-J"] 
+      customLoadArgs: ["-q", "--no-warnings", "--flat-playlist", "--skip-download", "--js-runtimes", "node", "-J"] 
+      customPlaybackArgs: ["-q", "--no-warnings", "--extract-audio", "--audio-format", "best", "--audio-quality", "0", "--js-runtimes", "node", "-J"] 
     jiosaavn:
       decryption: # The decryption configuration for the JioSaavn tracks
         secretKey: "your_key" # The required secret key used for decryption (Find your own secret key)
