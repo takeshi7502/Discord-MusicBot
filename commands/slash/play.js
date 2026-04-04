@@ -15,6 +15,9 @@ const command = new SlashCommand()
       .setRequired(true)
   )
   .setRun(async (client, interaction, options) => {
+    // Ngăn chặn lỗi timeout 3 giây của Discord bằng cách defer trước
+    await interaction.deferReply();
+
     let channel = await client.getChannel(client, interaction);
     if (!channel) {
       return;
@@ -22,7 +25,7 @@ const command = new SlashCommand()
 
     let node = await client.getLavalink(client);
     if (!node) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [client.ErrorEmbed("Nút Lavalink không được kết nối")],
       });
     }
@@ -48,13 +51,12 @@ const command = new SlashCommand()
       }, 2000);
     }
 
-    const ret = await interaction.reply({
+    const ret = await interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(client.config.embedColor)
           .setDescription(":mag_right: **Đang tìm...**"),
-      ],
-      fetchReply: true,
+      ]
     });
 
     let query = options.getString("query", true);

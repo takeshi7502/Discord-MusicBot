@@ -5,6 +5,7 @@ dbList.json
 dev-config.js
 config.js
 application.yml
+application_server.yml
 
 # Logs
 logs

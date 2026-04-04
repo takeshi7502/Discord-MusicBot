@@ -42,6 +42,7 @@ module.exports = async (client, interaction) => {
 	}
 
 	if (property === "Stop") {
+		await interaction.deferUpdate().catch(() => {});
 		player.queue.tracks.splice(0);
 		player.stopPlaying(false, false);
 		player.set("autoQueue", false);
@@ -57,9 +58,9 @@ module.exports = async (client, interaction) => {
 			msg.delete().catch(() => {});
 		}, 5000);
 
-		interaction.update({
+		await interaction.editReply({
 			components: [client.createController(player.guildId, player)],
-		});
+		}).catch(()=>{});
 		return;
 	}
 
@@ -90,7 +91,7 @@ module.exports = async (client, interaction) => {
 	}
 
 	if (property === "PlayAndPause") {
-		if (!player || (!player.playing && player.queue.tracks.length === 0)) {
+		if (!player || !player.queue.current) {
 			const msg = await interaction.channel.send({
                                 ephemeral: true,
 				embeds: [
@@ -102,9 +103,9 @@ module.exports = async (client, interaction) => {
 			setTimeout(() => {
 				msg.delete().catch(() => {});
 			}, 5000);
-			return interaction.deferUpdate();
+			return interaction.deferUpdate().catch(()=>{});
 		} else {
-
+            await interaction.deferUpdate().catch(() => {});
 			if (player.paused) {
 				player.resume();
 			} else {
@@ -112,9 +113,9 @@ module.exports = async (client, interaction) => {
 			}
 			client.warn(`Người chơi: ${player.guildId} | ${player.paused ? "Tạm dừng" : "Tiếp tục"} người chơi thành công`);
 
-			return interaction.update({
+			return interaction.editReply({
 				components: [client.createController(player.guildId, player)],
-			});
+			}).catch(()=>{});
 		}
 	}
 
@@ -129,11 +130,15 @@ module.exports = async (client, interaction) => {
 					.setColor(0xFF0000)
 					.setDescription(`Không có gì sau [${song.info.title}](${song.info.uri}) trong hàng đợi.`),
 			],
-		})} else player.stopPlaying(false, false);
-		return interaction.deferUpdate();
+		})} else {
+            await interaction.deferUpdate().catch(() => {});
+            player.stopPlaying(false, false);
+            return;
+        }
     }
 
 	if (property === "Loop") {
+        await interaction.deferUpdate().catch(() => {});
 		if (player.repeatMode === "track") {
 			player.setRepeatMode("queue");
 		} else if (player.repeatMode === "queue") {
@@ -143,9 +148,9 @@ module.exports = async (client, interaction) => {
 		}
 		client.warn(`Người chơi: ${player.guildId} | Đã bật/tắt lặp ${player.repeatMode === "track" ? "bài hát" : player.repeatMode === "queue" ? "hàng đợi" : "tất cả"} thành công`);
 
-		interaction.update({
+		await interaction.editReply({
 			components: [client.createController(player.guildId, player)],
-		});
+		}).catch(()=>{});
 		return;
 	}
 
