@@ -19,9 +19,12 @@ show_menu() {
     echo -e "5. Tạm Tắt Tailscale (Phục hồi IP gốc để tải file)"
     echo -e "6. Tải file Lavalink.jar (V4 mới nhất)"
     echo -e "7. Chạy trực tiếp Lavalink (Xem Log Console)"
+    echo -e "8. Khởi chạy Lavalink qua Docker Compose (Tự check & cài Docker)"
+    echo -e "9. Xem Log Lavalink trên Docker Compose"
+    echo -e "10. Restart Lavalink (Docker Compose)"
     echo -e "0. Thoát chương trình"
     echo -e "${CYAN}====================================================${NC}"
-    read -p "Nhập số (0-7) để thực hiện lệnh: " choice
+    read -p "Nhập số (0-10) để thực hiện lệnh: " choice
 }
 
 install_java() {
@@ -89,6 +92,67 @@ run_lavalink() {
     read -p "Nhấn Enter để quay lại menu..."
 }
 
+install_docker_if_needed() {
+    if ! command -v docker &> /dev/null || ! docker compose version &> /dev/null; then
+        echo -e "${YELLOW}Chưa có Docker/Docker Compose! Tiến hành tự động cài đặt...${NC}"
+        curl -fsSL https://get.docker.com | sh
+        echo -e "${GREEN}Cài đặt Docker hoàn tất!${NC}"
+    else
+        echo -e "${GREEN}Docker/Docker Compose đã được cài đặt sẵn! Bỏ qua bước cài đặt.${NC}"
+    fi
+}
+
+run_docker_compose() {
+    install_docker_if_needed
+    
+    if [ ! -f "docker-compose.yml" ]; then
+        echo -e "${YELLOW}Không tìm thấy docker-compose.yml! Đang tự động tạo mẫu chuẩn...${NC}"
+        cat <<EOF > docker-compose.yml
+version: "3"
+services:
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: lavalink
+    network_mode: "host"
+    environment:
+      - _JAVA_OPTIONS=-Xmx1024m
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml:ro
+      - ./plugins:/opt/Lavalink/plugins
+      # Bỏ comment dòng dưới nếu dùng yt-dlp_linux qua hệ điều hành chạy được
+      # - ./yt-dlp_linux:/opt/Lavalink/yt-dlp_linux:ro
+EOF
+        echo -e "${GREEN}Tạo mẫu docker-compose.yml thành công!${NC}"
+    fi
+
+    echo -e "${YELLOW}Khởi động Lavalink qua Docker Compose...${NC}"
+    docker compose up -d
+    echo -e "${GREEN}Chạy thành công! Đang trực tiếp mở Log ngay bây giờ... (Bấm Ctrl+C để thoát Log)${NC}"
+    docker compose logs -f
+    read -p "Nhấn Enter để quay lại menu..."
+}
+
+view_docker_logs() {
+    if [ ! -f "docker-compose.yml" ]; then
+        echo -e "${RED}[LỖI] Không tìm thấy docker-compose.yml! Vui lòng chọn số 8 trước.${NC}"
+    else
+        echo -e "${CYAN}Đang xem Log của Docker Compose... (Bấm Ctrl+C để thoát)${NC}"
+        docker compose logs -f
+    fi
+    read -p "Nhấn Enter để quay lại menu..."
+}
+
+restart_docker() {
+    if [ ! -f "docker-compose.yml" ]; then
+        echo -e "${RED}[LỖI] Không tìm thấy docker-compose.yml!${NC}"
+    else
+        echo -e "${YELLOW}Đang khởi động lại hệ thống Docker...${NC}"
+        docker compose restart
+        echo -e "${GREEN}Khởi động lại thành công!${NC}"
+    fi
+    read -p "Nhấn Enter để quay lại menu..."
+}
+
 while true; do
     show_menu
     case $choice in
@@ -99,7 +163,10 @@ while true; do
         5) disable_exitnode ;;
         6) download_lavalink ;;
         7) run_lavalink ;;
+        8) run_docker_compose ;;
+        9) view_docker_logs ;;
+        10) restart_docker ;;
         0) echo -e "${GREEN}Đã thoát công cụ quản lý Lavalink!${NC}"; exit 0 ;;
-        *) echo -e "${RED}Vui lòng chọn từ 1 đến 7!${NC}"; sleep 1 ;;
+        *) echo -e "${RED}Vui lòng chọn từ 1 đến 10!${NC}"; sleep 1 ;;
     esac
 done
