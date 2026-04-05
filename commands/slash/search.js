@@ -34,6 +34,7 @@ const command = new SlashCommand()
             .setColor(0xFF0000)
             .setDescription("Nút Lavalink không được kết nối"),
         ],
+        ephemeral: true,
       });
     }
     await interaction.deferReply().catch((_) => {});

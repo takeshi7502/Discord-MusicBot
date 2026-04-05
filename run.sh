@@ -73,13 +73,14 @@ while true; do
     echo "========================================================"
     echo "1. ⚙️  Chỉ Build (Rèn) lại Image từ Code hiện tại"
     echo "2. 📡 Kiểm tra tình trạng Máy Chủ Lavalink hiện tại"
-    echo "3. 🔄 Thay đổi Máy chủ Lavalink (Chỉ Restart, không Build)"
+    echo "3. 🔄 Thay đổi Máy chủ Lavalink (Chỉ sửa Config)"
     echo "4. 🛑 Tắt Bot (Stop)"
     echo "5. ♻️  Chỉ Khởi Động Lại Bot nhanh (Restart)"
     echo "6. 📋 Xem trực tiếp Màn hình Log Bot (Nhật ký lỗi)"
+    echo "7. 📖 Bảng hướng dẫn nhanh"
     echo "0. ❌ Thoát (Bot vẫn chạy ngầm)"
     echo "========================================================"
-    read -p "Nhập số để chọn (0-6): " choice
+    read -p "Nhập số để chọn (0-7): " choice
     
     case $choice in
         1)
@@ -161,6 +162,30 @@ while true; do
             echo "📋 Đang theo dõi cửa sổ Nhật ký (Logs)..."
             echo "   (Ấn Ctrl + C để ngừng theo dõi)"
             sudo docker compose logs -f discordmusicbot
+            ;;
+        7)
+            echo ""
+            echo "╔══════════════════════════════════════════════════════════╗"
+            echo "║           📖 BẢNG HƯỚNG DẪN CẬP NHẬT NHANH            ║"
+            echo "╠══════════════════════════════════════════════════════════╣"
+            echo "║ Thay đổi gì?              │ Cần làm gì?                ║"
+            echo "╠═══════════════════════════╪════════════════════════════ ╣"
+            echo "║ Sửa code lệnh, logic,     │ /reload trong Discord      ║"
+            echo "║ events, lib               │                            ║"
+            echo "╠═══════════════════════════╪════════════════════════════ ╣"
+            echo "║ Sửa config.js             │ /reload hoặc /lavalink     ║"
+            echo "║ (Lavalink, adminId...)     │                            ║"
+            echo "╠═══════════════════════════╪════════════════════════════ ╣"
+            echo "║ Thêm file lệnh .js mới    │ Restart Docker (Mục 5)     ║"
+            echo "╠═══════════════════════════╪════════════════════════════ ╣"
+            echo "║ Cài thêm thư viện npm     │ Rebuild Docker (Mục 1)     ║"
+            echo "║ (npm install xyz)         │                            ║"
+            echo "╠═══════════════════════════╪════════════════════════════ ╣"
+            echo "║ Sửa Dockerfile,           │ Rebuild Docker (Mục 1)     ║"
+            echo "║ package.json              │                            ║"
+            echo "╚══════════════════════════════════════════════════════════╝"
+            echo ""
+            read -p "Nhấn Enter để quay lại Menu..."
             ;;
         0)
             echo "👋 Thoát! Bot vẫn đang tự chạy đằng sau."

@@ -60,42 +60,65 @@ const command = new SlashCommand()
 				newConfig = require(configPath);
 			}
 
-			const oldNodeHost = client.config.nodes?.[0]?.host || "N/A";
-			const newNodeHost = newConfig.nodes?.[0]?.host || "N/A";
+			const oldNode = client.config.nodes?.[0] || {};
+			const oldNodeInfo = `${oldNode.id || "N/A"}\`|\`${oldNode.host || "N/A"}:${oldNode.port || "N/A"}\`|\`${oldNode.secure ? "True" : "False"}`;
+			const newNode0 = newConfig.nodes?.[0] || {};
 			const lavalinkChanged = JSON.stringify(client.config.nodes) !== JSON.stringify(newConfig.nodes);
 
 			// Cập nhật config mới vào client
 			client.config = newConfig;
 			reloadLog.push(`✅ Đã nạp lại cấu hình (config.js)`);
 
-			// ======== BƯỚC 3: ĐẢO LAVALINK (NẾU CÓ THAY ĐỔI) ========
+			// ======== BƯỚC 3: LUÔN KẾT NỐI LẠI LAVALINK ========
 			if (lavalinkChanged) {
-				reloadLog.push(`🔄 Phát hiện Lavalink thay đổi: \`${oldNodeHost}\` → \`${newNodeHost}\``);
+				reloadLog.push(`🔄 Phát hiện Lavalink thay đổi: \`${oldNode.host || "N/A"}\` → \`${newNode0.host || "N/A"}\``);
+			} else {
+				reloadLog.push(`🔄 Đang kết nối lại Lavalink...`);
+			}
 
 				try {
-					// Ngắt kết nối tất cả node cũ
-					const existingNodes = [...client.manager.nodeManager.nodes.values()];
-					for (const node of existingNodes) {
-						try {
-							node.destroy(0, false); // Ngắt kết nối, không reconnect
-						} catch (e) {
-							// Bỏ qua lỗi nếu node đã ngắt rồi
-						}
-					}
+				// Ngắt kết nối tất cả node cũ
+				try {
+					await client.manager.nodeManager.disconnectAll(true, false);
+				} catch (e) {
+					// Nếu disconnectAll lỗi (node đã chết sẵn), xoá thủ công
 					client.manager.nodeManager.nodes.clear();
-					reloadLog.push(`🗑️ Đã ngắt \`${existingNodes.length}\` node cũ`);
-
-					// Thêm và kết nối các node mới
-					for (const nodeOpts of newConfig.nodes) {
-						await client.manager.nodeManager.createNode(nodeOpts);
-					}
-					reloadLog.push(`🚀 Đã kết nối \`${newConfig.nodes.length}\` node mới thành công!`);
-
-				} catch (lavaErr) {
-					reloadLog.push(`⚠️ Lỗi khi đảo Lavalink: \`${lavaErr.message}\``);
 				}
-			} else {
-				reloadLog.push(`ℹ️ Lavalink không thay đổi, bỏ qua`);
+				reloadLog.push(`🗑️ Đã xoá node cũ`);
+
+				// Cập nhật nodes config trong manager
+				client.manager.options.nodes = newConfig.nodes;
+
+				// Reset cờ thông báo → cho phép event connect/error gửi lại
+				if (client.lavalinkNotified) client.lavalinkNotified.clear();
+
+				// Tạo các node mới
+				for (const nodeOpts of newConfig.nodes) {
+					client.manager.nodeManager.createNode(nodeOpts);
+				}
+
+				// Kết nối tất cả node mới
+				const connected = await client.manager.nodeManager.connectAll();
+				reloadLog.push(`🚀 Đã kết nối \`${connected}\` node mới thành công!`);
+
+				// Gửi thông báo đổi Lavalink vào kênh setlog (chỉ khi config thay đổi)
+				if (lavalinkChanged && client.sendLavalinkNotification) {
+					const newNodeInfo = `${newNode0.id || "N/A"}\`|\`${newNode0.host || "N/A"}:${newNode0.port || "N/A"}\`|\`${newNode0.secure ? "True" : "False"}`;
+					client.sendLavalinkNotification(
+						new EmbedBuilder()
+							.setColor("#00AAFF")
+							.setDescription(
+								`🔄 **Lavalink Đã Thay Đổi**\n` +
+								`**Node cũ:** \`${oldNodeInfo}\`\n` +
+								`**Node mới:** \`${newNodeInfo}\`\n` +
+								`**Kết nối:** ${connected} node`
+							)
+							.setTimestamp()
+					);
+				}
+
+			} catch (lavaErr) {
+				reloadLog.push(`⚠️ Lỗi khi đảo Lavalink: \`${lavaErr.message}\``);
 			}
 
 			// ======== BƯỚC 4: TẢI LẠI EVENTS ========

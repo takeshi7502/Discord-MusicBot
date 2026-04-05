@@ -30,7 +30,7 @@ const command = new SlashCommand()
       .setColor(client.config.embedColor)
       .setDescription(`✅ | Đã quy hoạch trạm tình báo! Từ nay mỗi khi Bot chui vào Server lạ hoặc bị sút khỏi Server nào, nó sẽ bẩm báo về <#${channel.id}>`);
 
-    return interaction.reply({ embeds: [embed], ephemeral: true });
+    return interaction.reply({ embeds: [embed] });
   });
 
 module.exports = command;

@@ -25,9 +25,11 @@ const command = new SlashCommand()
 
     let node = await client.getLavalink(client);
     if (!node) {
-      return interaction.editReply({
+      const errMsg = await interaction.editReply({
         embeds: [client.ErrorEmbed("Nút Lavalink không được kết nối")],
       });
+      setTimeout(() => errMsg.delete().catch(() => {}), 10000);
+      return;
     }
 
     let player = client.manager.getPlayer(interaction.guild.id);
