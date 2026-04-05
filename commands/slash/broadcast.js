@@ -74,10 +74,23 @@ const command = new SlashCommand()
       try {
         let targetChannel = null;
 
+        // Ép tải danh sách kênh từ Discord API (vì cache có thể chưa đầy đủ khi dùng "all")
+        if (guild.channels.cache.size === 0) {
+          await guild.channels.fetch().catch(() => {});
+        }
+
         // Ưu tiên Số 1: Lấy kênh đã set trong File Database
         const savedChannelId = await client.database.get(`announce_channel_${id}`);
         if (savedChannelId) {
           targetChannel = guild.channels.cache.get(savedChannelId);
+          // Nếu cache miss, thử fetch trực tiếp kênh đó
+          if (!targetChannel) {
+            try {
+              targetChannel = await guild.channels.fetch(savedChannelId);
+            } catch (e) {
+              targetChannel = null;
+            }
+          }
         }
 
         // Ưu tiên Số 2 (Fallback vét máng): Tìm kênh text đầu tiên bot có chìa khóa gửi tin
@@ -85,7 +98,7 @@ const command = new SlashCommand()
         if (!targetChannel) {
             targetChannel = guild.channels.cache.find(c => 
                 c.type === ChannelType.GuildText && 
-                c.permissionsFor(guild.members.me).has("SendMessages")
+                c.permissionsFor(guild.members.me)?.has("SendMessages")
             );
             isFallback = true;
         }
