@@ -4,6 +4,7 @@ const { EmbedBuilder, ChannelType } = require("discord.js");
 const command = new SlashCommand()
   .setName("broadcast")
   .setDescription("Phóng thanh thông báo (Chỉ dành cho Admin Bot)")
+  .setAdminOnly(true)
   .addStringOption((option) =>
     option
       .setName("message")

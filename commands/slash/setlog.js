@@ -4,6 +4,7 @@ const { EmbedBuilder, ChannelType } = require("discord.js");
 const command = new SlashCommand()
   .setName("setlog")
   .setDescription("Thiết lập kênh báo cáo Bot Join/Leave Server (Chỉ dành cho Admin Bot)")
+  .setAdminOnly(true)
   .addChannelOption((option) =>
     option
       .setName("channel")

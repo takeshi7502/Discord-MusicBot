@@ -6,6 +6,7 @@ const path = require("path");
 const command = new SlashCommand()
 	.setName("reload")
 	.setDescription("Tải lại tất cả các lệnh")
+	.setAdminOnly(true)
 	.setRun(async (client, interaction, options) => {
 		if (interaction.user.id === client.config.adminId) {
 			try {
