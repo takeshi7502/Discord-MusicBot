@@ -27,8 +27,11 @@ const command = new SlashCommand()
       }).catch(() => {});
     }
 
-    const messageContent = options.getString("message");
+    let messageContent = options.getString("message");
     let targetOpt = options.getString("target");
+
+    // Hỗ trợ gõ \n để xuống dòng trong Embed
+    messageContent = messageContent.replace(/\\n/g, "\n");
     
     // Nếu nhập có khoảng trắng ở đầu đuôi thì cắt đi
     if (targetOpt) targetOpt = targetOpt.trim();
