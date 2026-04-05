@@ -12,4 +12,3 @@ services:
       - ./events:/usr/src/app/events
       - ./util:/usr/src/app/util
       - ./index.js:/usr/src/app/index.js
-      - ./db.json:/usr/src/app/db.json
