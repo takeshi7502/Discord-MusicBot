@@ -1,57 +1,60 @@
 <h1 align="center"><img src="./assets/logo.gif" width="30px"> Discord Music Bot <img src="./assets/logo.gif" width="30px"></h1>
 
+<p align="center">
+  <b>English</b> | <a href="./README-vi.md">Tiếng Việt</a>
+</p>
+
 ## ✨ Latest Updates (Custom Fork)
 
 This is a heavily modified and optimized fork of the original project, bringing modern standards and bypass configurations to the bot!
 
 ### What's New in this Version:
  - **Lavalink v4 Support:** Fully migrated from `erela.js` (Lavalink v3) to `lavalink-client` v4.
- - **YouTube Anti-Bot Bypass:** Integrated `yt-dlp` instructions to effectively bypass YouTube's datacenter blocks and "Sign in to confirm you're not a bot" errors!
- - **Voice Channel Status Integration:** The bot now updates the Voice Channel Description with the song actively playing real-time!
+ - **YouTube Anti-Bot Bypass:** Integrated `yt-dlp` instructions to effectively bypass YouTube's datacenter blocks and "Sign in to confirm you're not a bot" errors.
+ - **Voice Channel Status Integration:** The bot now updates the Voice Channel Description with the actively playing song in real-time.
  - **Smart Notifications:** Grouped and optimized controller notifications to keep your bot channels extremely clean.
- - **Robust Orchestration:** Includes `run.sh` console for one-click Docker-compose management and log viewing.
- - Completely modular docker environment for easier development and deployment
+ - **Robust Orchestration:** Includes a `run.sh` console for one-click Docker-compose management and log viewing.
+ - Completely modular Docker environment for easier development and deployment.
  - A WORKING DASHBOARD!!!
- - DB Integration for you to save your favorite songs in
+ - DB Integration to save your favorite songs.
 
 ## 🚧 | Prerequisites
 
 - [Node.js 16+](https://nodejs.org/en/download/)
 - [Lavalink Server v4.x.x](https://github.com/lavalink-devs/Lavalink)
-- You'll need to run `npm run deploy` or `yarn deploy`. to initialized the slash commands. _You can do this on your pc
-  locally_
+- You'll need to run `npm run deploy` or `yarn deploy` to initialize slash commands. _You can do this locally on your PC._
 
-> NOTE: Lavalink is needed for music functionality. You need to have a working Lavalink server (v4 supported natively) to make the bot work.
+> **NOTE:** Lavalink is required for music functionality. You must have a working Lavalink server (v4 is natively supported) for the bot to work.
 
-## 📝 | Deploy bot lên VPS Ubuntu (Khuyên Dùng Docker & run.sh)
+## 📝 | Deployment on Ubuntu VPS (Docker & run.sh Recommended)
 
-Dự án đã được trang bị sẵn tệp `run.sh` giúp bạn quản lý từ A-Z!
+This project comes with a built-in `run.sh` script to help you manage everything from A to Z!
 
-1. Clone repo về máy:
+1. Clone the repository:
 ```sh
 git clone https://github.com/takeshi7502/Discord-MusicBot.git musicbot/ && cd musicbot
 ```
-2. Mở file `config.js` để cài đặt thông số Bot và thông tin Lavalink Server v4:
+2. Open the `config.js` file to configure your Bot variables and Lavalink Server v4 information:
 ```sh
 nano config.js
 ```
-*Lưu ý: Nếu bạn sử dụng Youtube qua Proxy hoặc yt-dlp, hãy cấu hình file `application.yml` trong thư mục `Lavalink/`.*
+*Note: If you use YouTube via Proxy or `yt-dlp`, make sure to configure the `application.yml` file in the `Lavalink/` folder.*
 
-3. Khởi chạy bảng điều khiển (Console Management):
+3. Start the Management Console:
 ```sh
 bash run.sh
 ```
-Từ bảng điều khiển này, bạn có thể tự động cài đặt Docker, build image, chạy Bot, xem Logs hoặc quản lý các trạng thái hoạt động 1 cách hoàn toàn tự động!
+From this console, you can automatically install Docker, build the image, start the Bot, view Logs, and manage operational states fully automatically!
 
-### 💪🏻 Non-Docker
-> Đảm bảo file `config.js` đã được điền đủ thông tin Lavalink Server.
+### 💪🏻 Non-Docker Deployment
+> Ensure the `config.js` file is completely filled out with your Lavalink Server info.
 
-Cài đặt thư viện và Deploy Slash Commands:
+Install dependencies and Deploy Slash Commands:
 ```sh
 npm install
 npm run deploy
 ```
-Khởi động bot:
+Start the bot:
 ```sh
 node index.js
 ```
