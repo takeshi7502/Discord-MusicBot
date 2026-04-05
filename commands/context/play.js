@@ -106,43 +106,20 @@ module.exports = {
       var title = escapeMarkdown(res.tracks[0].info.title);
       title = title.replace(/\]/g, "");
       title = title.replace(/\[/g, "");
-      let addQueueEmbed = new EmbedBuilder()
-        .setColor(client.config.embedColor)
-        .setAuthor({ name: "Đã thêm vào hàng đợi", iconURL: client.config.iconURL })
-        .setDescription(`[${title}](${res.tracks[0].info.uri})` || "Không có tiêu đề")
-        .setURL(res.tracks[0].info.uri)
-        .addFields(
-          {
-            name: "Đã thêm bởi",
-            value: `<@${interaction.user.id}>`,
-            inline: true,
-          },
-          {
-            name: "Thời lượng",
-            value: res.tracks[0].info.isStream
-              ? `\`LIVE 🔴 \``
-              : `\`${client.ms(res.tracks[0].info.duration, {
-                  colonNotation: true,
-                  secondsDecimalDigits: 0,
-                })}\``,
-            inline: true,
-          }
-        );
 
-      if (res.tracks[0].info.artworkUrl) {
-        addQueueEmbed.setThumbnail(res.tracks[0].info.artworkUrl);
-      }
+      const duration = res.tracks[0].info.isStream
+        ? "`LIVE 🔴`"
+        : `\`${client.ms(res.tracks[0].info.duration, { colonNotation: true, secondsDecimalDigits: 0 })}\``;
 
-      const totalSize = player.queue.tracks.length + (player.queue.current ? 1 : 0);
-      if (totalSize > 1) {
-        addQueueEmbed.addFields({
-          name: "Vị trí trong hàng đợi",
-          value: `${player.queue.tracks.length}`,
-          inline: true,
-        });
-      }
+      const addText = `**Đã thêm:**\n[${title}](${res.tracks[0].info.uri})\n**Từ** <@${interaction.user.id}> - **Thời lượng:** ${duration}`;
 
-      await interaction.editReply({ embeds: [addQueueEmbed] }).catch(() => {});
+      await interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.config.embedColor)
+            .setDescription(addText)
+        ]
+      }).catch(() => {});
     }
 
     if (res.loadType === "playlist") {
@@ -158,34 +135,21 @@ module.exports = {
       }
 
       const playlistDuration = res.tracks.reduce((a, t) => a + (t.info.duration || 0), 0);
-      let playlistEmbed = new EmbedBuilder()
-        .setColor(client.config.embedColor)
-        .setAuthor({
-          name: "Danh sách phát đã được thêm vào hàng đợi",
-          iconURL: client.config.iconURL,
-        })
-        .setThumbnail(res.tracks[0].info.artworkUrl || null)
-        .setDescription(`[${res.playlist?.name || "Playlist"}](${query})`)
-        .addFields(
-          {
-            name: "Đã thêm vào hàng đợi",
-            value: `\`${res.tracks.length}\` bài hát`,
-            inline: true,
-          },
-          {
-            name: "Thời lượng của danh sách phát",
-            value: `\`${client.ms(playlistDuration, {
-              colonNotation: true,
-              secondsDecimalDigits: 0,
-            })}\``,
-            inline: true,
-          }
-        );
+      const durationStr = client.ms(playlistDuration, { colonNotation: true, secondsDecimalDigits: 0 });
+      const playlistName = res.playlist?.name || "Playlist";
 
-      await interaction.editReply({ embeds: [playlistEmbed] }).catch(() => {});
+      const addText = `**Đã thêm Playlist:**\n${playlistName}\n**Từ** <@${interaction.user.id}> - **Thời lượng:** \`${durationStr}\` - **Playlist:** \`${res.tracks.length}\` bài hát`;
+
+      await interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(client.config.embedColor)
+            .setDescription(addText)
+        ]
+      }).catch(() => {});
     }
 
-    if (ret) setTimeout(() => ret.delete().catch(() => {}), 20000);
+    if (ret) setTimeout(() => ret.delete().catch(() => {}), 10000);
     return ret;
   },
 };
