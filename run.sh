@@ -71,9 +71,9 @@ while true; do
     echo "========================================================"
     echo "           🎵 CHƯƠNG TRÌNH ĐIỀU KHIỂN BOT VPS 🎵        "
     echo "========================================================"
-    echo "1. 📥 Cập nhật Code mới từ Github (Pull) & Build lại"
+    echo "1. ⚙️  Chỉ Build (Rèn) lại Image từ Code hiện tại"
     echo "2. 📡 Kiểm tra tình trạng Máy Chủ Lavalink hiện tại"
-    echo "3. 🔄 Thay đổi Máy chủ Lavalink khác (Gắn Node mới)"
+    echo "3. 🔄 Thay đổi Máy chủ Lavalink (Chỉ Restart, không Build)"
     echo "4. 🛑 Tắt Bot (Stop)"
     echo "5. ♻️  Chỉ Khởi Động Lại Bot nhanh (Restart)"
     echo "6. 📋 Xem trực tiếp Màn hình Log Bot (Nhật ký lỗi)"
@@ -83,8 +83,6 @@ while true; do
     
     case $choice in
         1)
-            echo "📥 Đang kéo (pull) code cập nhật mới nhất..."
-            git pull || echo "⚠️  Git chưa được cài đặt hoặc thư mục không có Git!"
             echo "🛑 Đang tháo gỡ nền tảng cũ..."
             sudo docker compose down --remove-orphans 2>/dev/null || true
             echo "⚙️  Đang rèn (Build) lại Image Docker mã nguồn..."
@@ -143,12 +141,11 @@ while true; do
             sed -i "s|^.*port: .*|\t\t\tport: $lava_port,|g" config.js
             sed -i "s|^.*authorization: .*|\t\t\tauthorization: \"$lava_auth_esc\",|g" config.js
             sed -i "s|^.*secure: .*|\t\t\tsecure: $lava_secure,|g" config.js
-            
-            echo "♻️  Cấu hình nạp thành công! Đang Khởi động lại Bot lướt Lavalink mới..."
-            sudo docker compose restart discordmusicbot
-            check_lavalink
-            echo "📋 Xong. Bấm Ctrl+C để thoát nếu muốn đóng Màn hình Nhật ký."
-            sudo docker compose logs -f discordmusicbot
+            echo ""
+            echo "✅ Đã ghi cấu hình Lavalink mới vào config.js thành công!"
+            echo "👉 Bây giờ sếp vào Discord gõ lệnh /reload để Bot nạp lại cấu hình mới nhé!"
+            echo ""
+            read -p "Nhấn Enter để quay lại Menu..."
             ;;
         4)
             echo "🛑 Đang cắt điện toàn bộ hệ thống Bot..."
