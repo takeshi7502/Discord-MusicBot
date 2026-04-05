@@ -20,8 +20,9 @@ const command = new SlashCommand()
       return [].concat(cmds.slash) /*.concat(cmds.context)*/;
     });
     // from commands remove the ones that have "null" in the description
+    // and hide admin-only commands from regular users
     const filteredCommands = commands.filter(
-      (cmd) => cmd.description != "null"
+      (cmd) => cmd.description != "null" && !cmd.adminOnly
     );
     const totalCmds = filteredCommands.length;
     let maxPages = Math.ceil(totalCmds / client.config.helpCmdPerPage);

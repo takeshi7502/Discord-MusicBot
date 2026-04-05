@@ -4,6 +4,7 @@ const SlashCommand = require("../../lib/SlashCommand");
 const command = new SlashCommand()
   .setName("guildleave")
   .setDescription("Rời khỏi máy chủ")
+  .setAdminOnly(true)
   .addStringOption((option) =>
     option
       .setName("id")
