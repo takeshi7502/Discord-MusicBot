@@ -1,87 +1,82 @@
 <h1 align="center"><img src="./assets/logo.gif" width="30px"> Discord Music Bot <img src="./assets/logo.gif" width="30px"></h1>
 
-<p align="center">
-  <b>English</b> | <a href="./README-vi.md">Tiếng Việt</a>
-</p>
+## ✨ Cập Nhật Mới Nhất (Bản Fork Tùy Biến)
 
-## ✨ Latest Updates (Custom Fork)
+Đây là phiên bản fork đã được tùy chỉnh từ dự án gốc, mang lại sự tương thích tốt nhất với hệ thống Lavalink v4.
 
-This is a heavily modified and optimized fork of the original project, bringing modern standards and bypass configurations to the bot!
+### Các Thay Đổi Trong Phiên Bản Này:
+ - **Hỗ Trợ Lavalink v4:** Đã chuyển từ thư viện `erela.js` (Lavalink v3) sang `lavalink-client` v4.
+ - **Vượt Tường Lửa YouTube:** Tích hợp bộ cấu hình `yt-dlp` để vượt qua lỗi chặn IP của YouTube.
+ - **Cập Nhật Voice Channel Status:** Tự động hiển thị tên bài hát đang phát lên trạng thái của Kênh Thoại.
+ - **Tối Ưu Thông Báo:** Cải thiện và gộp chung thông báo điều khiển nhạc để kênh chat gọn gàng hơn.
+ - **Trình Quản Lý `run.sh`:** Chứa lệnh tự động giúp bạn cài đặt Docker và quản lý toàn bộ bot một cách dễ dàng.
+ - Bảng Điều Khiển (Dashboard) trên Website.
+ - Database nội bộ để lưu trữ danh sách bài hát yêu thích.
 
-### What's New in this Version:
- - **Lavalink v4 Support:** Fully migrated from `erela.js` (Lavalink v3) to `lavalink-client` v4.
- - **YouTube Anti-Bot Bypass:** Integrated `yt-dlp` instructions to effectively bypass YouTube's datacenter blocks and "Sign in to confirm you're not a bot" errors.
- - **Voice Channel Status Integration:** The bot now updates the Voice Channel Description with the actively playing song in real-time.
- - **Smart Notifications:** Grouped and optimized controller notifications to keep your bot channels extremely clean.
- - **Robust Orchestration:** Includes a `run.sh` console for one-click Docker-compose management and log viewing.
- - Completely modular Docker environment for easier development and deployment.
- - A WORKING DASHBOARD!!!
- - DB Integration to save your favorite songs.
-
-## 🚧 | Prerequisites
+## 🚧 | Yêu Cầu Hệ Thống
 
 - [Node.js 16+](https://nodejs.org/en/download/)
 - [Lavalink Server v4.x.x](https://github.com/lavalink-devs/Lavalink)
-- You'll need to run `npm run deploy` or `yarn deploy` to initialize slash commands. _You can do this locally on your PC._
+- Bạn cần chạy lệnh `npm run deploy` hoặc `yarn deploy` máy tính để tải dữ liệu lệnh Slash lên Discord.
 
-> **NOTE:** Lavalink is required for music functionality. You must have a working Lavalink server (v4 is natively supported) for the bot to work.
+> **LƯU Ý:** Bot này dùng Lavalink để phát nhạc. Bắt buộc bạn phải chuẩn bị 1 Server Lavalink đang hoạt động (hỗ trợ bản v4.x).
 
-## 📝 | Deployment on Ubuntu VPS (Docker & run.sh Recommended)
+## 📝 | Tự Động Deploy Bot Lên VPS Ubuntu (Khuyên Dùng Docker)
 
-This project comes with a built-in `run.sh` script to help you manage everything from A to Z!
+Dự án này đã được trang bị công cụ `run.sh` giúp bạn cài đặt tự động.
 
-1. Clone the repository:
+1. Clone bộ code này về máy chủ VPS của bạn:
 ```sh
 git clone https://github.com/takeshi7502/Discord-MusicBot.git musicbot/ && cd musicbot
 ```
-2. Open the `config.js` file to configure your Bot variables and Lavalink Server v4 information:
+2. Mở file thư mục `config.js` để chỉnh sửa Token Bot và thiết lập kết nối Lavalink:
 ```sh
 nano config.js
 ```
-*Note: If you use YouTube via Proxy or `yt-dlp`, make sure to configure the `application.yml` file in the `Lavalink/` folder.*
+*Lưu ý: Nếu bạn sử dụng tính năng nghe nhạc YouTube qua Proxy / yt-dlp, hãy cấu hình file `application.yml` trong mục `Lavalink/`.*
 
-3. Start the Management Console:
+3. Khởi chạy Trình Quản Trị Console:
 ```sh
 bash run.sh
 ```
-From this console, you can automatically install Docker, build the image, start the Bot, view Logs, and manage operational states fully automatically!
+Từ bảng điều khiển này, bạn có thể Tự động cài đặt Docker, Build mã nguồn, Chạy Bot, và Xem Logs hoạt động.
 
-### 💪🏻 Non-Docker Deployment
-> Ensure the `config.js` file is completely filled out with your Lavalink Server info.
+### 💪🏻 Cài Đặt Trực Tiếp (Không Dùng Docker)
+> Nhớ hãy điền đầy đủ mọi thông tin cấu hình Lavalink trong `config.js` trước.
 
-Install dependencies and Deploy Slash Commands:
+Cài đặt thư viện và đăng ký Slash Commands:
 ```sh
 npm install
 npm run deploy
 ```
-Start the bot:
+Chạy Bot:
 ```sh
 node index.js
 ```
 
-## 📝 | [Support Server](https://discord.gg/sbySMS7m3v)
+## 📝 | [Nhóm Trợ Giúp (Support Server)](https://discord.gg/sbySMS7m3v)
 
-If you have major coding issues with this bot, please join and ask for help.
+Nếu bạn gặp khó khăn hay lỗi xuất hiện trong quá trình thiết lập bot, hãy tham gia server hỗ trợ để hỏi đáp.
 
-## 🙏 | Credits & Acknowledgements
+## 🙏 | Lời Cảm Ơn (Credits)
 
-**Original Project:** This project is originally created and maintained by **[SudhanPlayz](https://github.com/SudhanPlayz)**.
-- Original Repository: [SudhanPlayz/Discord-MusicBot](https://github.com/SudhanPlayz/Discord-MusicBot)
+- **Tác Giả Gốc:** [SudhanPlayz](https://github.com/SudhanPlayz)
+- **Repository Gốc:** [SudhanPlayz/Discord-MusicBot](https://github.com/SudhanPlayz/Discord-MusicBot)
 
-All core credits for the initial architecture go to the original author. This fork purely builds upon their fantastic foundation to provide compatibility with newer technologies and anti-bot bypass mechanisms.
+Phiên bản Fork này hoạt động độc lập nhằm mục đích nâng cấp cấu trúc lên hệ điều hành Lavalink v4 hiện đại.
 
-## ✨ | Contributors of Original Repo
+## ✨ | Những Người Đóng Góp Cho Original Repo
 
-Contributions are always welcomed :D Make sure to follow [Contributing.md](/CONTRIBUTING.md)
+Những đóng góp luôn được đón nhận nồng nhiệt :D Vui lòng xem [Contributing.md](/CONTRIBUTING.md)
 
 <a href="https://github.com/SudhanPlayz/Discord-MusicBot/graphs/contributors">
   <img src="https://contributors-img.web.app/image?repo=SudhanPlayz/Discord-MusicBot" />
 </a>
 
-## 🌟 | Made with
+## 🌟 | Các Công Nghệ Được Sử Dụng
 
 - [Discord.js](https://discord.js.org/)
-- **[Lavalink-Client](https://github.com/EmberGalaxy/lavalink-client)** (Replacing erela.js)
+- **[Lavalink-Client](https://github.com/EmberGalaxy/lavalink-client)** (Thay thế cho erela.js)
 - [Lavalink v4](https://github.com/lavalink-devs/Lavalink) 
 - [Express](https://expressjs.com/)
 - [Next JS](https://nextjs.org/)
