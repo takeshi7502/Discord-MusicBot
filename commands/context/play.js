@@ -9,7 +9,7 @@ module.exports = {
    * @param {import("../lib/DiscordMusicBot")} client
    * @param {import("discord.js").ContextMenuCommandInteraction} interaction
    */
-  run: async (client, interaction, options) => {
+   run: async (client, interaction, options) => {
     let channel = await client.getChannel(client, interaction);
     if (!channel) {
       return;
@@ -19,6 +19,7 @@ module.exports = {
     if (!node) {
       return interaction.reply({
         embeds: [client.ErrorEmbed("Nút Lavalink không được kết nối")],
+        ephemeral: true,
       });
     }
 
@@ -66,13 +67,15 @@ module.exports = {
       if (!player.queue.current) {
         player.destroy();
       }
+      await interaction.deleteReply().catch(() => {});
       await interaction
-        .editReply({
+        .followUp({
           embeds: [
             new EmbedBuilder()
               .setColor(0xFF0000)
               .setDescription("Có lỗi xảy ra trong quá trình tìm kiếm"),
           ],
+          ephemeral: true,
         })
         .catch(() => {});
     }
@@ -81,13 +84,15 @@ module.exports = {
       if (!player.queue.current) {
         player.destroy();
       }
+      await interaction.deleteReply().catch(() => {});
       await interaction
-        .editReply({
+        .followUp({
           embeds: [
             new EmbedBuilder()
               .setColor(0xFF0000)
               .setDescription("Không tìm thấy kết quả nào"),
           ],
+          ephemeral: true,
         })
         .catch(() => {});
     }

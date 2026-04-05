@@ -14,10 +14,8 @@ module.exports = async (client, interaction) => {
 			embeds: [
 				client.Embed("❌ | **Không có người chơi để kiểm soát trong máy chủ này.**"),
 			],
+			ephemeral: true,
 		});
-		setTimeout(() => {
-			interaction.deleteReply().catch(() => {});
-		}, 5000);
 		return;
 	}
 	if (!interaction.member.voice.channel) {
@@ -44,23 +42,10 @@ module.exports = async (client, interaction) => {
 	if (property === "Stop") {
 		await interaction.deferUpdate().catch(() => {});
 		player.queue.tracks.splice(0);
-		player.stopPlaying(false, false);
 		player.set("autoQueue", false);
+		player.set("stoppedByUser", true);
+		player.stopPlaying(false, false);
 		client.warn(`Người chơi: ${ player.guildId } | Đã dừng trình phát nhạc.`);
-		const msg = await interaction.channel.send({
-			embeds: [
-				client.Embed(
-					"⏹️ | **Đã dừng trình phát nhạc**",
-				),
-			],
-		});
-		setTimeout(() => {
-			msg.delete().catch(() => {});
-		}, 5000);
-
-		await interaction.editReply({
-			components: [client.createController(player.guildId, player)],
-		}).catch(()=>{});
 		return;
 	}
 
