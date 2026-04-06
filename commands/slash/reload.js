@@ -76,12 +76,14 @@ const command = new SlashCommand()
 				reloadLog.push(`🔄 Đang kết nối lại Lavalink...`);
 			}
 
-				try {
+			try {
+				// Lưu danh sách player cũ trước khi đảo node
+				const activePlayers = [...client.manager.players.values()];
+
 				// Ngắt kết nối tất cả node cũ
 				try {
 					await client.manager.nodeManager.disconnectAll(true, false);
 				} catch (e) {
-					// Nếu disconnectAll lỗi (node đã chết sẵn), xoá thủ công
 					client.manager.nodeManager.nodes.clear();
 				}
 				reloadLog.push(`🗑️ Đã xoá node cũ`);
@@ -100,6 +102,32 @@ const command = new SlashCommand()
 				// Kết nối tất cả node mới
 				const connected = await client.manager.nodeManager.connectAll();
 				reloadLog.push(`🚀 Đã kết nối \`${connected}\` node mới thành công!`);
+
+				// SAU KHI RELOAD XONG → Dọn dẹp player cũ
+				if (activePlayers.length > 0) {
+					reloadLog.push(`🔇 Đang dọn dẹp \`${activePlayers.length}\` trình phát cũ...`);
+					for (const player of activePlayers) {
+						try {
+							// Xoá tin nhắn Now Playing cũ
+							const nowPlayingMsg = player.get("nowPlayingMessage");
+							if (nowPlayingMsg) {
+								await nowPlayingMsg.delete().catch(() => { });
+							}
+							// Gửi thông báo vào kênh text
+							const textChannel = client.channels.cache.get(player.textChannelId);
+							if (textChannel) {
+								const reloadEmbed = new EmbedBuilder()
+									.setColor("#FF8800")
+									.setDescription("⚠️ **Bot vừa được cập nhật!**\nBạn dùng `/play` để phát lại nhạc nhé.")
+									.setTimestamp();
+								await textChannel.send({ embeds: [reloadEmbed] }).catch(() => { });
+							}
+							// Destroy player
+							await player.destroy().catch(() => { });
+						} catch (e) { }
+					}
+					reloadLog.push(`✅ Đã dọn dẹp \`${activePlayers.length}\` trình phát`);
+				}
 
 				// Gửi thông báo đổi Lavalink vào kênh setlog (chỉ khi config thay đổi)
 				if (lavalinkChanged && client.sendLavalinkNotification) {

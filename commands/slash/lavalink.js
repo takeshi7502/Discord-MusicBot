@@ -210,11 +210,13 @@ const command = new SlashCommand()
                     if (cmd?.command && cmd?.run) client.contextCommands.set(file.split(".")[0].toLowerCase(), cmd);
                   });
 
+                  // Lưu danh sách player cũ trước khi đảo node
+                  const activePlayers = [...client.manager.players.values()];
+
                   // Đảo Lavalink - ngắt node cũ
                   try {
                     await client.manager.nodeManager.disconnectAll(true, false);
                   } catch (e) {
-                    // Nếu disconnectAll lỗi (node đã chết sẵn), xoá thủ công
                     client.manager.nodeManager.nodes.clear();
                   }
                   client.manager.options.nodes = newConfig.nodes;
@@ -227,6 +229,27 @@ const command = new SlashCommand()
                   }
 
                   const connected = await client.manager.nodeManager.connectAll();
+
+                  // SAU KHI RELOAD XONG → Dọn dẹp player cũ
+                  for (const player of activePlayers) {
+                    try {
+                      // Xoá tin nhắn Now Playing cũ
+                      const nowPlayingMsg = player.get("nowPlayingMessage");
+                      if (nowPlayingMsg) {
+                        await nowPlayingMsg.delete().catch(() => {});
+                      }
+                      // Gửi thông báo vào kênh text
+                      const textChannel = client.channels.cache.get(player.textChannelId);
+                      if (textChannel) {
+                        const reloadEmbed = new EmbedBuilder()
+                          .setColor("#FF8800")
+                          .setDescription("⚠️ **Lavalink đã được thay đổi!**\nVui lòng dùng `/play` để phát lại nhạc.")
+                          .setTimestamp();
+                        await textChannel.send({ embeds: [reloadEmbed] }).catch(() => {});
+                      }
+                      await player.destroy().catch(() => {});
+                    } catch (e) {}
+                  }
 
                   const newNode = newConfig.nodes?.[0] || {};
                   const newNodeInfo = `${newNode.id || "N/A"}\`|\`${newNode.host || "N/A"}:${newNode.port || "N/A"}\`|\`${newNode.secure ? "True" : "False"}`;

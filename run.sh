@@ -86,6 +86,15 @@ while true; do
         1)
             echo "🛑 Đang tháo gỡ nền tảng cũ..."
             sudo docker compose down --remove-orphans 2>/dev/null || true
+            # Đảm bảo db.json là file (không phải thư mục) trước khi mount
+            if [ -d "./db.json" ]; then
+                echo "⚠️  Phát hiện db.json là thư mục, đang sửa..."
+                rm -rf ./db.json
+            fi
+            if [ ! -f "./db.json" ]; then
+                echo "{}" > ./db.json
+                echo "📄 Đã tạo db.json mới"
+            fi
             echo "⚙️  Đang rèn (Build) lại Image Docker mã nguồn..."
             sudo docker compose build --no-cache discordmusicbot
             echo "🚀 Đang kích hoạt Bot..."

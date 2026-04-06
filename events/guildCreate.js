@@ -6,7 +6,7 @@ module.exports = async (client, guild) => {
 
         // Lấy ID kênh log từ database (Kênh này do Admin gốc gõ /setlog để cấu hình)
         const logChannelId = await client.database.get("admin_log_channel");
-        
+
         if (logChannelId) {
             const logChannel = client.channels.cache.get(logChannelId);
             if (logChannel) {
@@ -15,7 +15,7 @@ module.exports = async (client, guild) => {
                 try {
                     const owner = await guild.fetchOwner();
                     ownerStr = `${owner.user.tag} (ID: ${owner.id})`;
-                } catch (e) {}
+                } catch (e) { }
 
                 const embed = new EmbedBuilder()
                     .setColor("#00FF00") // Màu xanh lá: Vào mới
@@ -30,15 +30,15 @@ module.exports = async (client, guild) => {
                     )
                     .setTimestamp();
 
-                await logChannel.send({ embeds: [embed] }).catch(() => {});
+                await logChannel.send({ embeds: [embed] }).catch(() => { });
             }
         }
-        
+
         // ----------------------------------------------------
         // GỬI LỜI CHÀO MỜI ĐẾN MÁY CHỦ VỪA THAM GIA
         // ----------------------------------------------------
-        const targetChannel = guild.channels.cache.find(c => 
-            c.type === ChannelType.GuildText && 
+        const targetChannel = guild.channels.cache.find(c =>
+            c.type === ChannelType.GuildText &&
             c.permissionsFor(guild.members.me).has("SendMessages") &&
             c.permissionsFor(guild.members.me).has("ViewChannel")
         );
@@ -47,19 +47,18 @@ module.exports = async (client, guild) => {
             const welcomeEmbed = new EmbedBuilder()
                 .setColor(client.config.embedColor)
                 .setAuthor({ name: "Cảm ơn vì đã sử dụng Bot!", iconURL: client.config.iconURL || client.user.displayAvatarURL() })
-                .setTitle("👋 Hướng dẫn nhận thông báo Cập Nhật, Fix Lỗi")
+                .setTitle("👋 Xin chào!")
                 .setDescription(
-                    `Chào mn! Mình là một Bot Âm Nhạc xịn xò con bò.\n\n` +
-                    `Để không bỏ lỡ các thông báo quan trọng từ Admin Bot (Ví dụ: thông báo đứt cáp, cập nhật sửa lỗi, bảo trì server,...), ` +
-                    `**Chủ Server hoặc Quản Trị Viên (Admin) vui lòng gõ lệnh sau để chỉ định kênh nhận tin nhé:**\n\n` +
-                    `👉 Gõ lệnh: \`/setup\`\n\n` +
-                    `Bot sẽ lưu kênh đó lại và vĩnh viễn chỉ gửi thông báo quan trọng vào đúng kênh đó thôi, không làm phiền kênh chat chính của các bạn!\n\n` +
-                    `*Một lần nữa cảm ơn bạn đã mời bot. Gõ \`/help\` để khám phá các lệnh nhạc nhé!*`
+                    `Chào mn! Tekisha Music là một Bot Nghe nhạc miễn phí với đầy đủ tính năng, không quảng cáo, không tính phí, không giới hạn thời gian sử dụng.\n` +
+                    `*Cảm ơn bạn đã sử dụng Bot. Gõ \`/help\` để khám phá các lệnh nhé!*\n\n` +
+                    `**Bạn Admin Server gõ lệnh sau để chỉ định kênh nhận tin nhé:**\n` +
+                    `👉 Gõ lệnh: \`/setup\`\n`
+
                 )
                 .setThumbnail(client.user.displayAvatarURL())
                 .setTimestamp();
 
-            await targetChannel.send({ embeds: [welcomeEmbed] }).catch(() => {});
+            await targetChannel.send({ embeds: [welcomeEmbed] }).catch(() => { });
         }
     } catch (error) {
         client.error(`Lỗi guildCreate: ${error.message}`);
