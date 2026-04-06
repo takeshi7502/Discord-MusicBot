@@ -44,7 +44,9 @@ function buildStatusEmbed(client, autoMode) {
       const h = node.options?.host || "N/A";
       const p = node.options?.port || "N/A";
 
-      desc += `\n${icon} **${node.id || "Node"}**\n`;
+      const playersOnThisNode = allPlayers.filter(pl => pl.node?.id === node.id && pl.playing).length;
+
+      desc += `\n${icon} **${node.id || "Node"}** (Playing: \`${playersOnThisNode}\`)\n`;
       desc += `**• Host:** \`${h}:${p}\`\n`;
       desc += `**• Status:** ${isConnected ? "Đang hoạt động" : "Mất kết nối"}\n`;
 
@@ -97,19 +99,9 @@ function autoRow() {
 const command = new SlashCommand()
   .setName("status")
   .setDescription("Xem trạng thái Bot & Lavalink")
+  .setAdminOnly(true)
   .setRun(async (client, interaction) => {
-    if (interaction.user.id !== client.config.adminId) {
-      return interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(client.config.embedColor)
-            .setDescription("Bạn không được ủy quyền để sử dụng lệnh này!"),
-        ],
-        ephemeral: true,
-      });
-    }
-
-    // Tắt session /status cũ nếu có
+    // Nếu có session cũ đang báo auto, dừng nó lại
     if (client._statusSession) {
       client._statusSession.stop();
       client._statusSession = null;
@@ -187,6 +179,7 @@ const command = new SlashCommand()
     collector.on("end", () => {
       stopAuto();
       client._statusSession = null;
+      interaction.editReply({ components: [] }).catch(() => {});
     });
   });
 

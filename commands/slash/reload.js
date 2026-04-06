@@ -60,94 +60,9 @@ const command = new SlashCommand()
 				newConfig = require(configPath);
 			}
 
-			const oldNode = client.config.nodes?.[0] || {};
-			const oldNodeInfo = `${oldNode.id || "N/A"}\`|\`${oldNode.host || "N/A"}:${oldNode.port || "N/A"}\`|\`${oldNode.secure ? "True" : "False"}`;
-			const newNode0 = newConfig.nodes?.[0] || {};
-			const lavalinkChanged = JSON.stringify(client.config.nodes) !== JSON.stringify(newConfig.nodes);
-
 			// Cập nhật config mới vào client
 			client.config = newConfig;
 			reloadLog.push(`✅ Đã nạp lại cấu hình (config.js)`);
-
-			// ======== BƯỚC 3: LUÔN KẾT NỐI LẠI LAVALINK ========
-			if (lavalinkChanged) {
-				reloadLog.push(`🔄 Phát hiện Lavalink thay đổi: \`${oldNode.host || "N/A"}\` → \`${newNode0.host || "N/A"}\``);
-			} else {
-				reloadLog.push(`🔄 Đang kết nối lại Lavalink...`);
-			}
-
-			try {
-				// Lưu danh sách player cũ trước khi đảo node
-				const activePlayers = [...client.manager.players.values()];
-
-				// Ngắt kết nối tất cả node cũ
-				try {
-					await client.manager.nodeManager.disconnectAll(true, false);
-				} catch (e) {
-					client.manager.nodeManager.nodes.clear();
-				}
-				reloadLog.push(`🗑️ Đã xoá node cũ`);
-
-				// Cập nhật nodes config trong manager
-				client.manager.options.nodes = newConfig.nodes;
-
-				// Reset cờ thông báo → cho phép event connect/error gửi lại
-				if (client.lavalinkNotified) client.lavalinkNotified.clear();
-
-				// Tạo các node mới
-				for (const nodeOpts of newConfig.nodes) {
-					client.manager.nodeManager.createNode(nodeOpts);
-				}
-
-				// Kết nối tất cả node mới
-				const connected = await client.manager.nodeManager.connectAll();
-				reloadLog.push(`🚀 Đã kết nối \`${connected}\` node mới thành công!`);
-
-				// SAU KHI RELOAD XONG → Dọn dẹp player cũ
-				if (activePlayers.length > 0) {
-					reloadLog.push(`🔇 Đang dọn dẹp \`${activePlayers.length}\` trình phát cũ...`);
-					for (const player of activePlayers) {
-						try {
-							// Xoá tin nhắn Now Playing cũ
-							const nowPlayingMsg = player.get("nowPlayingMessage");
-							if (nowPlayingMsg) {
-								await nowPlayingMsg.delete().catch(() => { });
-							}
-							// Gửi thông báo vào kênh text
-							const textChannel = client.channels.cache.get(player.textChannelId);
-							if (textChannel) {
-								const reloadEmbed = new EmbedBuilder()
-									.setColor("#FF8800")
-									.setDescription("⚠️ **Bot vừa được cập nhật!**\nBạn dùng `/play` để phát lại nhạc nhé.")
-									.setTimestamp();
-								await textChannel.send({ embeds: [reloadEmbed] }).catch(() => { });
-							}
-							// Destroy player
-							await player.destroy().catch(() => { });
-						} catch (e) { }
-					}
-					reloadLog.push(`✅ Đã dọn dẹp \`${activePlayers.length}\` trình phát`);
-				}
-
-				// Gửi thông báo đổi Lavalink vào kênh setlog (chỉ khi config thay đổi)
-				if (lavalinkChanged && client.sendLavalinkNotification) {
-					const newNodeInfo = `${newNode0.id || "N/A"}\`|\`${newNode0.host || "N/A"}:${newNode0.port || "N/A"}\`|\`${newNode0.secure ? "True" : "False"}`;
-					client.sendLavalinkNotification(
-						new EmbedBuilder()
-							.setColor("#00AAFF")
-							.setDescription(
-								`🔄 **Lavalink Đã Thay Đổi**\n` +
-								`**Node cũ:** \`${oldNodeInfo}\`\n` +
-								`**Node mới:** \`${newNodeInfo}\`\n` +
-								`**Kết nối:** ${connected} node`
-							)
-							.setTimestamp()
-					);
-				}
-
-			} catch (lavaErr) {
-				reloadLog.push(`⚠️ Lỗi khi đảo Lavalink: \`${lavaErr.message}\``);
-			}
 
 			// ======== BƯỚC 4: TẢI LẠI EVENTS ========
 			const eventsDir = path.join(__dirname, "..", "..", "events");

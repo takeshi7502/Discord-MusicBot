@@ -15,6 +15,13 @@ module.exports = async (client, interaction) => {
                 "Xin lỗi, lệnh bạn đã sử dụng không có bất kỳ chức năng thực thi nào",
             );
         }
+        if (command.adminOnly && interaction.user.id !== client.config.adminId) {
+            return interaction.reply({
+                content: "Bạn không có quyền sử dụng lệnh này!",
+                ephemeral: true,
+            });
+        }
+
         client.commandsRan++;
         command.run(client, interaction, interaction.options);
         return;
@@ -29,6 +36,13 @@ module.exports = async (client, interaction) => {
                 "Xin lỗi, lệnh bạn vừa sử dụng không có bất kỳ chức năng thực thi nào",
             );
         }
+        if (command.adminOnly && interaction.user.id !== client.config.adminId) {
+            return interaction.reply({
+                content: "Bạn không có quyền sử dụng lệnh này!",
+                ephemeral: true,
+            });
+        }
+
         client.commandsRan++;
         command.run(client, interaction, interaction.options);
         return;
@@ -53,7 +67,8 @@ module.exports = async (client, interaction) => {
                 }
 
                 // Search using lavalink-client
-                const node = client.manager.nodeManager.leastUsedNodes()[0];
+                const connectedNodes = [...client.manager.nodeManager.nodes.values()].filter(n => n.connected);
+                const node = connectedNodes.length > 0 ? connectedNodes[Math.floor(Math.random() * connectedNodes.length)] : undefined;
                 if (!node) return interaction.respond([]).catch(() => {});
 
                 const res = await node.search({ query, source: "youtube" }, interaction.user);

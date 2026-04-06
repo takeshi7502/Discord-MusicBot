@@ -7,18 +7,9 @@ const os = require("os");
 const command = new SlashCommand()
   .setName("stats")
   .setDescription("Nhận thông tin về bot")
+  .setAdminOnly(true)
   .setRun(async (client, interaction) => {
-    // Kiểm tra quyền admin
-    if (interaction.user.id !== client.config.adminId) {
-      return interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(client.config.embedColor)
-            .setDescription("Bạn không được ủy quyền để sử dụng lệnh này!"),
-        ],
-        ephemeral: true,
-      });
-    }
+    await interaction.deferReply().catch((_) => {});
 
     const osver = os.platform() + " " + os.release();
 

@@ -21,11 +21,23 @@ const command = new SlashCommand()
       return;
     }
 
+    let node = await client.getLavalink(client);
+    if (!node) {
+      return interaction.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(0xFF0000)
+            .setDescription("Nút Lavalink không được kết nối"),
+        ],
+        ephemeral: true,
+      });
+    }
+
     let player;
     if (client.manager) {
       player = client.manager.getPlayer(interaction.guild.id);
       if (!player) {
-        player = client.createPlayer(interaction.channel, channel);
+        player = client.createPlayer(interaction.channel, channel, node);
       }
     } else {
       return interaction.reply({

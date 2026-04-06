@@ -15,9 +15,14 @@ const command = new SlashCommand()
 			return interaction.reply({ ephemeral: true,  embeds: [joinEmbed], ephemeral: true });
 		}
 		
+		let node = await client.getLavalink(client);
+		if (!node) {
+			return interaction.reply({ ephemeral: true, embeds: [client.ErrorEmbed("Nút Lavalink không được kết nối")] });
+		}
+		
 		let player = client.manager.getPlayer(interaction.guild.id);
 		if (!player) {
-			player = client.createPlayer(interaction.channel, channel);
+			player = client.createPlayer(interaction.channel, channel, node);
 			await player.connect();
 		}
 		

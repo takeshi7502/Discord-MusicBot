@@ -4,18 +4,19 @@ const { EmbedBuilder } = require("discord.js");
 const command = new SlashCommand()
 	.setName("stop")
 	.setDescription("Dừng lại những gì bot đang phát và rời khỏi kênh thoại\n(Lưu ý: Lệnh này sẽ xóa toàn bộ hàng đợi)")
-	
+
 	.setRun(async (client, interaction, options) => {
 		let channel = await client.getChannel(client, interaction);
 		if (!channel) {
 			return;
 		}
-		
+
 		let player;
 		if (client.manager) {
 			player = client.manager.getPlayer(interaction.guild.id);
 		} else {
-			return interaction.reply({ ephemeral: true, 
+			return interaction.reply({
+				ephemeral: true,
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -23,9 +24,10 @@ const command = new SlashCommand()
 				],
 			});
 		}
-		
+
 		if (!player) {
-			return interaction.reply({ ephemeral: true, 
+			return interaction.reply({
+				ephemeral: true,
 				embeds: [
 					new EmbedBuilder()
 						.setColor(0xFF0000)
@@ -34,7 +36,21 @@ const command = new SlashCommand()
 				ephemeral: true,
 			});
 		}
-		
+
+		await interaction.deferReply();
+
+		const stopEmbed = new EmbedBuilder()
+			.setColor(client.config.embedColor)
+			.setDescription(`**👋 | Tạm biệt nha!** (Đã dừng bởi <@${interaction.user.id}>)`);
+
+		const existingMsg = player.get("nowPlayingMessage");
+		if (existingMsg && !client.isMessageDeleted(existingMsg)) {
+			await existingMsg.edit({ embeds: [stopEmbed], components: [] }).catch(() => { });
+			setTimeout(() => existingMsg.delete().catch(() => { }), 10000);
+			client.markMessageAsDeleted(existingMsg);
+		}
+		player.set("nowPlayingMessage", null);
+
 		if (player.get("twentyFourSeven")) {
 			player.queue.splice(0);
 			player.stopPlaying(false, false);
@@ -42,14 +58,8 @@ const command = new SlashCommand()
 		} else {
 			player.destroy();
 		}
-		
-		interaction.reply({ ephemeral: true, 
-			embeds: [
-				new EmbedBuilder()
-					.setColor(client.config.embedColor)
-					.setDescription(`:wave: | **Tạm biệt nha!**`),
-			],
-		});
+
+		await interaction.deleteReply().catch(() => { });
 	});
 
 module.exports = command;

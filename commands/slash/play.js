@@ -34,7 +34,7 @@ const command = new SlashCommand()
 
     let player = client.manager.getPlayer(interaction.guild.id);
     if (!player) {
-      player = client.createPlayer(interaction.channel, channel);
+      player = client.createPlayer(interaction.channel, channel, node);
     }
 
     if (!player.connected) {
