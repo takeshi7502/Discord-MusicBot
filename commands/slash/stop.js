@@ -37,7 +37,8 @@ const command = new SlashCommand()
 			});
 		}
 
-		await interaction.deferReply();
+		// Trả lời bằng ký tự rỗng ngay lập tức để hoàn tất lệnh, bỏ qua chữ "đang suy nghĩ"
+		await interaction.reply({ content: "** **", ephemeral: true }).catch(() => {});
 
 		const stopEmbed = new EmbedBuilder()
 			.setColor(client.config.embedColor)
@@ -59,7 +60,7 @@ const command = new SlashCommand()
 			player.destroy();
 		}
 
-		await interaction.deleteReply().catch(() => { });
+		await interaction.deleteReply().catch(() => {});
 	});
 
 module.exports = command;
