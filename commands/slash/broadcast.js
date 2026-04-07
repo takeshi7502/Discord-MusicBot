@@ -1,5 +1,5 @@
 const SlashCommand = require("../../lib/SlashCommand");
-const { EmbedBuilder, ChannelType } = require("discord.js");
+const { EmbedBuilder, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 const command = new SlashCommand()
   .setName("broadcast")
@@ -19,13 +19,13 @@ const command = new SlashCommand()
   )
   .setRun(async (client, interaction, options) => {
     // Tránh việc lệnh chạy quá lâu bị timeout
-    await interaction.deferReply({ ephemeral: true }).catch(() => {});
+    await interaction.deferReply({ ephemeral: true }).catch(() => { });
 
     // Kiểm tra quyền: Chỉ tài khoản Admin gốc mớii xài được lệnh này
     if (interaction.user.id !== client.config.adminId) {
       return interaction.editReply({
         embeds: [client.ErrorEmbed("Bạn không có đặc quyền để sử dụng hệ thống phóng thanh tột đỉnh này!")],
-      }).catch(() => {});
+      }).catch(() => { });
     }
 
     let messageContent = options.getString("message");
@@ -33,7 +33,7 @@ const command = new SlashCommand()
 
     // Hỗ trợ gõ \n để xuống dòng trong Embed
     messageContent = messageContent.replace(/\\n/g, "\n");
-    
+
     // Nếu nhập có khoảng trắng ở đầu đuôi thì cắt đi
     if (targetOpt) targetOpt = targetOpt.trim();
 
@@ -54,7 +54,7 @@ const command = new SlashCommand()
       } else {
         return interaction.editReply({
           embeds: [client.ErrorEmbed(`❌ Không tìm thấy Server nào có ID: \`${targetOpt}\` mà Bot đang tham gia cả!`)],
-        }).catch(() => {});
+        }).catch(() => { });
       }
     }
 
@@ -63,11 +63,22 @@ const command = new SlashCommand()
     let failCount = 0;
 
     const embed = new EmbedBuilder()
-      .setColor(client.config.embedColor)
-      .setAuthor({ name: "📢 Thông Báo Từ Admin"})
+      .setColor("#00FF00")
+      .setAuthor({ name: `📢 Thông báo từ ${client.user.username}` })
       .setDescription(messageContent)
-      .setFooter({ text: "Bạn là Admin Server này? Gõ /setup đê chọn kênh nhận thông báo nhé!" })
+      .setFooter({ text: "Nhấn nút bên dưới để thêm bot mới nhé!" })
       .setTimestamp();
+
+    const row = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setLabel("THÊM BOT")
+        .setStyle(ButtonStyle.Link)
+        .setURL("https://discord.com/oauth2/authorize?client_id=1162333756137406514&permissions=281474980244800&integration_type=0&scope=bot+applications.commands"),
+      new ButtonBuilder()
+        .setLabel("SERVER CÁ NHÂN")
+        .setStyle(ButtonStyle.Link)
+        .setURL(client.config.supportServer)
+    );
 
     // Duyệt qua tất cả các server được chọn
     for (const [id, guild] of guildsToProcess) {
@@ -76,7 +87,7 @@ const command = new SlashCommand()
 
         // Ép tải danh sách kênh từ Discord API (vì cache có thể chưa đầy đủ khi dùng "all")
         if (guild.channels.cache.size === 0) {
-          await guild.channels.fetch().catch(() => {});
+          await guild.channels.fetch().catch(() => { });
         }
 
         // Ưu tiên Số 1: Lấy kênh đã set trong File Database
@@ -96,16 +107,16 @@ const command = new SlashCommand()
         // Ưu tiên Số 2 (Fallback vét máng): Tìm kênh text đầu tiên bot có chìa khóa gửi tin
         let isFallback = false;
         if (!targetChannel) {
-            targetChannel = guild.channels.cache.find(c => 
-                c.type === ChannelType.GuildText && 
-                c.permissionsFor(guild.members.me)?.has("SendMessages")
-            );
-            isFallback = true;
+          targetChannel = guild.channels.cache.find(c =>
+            c.type === ChannelType.GuildText &&
+            c.permissionsFor(guild.members.me)?.has("SendMessages")
+          );
+          isFallback = true;
         }
 
         // Phóng tên lửa tin nhắn!
         if (targetChannel) {
-          await targetChannel.send({ embeds: [embed] }).catch(() => { failCount++; });
+          await targetChannel.send({ embeds: [embed], components: [row] }).catch(() => { failCount++; });
           if (isFallback) fallbackCount++;
           else successCount++;
         } else {
@@ -121,12 +132,12 @@ const command = new SlashCommand()
       .setAuthor({ name: "Chiến dịch Phóng Thanh hoàn tất!" })
       .setDescription(targetOpt?.toLowerCase() === "all" ? `Đã loan tin rải thảm đến toàn bộ Server!` : `Đã báo cáo mục tiêu thành công!`)
       .addFields(
-         { name: "✅ Đã setup bài bản", value: `${successCount} kênh`, inline: true },
-         { name: "⚠️ Rải ngẫu nhiên (Fallback)", value: `${fallbackCount} kênh`, inline: true },
-         { name: "❌ Thất bại", value: `${failCount} kênh`, inline: true }
+        { name: "✅ Đã setup kênh", value: `${successCount} kênh`, inline: true },
+        { name: "⚠️ Rải ngẫu nhiên", value: `${fallbackCount} kênh`, inline: true },
+        { name: "❌ Thất bại", value: `${failCount} kênh`, inline: true }
       );
 
-    return interaction.editReply({ embeds: [resultEmbed] }).catch(() => {});
+    return interaction.editReply({ embeds: [resultEmbed] }).catch(() => { });
   });
 
 module.exports = command;
