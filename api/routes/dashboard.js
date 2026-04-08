@@ -3,9 +3,13 @@ const api = Router();
 const { getClient } = require("../../");
 const Auth = require("../middlewares/auth");
 
-api.get("/", Auth, (req, res) => {
+// Public stats API — no auth required for landing page
+api.get("/", (req, res) => {
 	const client = getClient();
 	let data = {
+		name: client.user ? client.user.username : "Music Bot",
+		avatar: client.user ? client.user.displayAvatarURL() : "",
+		version: require("../../package.json").version || "6.0-alpha",
 		commandsRan: client.commandsRan,
 		users: client.users.cache.size,
 		servers: client.guilds.cache.size,

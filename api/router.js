@@ -3,25 +3,18 @@
 const { Router } = require("express");
 const passport = require("passport");
 const { join } = require("path");
-const Auth = require("./middlewares/auth");
 
 const dist = join(__dirname, "..", "dashboard", "out");
 
 const router = Router();
 
+// Landing page (new Next.js static export)
 router.get("/", (req, res) => {
 	res.sendFile(join(dist, "index.html"));
 });
 
-router.get("/login", (req, res) => {
-	res.sendFile(join(dist, "login.html"));
-});
-
+// Auth routes (keep for potential future use)
 router.get("/api/login", passport.authenticate("discord"));
-
-router.get("/logout", (req, res) => {
-	res.sendFile(join(dist, "logout.html"));
-});
 
 router.get("/api/logout", (req, res) => {
 	req.session.destroy(() => {
@@ -29,17 +22,9 @@ router.get("/api/logout", (req, res) => {
 	});
 });
 
-router.get("/dashboard", Auth, (_req, res) => {
-	res.sendFile(join(dist, "dashboard.html"));
-});
-
-router.get("/servers", Auth, (_req, res) => {
-	res.sendFile(join(dist, "servers.html"));
-});
-
-router.get("/api/callback", passport.authenticate('discord', {
-	failureRedirect: '/',
-}), (req, res ) => {
+router.get("/api/callback", passport.authenticate("discord", {
+	failureRedirect: "/",
+}), (req, res) => {
 	req.session.save(() => {
 		res.redirect("/");
 	});
