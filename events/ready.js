@@ -20,5 +20,4 @@ module.exports = async (client) => {
 	}
 	client.user.setPresence(client.config.presence);
 	client.log("Đã đăng nhập thành công với tư cách là " + client.user.tag);
-	client.log("🌐 Dashboard Trực Tuyến: \x1b[36m\x1b[4m" + client.config.website + "\x1b[0m");
 };

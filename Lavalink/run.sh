@@ -1,172 +1,276 @@
 #!/bin/bash
 
-# Màu sắc cho menu
+# Màu sắc hiển thị
 GREEN='\033[0;32m'
-CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
-NC='\033[0m' # Không màu
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
 
-show_menu() {
-    clear
-    echo -e "${CYAN}====================================================${NC}"
-    echo -e "${GREEN}       BỘ CÔNG CỤ CÀI ĐẶT LAVALINK + TAILSCALE      ${NC}"
-    echo -e "${CYAN}====================================================${NC}"
-    echo -e "1. Cài đặt Java 17 (Bắt buộc cho Lavalink V4)"
-    echo -e "2. Cài đặt/Cập nhật yt-dlp_linux (Cho YouTube)"
-    echo -e "3. Cài đặt hệ thống màng lọc Tailscale (VPN)"
-    echo -e "4. Kích hoạt Tailscale Exit Node (Nhập IP Điện thoại)"
-    echo -e "5. Tạm Tắt Tailscale (Phục hồi IP gốc để tải file)"
-    echo -e "6. Tải file Lavalink.jar (V4 mới nhất)"
-    echo -e "7. Chạy trực tiếp Lavalink (Xem Log Console)"
-    echo -e "8. Khởi chạy Lavalink qua Docker Compose (Tự check & cài Docker)"
-    echo -e "9. Xem Log Lavalink trên Docker Compose"
-    echo -e "10. Restart Lavalink (Docker Compose)"
-    echo -e "0. Thoát chương trình"
-    echo -e "${CYAN}====================================================${NC}"
-    read -p "Nhập số (0-10) để thực hiện lệnh: " choice
+# Hàm báo lỗi và dừng script
+die() {
+    echo -e "${RED}❌ LỖI: $1${NC}"
+    exit 1
 }
 
-install_java() {
-    echo -e "${YELLOW}Đang tiến hành cài đặt OpenJDK 17...${NC}"
-    sudo apt update
-    sudo apt install -y openjdk-17-jre-headless curl wget screen
-    echo -e "${GREEN}Cài đặt Java hoàn tất! Kiểm tra mã phiên bản:${NC}"
-    java -version
-    read -p "Nhấn Enter để quay lại menu..."
-}
+echo -e "${CYAN}===================================================${NC}"
+echo -e "${GREEN}🎵 Lavalink Auto-Deploy Script - Kèm tính năng chống IP-Ban 🎵${NC}"
+echo -e "${CYAN}===================================================${NC}"
 
-install_ytdlp() {
-    echo -e "${YELLOW}Đang tải yt-dlp_linux (Mới nhất) về thư mục Lavalink...${NC}"
-    wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp_linux -O yt-dlp_linux
-    chmod +x yt-dlp_linux
-    echo -e "${GREEN}Thành công! Kiểm tra phiên bản yt-dlp_linux:${NC}"
-    ./yt-dlp_linux --version
-    read -p "Nhấn Enter để quay lại menu..."
-}
+# Chế độ Menu
+echo "Vui lòng chọn tính năng:"
+echo "1. Cài đặt Lavalink (Dùng file nội bộ có sẵn, có báo cáo tổng kết)"
+echo "2. Khởi động lại Lavalink (Systemctl Restart)"
+echo "3. Xem Log trực tiếp của Lavalink (Journalctl)"
+read -p "Lựa chọn của bạn [1-3]: " MENU_CHOICE
 
-install_tailscale() {
-    echo -e "${YELLOW}Đang tải bộ cài tự động Tailscale...${NC}"
-    curl -fsSL https://tailscale.com/install.sh | sh
-    echo -e "${GREEN}Cài đặt hoàn tất! Lần đầu, VPS cần được phê duyệt:${NC}"
-    echo -e "${YELLOW}Vui lòng CHÉP ĐƯỜNG LINK dán vào trình duyệt để chứng thực VPS của bạn:${NC}"
-    sudo tailscale up
-    read -p "Nhấn Enter sau khi bạn đã dán link trên trình duyệt và chứng thực xong..."
-}
+# -----------------------------------------------------
+# MENU 2: RESTART
+if [ "$MENU_CHOICE" == "2" ]; then
+    echo -e "${YELLOW}Đang khởi động lại Lavalink...${NC}"
+    sudo systemctl restart lavalink || die "Không thể khởi động lại lavalink service"
+    echo -e "${GREEN}Xong!${NC}"
+    exit 0
+fi
 
-config_exitnode() {
-    echo -e "${CYAN}BƯỚC QUAN TRỌNG: Mở App Tailscale trên điện thoại, bấm vào dấu 3 chấm góc phải, chọn 'Run as exit node'.${NC}"
-    read -p "Hãy nhập địa chỉ IP Tailscale của chiếc điện thoại đó (VD: 100.123...): " exit_ip
-    echo -e "${YELLOW}Tiến hành liên kết với trạm trung chuyển $exit_ip...${NC}"
-    sudo tailscale up --exit-node=$exit_ip
-    echo -e "${GREEN}Kích hoạt thành công! VPS bây giờ đã 'Tàng hình' qua đường mạng điện thoại của bạn.${NC}"
-    read -p "Nhấn Enter để quay lại menu..."
-}
+# -----------------------------------------------------
+# MENU 3: XEM LOG
+if [ "$MENU_CHOICE" == "3" ]; then
+    sudo journalctl -u lavalink -f -n 100
+    exit 0
+fi
 
-disable_exitnode() {
-    echo -e "${YELLOW}Tháo gỡ mạng Exit Node...${NC}"
-    sudo tailscale up --exit-node=
-    echo -e "${GREEN}Chế độ Exit Node đã tắt! Mạng VPS trở về trạng thái xuất xưởng bình thường.${NC}"
-    read -p "Nhấn Enter để quay lại menu..."
-}
+# -----------------------------------------------------
+# MENU 1: SETUP (CẢI TIẾN)
+if [ "$MENU_CHOICE" != "1" ]; then
+    die "Lựa chọn không hợp lệ! Thoát!"
+fi
 
-download_lavalink() {
-    echo -e "${YELLOW}Đang tải xuống Lavalink.jar (Bản ổn định nhất V4.0.8)...${NC}"
-    wget https://github.com/lavalink-devs/Lavalink/releases/download/4.2.2/Lavalink.jar -O Lavalink.jar
-    echo -e "${GREEN}Đã tải xong Lavalink.jar! (Lưu ý: đừng quên đưa file application.yml vào cùng folder này)${NC}"
-    read -p "Nhấn Enter để quay lại menu..."
-}
+echo -e "\n${YELLOW}[1] Kiểm tra điều kiện đầu vào...${NC}"
+if [ "$EUID" -ne 0 ]; then
+    die "Vui lòng chạy script này dưới quyền Root (thêm sudo ở trước)!"
+fi
 
-run_lavalink() {
-    if [ ! -f "Lavalink.jar" ]; then
-        echo -e "${RED}[LỖI] Không tìm thấy Lavalink.jar! Hãy quay lại chọn phím 6 để tải về trước.${NC}"
-    elif [ ! -f "application.yml" ] && [ ! -f "application_server.yml" ]; then
-        echo -e "${RED}[LỖI] Không có file cấu hình application.yml! Mời chép file từ máy tính lên VPS.${NC}"
-    else
-        CONFIG_FILE="application.yml"
-        if [ -f "application_server.yml" ]; then CONFIG_FILE="application_server.yml"; fi
-        
-        echo -e "${GREEN}Khởi động Lavalink với file cấu hình $CONFIG_FILE... (Bấm Ctrl+C để thoát Log)${NC}"
-        java -Dlavalink.server.config.path=$CONFIG_FILE -jar Lavalink.jar
+if [ ! -f "Lavalink.jar" ]; then
+    die "Không tìm thấy file 'Lavalink.jar' trong thư mục hiện tại. Vui lòng tải về hoặc copy vào trước!"
+fi
+
+if [ ! -f "example.vps.application.yml" ]; then
+    die "Không tìm thấy file 'example.vps.application.yml' trong thư mục hiện tại."
+fi
+
+# Nhận diện hãng VPS
+ORG_INFO=$(curl -s ipinfo.io/org || echo "Unknown")
+if [[ "$ORG_INFO" == *"Contabo"* ]]; then
+    VPS_TYPE="Contabo"
+elif [[ "$ORG_INFO" == *"Vultr"* || "$ORG_INFO" == *"Choopa"* ]]; then
+    VPS_TYPE="Vultr"
+else
+    VPS_TYPE="Khác ($ORG_INFO)"
+fi
+
+# Tự động dò IPv6
+MAC_IFACE=$(ip route get 8.8.8.8 2>/dev/null | awk -- '{printf $5}')
+IPV6_PREFIX=$(ip -6 addr show scope global | grep inet6 | awk '{print $2}' | cut -d: -f1,2,3,4 | head -n1)
+if [ -n "$IPV6_PREFIX" ]; then
+    DEFAULT_IPV6="${IPV6_PREFIX}::/64"
+else
+    DEFAULT_IPV6=""
+fi
+
+echo -e "\n${YELLOW}[2] Thu thập thông tin cấu hình...${NC}"
+
+# Nhập Port
+read -p "Nhập Port cho Lavalink [Mặc định: 3333]: " LAVA_PORT
+LAVA_PORT=${LAVA_PORT:-3333}
+
+# Nhập Pass
+read -p "Nhập mật khẩu cho Lavalink [Mặc định: takeshi]: " LAVA_PASS
+LAVA_PASS=${LAVA_PASS:-takeshi}
+
+# Nhập IPv6 nếu không dò được hoặc muốn đổi
+if [ -n "$DEFAULT_IPV6" ]; then
+    read -p "Dải IPv6 được tự động dò là [$DEFAULT_IPV6]. Nhấn Enter để dùng dải này hoặc nhập dải khác: " IPV6_BLOCK
+    IPV6_BLOCK=${IPV6_BLOCK:-$DEFAULT_IPV6}
+else
+    read -p "Không dò được IPv6 tự động. Vui lòng nhập dải IPv6/64 của bạn (VD: 2401:c080::/64): " IPV6_BLOCK
+fi
+if [ -z "$IPV6_BLOCK" ]; then die "Bạn không được để trống dải IPv6!"; fi
+
+# Nhập YouTube OAuth2 Token (Nếu đã có)
+echo -e "\n${CYAN}--- Cấu hình YouTube OAuth2 ---${NC}"
+echo "Nếu bạn LÀM MỚI TỪ ĐẦU, hãy để trống ấn Enter, script sẽ tự kích hoạt Java để xin mã Google."
+echo "Nếu bạn ĐÃ CÓ MÃ REFRESH TOKEN (bắt đầu bằng 1//...), hãy dán luôn vào đây để bỏ qua bước xin mã:"
+read -p "Nhập YouTube Refresh Token (Nhấn Enter để tự động tạo mã): " YOUTUBE_TOKEN
+
+# Nhập Spotify (Tùy chọn)
+echo -e "\n${CYAN}--- Cấu hình Spotify (Tùy chọn) ---${NC}"
+read -p "Nhập Spotify Client ID (Nhấn Enter để bỏ qua): " SPOTIFY_ID
+read -p "Nhập Spotify Client Secret (Nhấn Enter để bỏ qua): " SPOTIFY_SECRET
+
+# ==========================================
+# BẢNG TỔNG KẾT TRƯỚC KHI CHẠY (CONFIRMATION)
+# ==========================================
+echo -e "\n${CYAN}===================================================${NC}"
+echo -e "${GREEN}📋 BẢNG TỔNG KẾT THÔNG TIN TRƯỚC KHI THỰC THI 📋${NC}"
+echo -e "${CYAN}===================================================${NC}"
+echo -e "▶ Loại VPS:        ${YELLOW}$VPS_TYPE${NC}"
+echo -e "▶ Dải IPv6:        ${YELLOW}$IPV6_BLOCK${NC}"
+echo -e "▶ Port Lavalink:   ${YELLOW}$LAVA_PORT${NC}"
+echo -e "▶ Pass Lavalink:   ${YELLOW}$LAVA_PASS${NC}"
+
+if [ -n "$YOUTUBE_TOKEN" ]; then
+    echo -e "▶ YouTube Token:   ${GREEN}Đã nhập sẵn (Sẽ bỏ qua bước xin mã rút gọn)${NC}"
+else
+    echo -e "▶ YouTube Token:   ${YELLOW}Chưa có (Sẽ chạy ngầm Lavalink để sinh code xác thực)${NC}"
+fi
+
+if [ -n "$SPOTIFY_ID" ]; then
+    echo -e "▶ Spotify ID:      ${YELLOW}$SPOTIFY_ID${NC}"
+else
+    echo -e "▶ Spotify:         ${RED}Bỏ qua (Trống)${NC}"
+fi
+echo -e "▶ File Lavalink:   ${YELLOW}Có sẵn (Không download)${NC}"
+echo -e "▶ File Mẫu (YML):  ${YELLOW}Sẽ copy từ example.vps.application.yml${NC}"
+echo -e "${CYAN}===================================================${NC}"
+
+read -p "❓ Bạn có chắc chắn mọi thông tin trên đã chính xác và muốn cấu hình? (y/n): " CONFIRM
+if [[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]]; then
+    echo -e "${RED}Đã hủy quá trình cài đặt!${NC}"
+    exit 0
+fi
+
+# ==========================================
+# THỰC THI (BÁO LỖI NẾU CÓ DỪNG NGAY)
+# ==========================================
+echo -e "\n${YELLOW}[3] Kiểm tra công cụ cần thiết...${NC}"
+for cmd in java docker docker-compose jq ufw curl wget; do
+    if ! command -v $cmd &> /dev/null; then
+        echo -e "${RED}Chưa cài đặt $cmd. Đang tiến hành cài...${NC}"
+        apt-get update -y || die "Update apt hệ thống thất bại"
+        # Chỉ cài những phần tử cần thiết
+        apt-get install -y default-jre docker.io docker-compose jq ufw curl wget || die "Cài đặt gói $cmd thất bại"
+        break
     fi
-    read -p "Nhấn Enter để quay lại menu..."
-}
-
-install_docker_if_needed() {
-    if ! command -v docker &> /dev/null || ! docker compose version &> /dev/null; then
-        echo -e "${YELLOW}Chưa có Docker/Docker Compose! Tiến hành tự động cài đặt...${NC}"
-        curl -fsSL https://get.docker.com | sh
-        echo -e "${GREEN}Cài đặt Docker hoàn tất!${NC}"
-    else
-        echo -e "${GREEN}Docker/Docker Compose đã được cài đặt sẵn! Bỏ qua bước cài đặt.${NC}"
-    fi
-}
-
-run_docker_compose() {
-    install_docker_if_needed
-    
-    if [ ! -f "docker-compose.yml" ]; then
-        echo -e "${YELLOW}Không tìm thấy docker-compose.yml! Đang tự động tạo mẫu chuẩn...${NC}"
-        cat <<EOF > docker-compose.yml
-version: "3"
-services:
-  lavalink:
-    image: ghcr.io/lavalink-devs/lavalink:4
-    container_name: lavalink
-    network_mode: "host"
-    environment:
-      - _JAVA_OPTIONS=-Xmx1024m
-    volumes:
-      - ./application.yml:/opt/Lavalink/application.yml:ro
-      - ./plugins:/opt/Lavalink/plugins
-      # Bỏ comment dòng dưới nếu dùng yt-dlp_linux qua hệ điều hành chạy được
-      # - ./yt-dlp_linux:/opt/Lavalink/yt-dlp_linux:ro
-EOF
-        echo -e "${GREEN}Tạo mẫu docker-compose.yml thành công!${NC}"
-    fi
-
-    echo -e "${YELLOW}Khởi động Lavalink qua Docker Compose...${NC}"
-    docker compose up -d
-    echo -e "${GREEN}Chạy thành công! Đang trực tiếp mở Log ngay bây giờ... (Bấm Ctrl+C để thoát Log)${NC}"
-    docker compose logs -f
-    read -p "Nhấn Enter để quay lại menu..."
-}
-
-view_docker_logs() {
-    if [ ! -f "docker-compose.yml" ]; then
-        echo -e "${RED}[LỖI] Không tìm thấy docker-compose.yml! Vui lòng chọn số 8 trước.${NC}"
-    else
-        echo -e "${CYAN}Đang xem Log của Docker Compose... (Bấm Ctrl+C để thoát)${NC}"
-        docker compose logs -f
-    fi
-    read -p "Nhấn Enter để quay lại menu..."
-}
-
-restart_docker() {
-    if [ ! -f "docker-compose.yml" ]; then
-        echo -e "${RED}[LỖI] Không tìm thấy docker-compose.yml!${NC}"
-    else
-        echo -e "${YELLOW}Đang khởi động lại hệ thống Docker...${NC}"
-        docker compose restart
-        echo -e "${GREEN}Khởi động lại thành công!${NC}"
-    fi
-    read -p "Nhấn Enter để quay lại menu..."
-}
-
-while true; do
-    show_menu
-    case $choice in
-        1) install_java ;;
-        2) install_ytdlp ;;
-        3) install_tailscale ;;
-        4) config_exitnode ;;
-        5) disable_exitnode ;;
-        6) download_lavalink ;;
-        7) run_lavalink ;;
-        8) run_docker_compose ;;
-        9) view_docker_logs ;;
-        10) restart_docker ;;
-        0) echo -e "${GREEN}Đã thoát công cụ quản lý Lavalink!${NC}"; exit 0 ;;
-        *) echo -e "${RED}Vui lòng chọn từ 1 đến 10!${NC}"; sleep 1 ;;
-    esac
 done
+
+echo -e "\n${YELLOW}[4] Cấu hình file application.yml...${NC}"
+cp example.vps.application.yml application.yml || die "Copy file cấu hình thất bại"
+
+# Đổi thông tin IP, pass, port
+sed -i "s|\[IP_ADDRESS\]|$IPV6_BLOCK|g" application.yml || die "Lỗi ghi IPv6 vào file config"
+sed -i "s|port: 3333|port: $LAVA_PORT|g" application.yml || die "Lỗi ghi port vào file config"
+sed -i "s|password: \"takeshi\"|password: \"$LAVA_PASS\"|g" application.yml || die "Lỗi ghi pass vào config"
+
+# Ghi Spotify
+if [ -n "$SPOTIFY_ID" ]; then
+    sed -i "s|clientId: \"\"|clientId: \"$SPOTIFY_ID\"|g" application.yml
+fi
+if [ -n "$SPOTIFY_SECRET" ]; then
+    sed -i "s|clientSecret: \"\"|clientSecret: \"$SPOTIFY_SECRET\"|g" application.yml
+fi
+
+# Ghi Youtube Token nếu đã có nhập thủ công
+if [ -n "$YOUTUBE_TOKEN" ]; then
+    sed -i "s|refreshToken: \"\"|refreshToken: \"$YOUTUBE_TOKEN\"|g" application.yml || die "Lỗi ghi YouTube Token vào config"
+fi
+
+echo -e "\n${YELLOW}[5] Thiết lập YT-Cipher qua Docker...${NC}"
+if [ ! -d "yt-cipher" ]; then
+    git clone https://github.com/kikkia/yt-cipher.git || die "Lỗi Clone YT-Cipher"
+fi
+cd yt-cipher || die "Không vào được thư mục yt-cipher"
+docker compose up -d || die "Chạy Docker cho YT-Cipher thất bại"
+cd ..
+
+echo -e "\n${YELLOW}[6] Tối ưu mạng IPv6...${NC}"
+sysctl -w net.ipv6.ip_nonlocal_bind=1 || die "Lỗi bật ip_nonlocal_bind"
+grep -q "net.ipv6.ip_nonlocal_bind" /etc/sysctl.conf || echo 'net.ipv6.ip_nonlocal_bind=1' >> /etc/sysctl.conf
+
+if [[ "$VPS_TYPE" == *"Vultr"* ]]; then
+    if ! command -v ndppd &> /dev/null; then
+        apt-get install -y ndppd || die "Lỗi cài đặt ndppd"
+    fi
+    cat <<EOF > /etc/ndppd.conf
+route-ttl 30000
+proxy $MAC_IFACE {
+    router yes
+    timeout 500
+    ttl 30000
+    rule $IPV6_BLOCK {
+        static
+    }
+}
+EOF
+    systemctl restart ndppd || die "Lỗi khởi động ndppd"
+    systemctl enable ndppd
+fi
+
+ip -6 route replace local $IPV6_BLOCK dev lo 2>/dev/null || echo "Bỏ qua... Route IPv6 đã tồn tại."
+
+echo -e "\n${YELLOW}[7] Mở cổng Firewall (UFW) cho Port $LAVA_PORT...${NC}"
+ufw allow $LAVA_PORT/tcp || echo "Cảnh báo: Không thể nới port bằng UFW"
+
+echo -e "\n${YELLOW}[8] Cấu hình Token Youtube (OAuth)...${NC}"
+fuser -k $LAVA_PORT/tcp 2>/dev/null || true
+
+if [ -n "$YOUTUBE_TOKEN" ]; then
+    echo -e "${GREEN}=> Đã có Token ($YOUTUBE_TOKEN), bỏ qua phần chạy thử Lavalink!${NC}"
+else
+    echo -e "${CYAN}Chưa có Token! Đang khởi động Lavalink (Vui lòng chờ. Quá trình có thể mất lên tới 1 phút)...${NC}"
+    stdbuf -oL java -jar Lavalink.jar | while IFS= read -r line; do
+        echo "$line"
+        if [[ "$line" == *"OAUTH INTEGRATION: To give youtube-source access"* ]]; then
+            echo -e "\n${RED}========================================================================${NC}"
+            echo -e "${GREEN}🚨🚨🚨 HÀNH ĐỘNG CẦN THIẾT 🚨🚨🚨${NC}"
+            echo -e "${YELLOW}=> VUI LÒNG MỞ TRÌNH DUYỆT CỦA BẠN VÀ NHẬP MÃ BÊN TRÊN ĐỂ XÁC THỰC!${NC}"
+            echo -e "${RED}========================================================================${NC}\n"
+        fi
+        if [[ "$line" == *"Store your refresh token"* ]]; then
+            TOKEN=$(echo "$line" | grep -o "1//[a-zA-Z0-9_-]*" | head -n1)
+            if [ -n "$TOKEN" ]; then
+                echo -e "\n${GREEN}🎉 Đã bắt được Refresh Token: $TOKEN 🎉${NC}"
+                sed -i "s|refreshToken: \"\"|refreshToken: \"$TOKEN\"|g" application.yml || die "Ghi token thất bại"
+            else
+                echo -e "\n${RED}Cảnh báo: Thấy token nhưng Regex gắp không được!${NC}"
+            fi
+            
+            pkill -f "java -jar Lavalink.jar"
+            break
+        fi
+        if [[ "$line" == *"Lavalink is ready to accept connections"* ]]; then
+            pkill -f "java -jar Lavalink.jar"
+            break
+        fi
+    done
+fi
+
+echo -e "\n${YELLOW}[9] Thiết lập SystemD Service để chạy ngầm...${NC}"
+cat <<EOF > /etc/systemd/system/lavalink.service
+[Unit]
+Description=Lavalink Background Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=$(pwd)
+ExecStart=/usr/bin/java -jar Lavalink.jar
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload || die "Lỗi reload systemctl"
+systemctl enable lavalink
+systemctl start lavalink || die "Lỗi không thể khởi động service Lavalink"
+
+echo -e "\n${GREEN}===================================================${NC}"
+echo -e "${GREEN}✅ HOÀN TẤT CÀI ĐẶT LAVALINK!${NC}"
+echo -e "${CYAN}Kiểm tra trạng thái bằng lệnh:${NC}"
+echo -e "systemctl status lavalink"
+echo -e "journalctl -u lavalink -f -n 100"
+echo -e "${GREEN}===================================================${NC}"

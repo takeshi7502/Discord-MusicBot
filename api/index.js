@@ -97,8 +97,8 @@ class Server extends EventEmitter {
 	}
 
 	listen() {
-		this.app.listen(this.config.port, "0.0.0.0");
-		console.log("[SERVER] Listening on port:", this.config.port, " (0.0.0.0)");
+		this.app.listen(this.config.port);
+		console.log("[SERVER] Listening on port:", this.config.port);
 	}
 }
 

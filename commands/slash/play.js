@@ -61,13 +61,7 @@ const command = new SlashCommand()
       ]
     });
 
-    let query = options.getString("query");
-    if (!query) {
-      await interaction.editReply({
-        embeds: [client.ErrorEmbed("Vui lòng nhập tên bài hát hoặc link!")],
-      }).catch(() => {});
-      return;
-    }
+    let query = options.getString("query", true);
     let res = await player.search({ query }, interaction.user).catch((err) => {
       client.error(err);
       return {

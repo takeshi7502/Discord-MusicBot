@@ -33,6 +33,7 @@ const command = new SlashCommand()
 						.setColor(0xFF0000)
 						.setDescription("Tôi không ở trong một kênh thoại."),
 				],
+				ephemeral: true,
 			});
 		}
 
