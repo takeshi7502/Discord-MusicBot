@@ -22,7 +22,9 @@ const LoadDirectory = dir => {
         throw err;
       }
       for (const file of files) {
-        let cmd = require(CommandsDir + "/" + file);
+        const filePath = CommandsDir + "/" + file;
+        delete require.cache[require.resolve(filePath)];
+        let cmd = require(filePath);
         if (!cmd || dir == "context" && !cmd.command) {
           return console.log(t("loadCommands.auto_300") + file.split(".")[0] + t("loadCommands.auto_301"));
         }

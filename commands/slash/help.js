@@ -102,9 +102,8 @@ const command = new SlashCommand().setName("help").setDescription(t("help.auto_7
     });
     await iter.update({
       embeds: [helpEmbed],
-      components: [getButtons(pageNo)],
-      fetchReply: true
-    });
+      components: [getButtons(pageNo)]
+    }).catch(() => {});
   });
 });
 module.exports = command;
