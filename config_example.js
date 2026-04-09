@@ -1,4 +1,5 @@
 module.exports = {
+	language: "vi", //- Ngôn ngữ (vi, en, ja,...) | Language setting
 	helpCmdPerPage: 10, //- Number of commands per page of help command
 	lyricsMaxResults: 5, //- Number of results for lyrics command (Do not touch this value if you don't know what you are doing)
 	adminId: "UserId", //- Replace UserId with the Discord ID of the admin of the bot
@@ -41,5 +42,10 @@ module.exports = {
 			},
 		],
 	},
-	iconURL: "https://cdn.darrennathanael.com/icons/spinning_disk.gif", //- This icon will be in every embed's author field
+	iconURL: "https://cdn.discordapp.com/attachments/1360438209645121620/1491891499116527747/youtube_1.png?ex=69d957bb&is=69d8063b&hm=aa1d3166fc1882fc5fe32e96fb75c63af75470430bc270cc89fef39a2ac310b3&", //- This icon will be in every embed's author field
+	// ====== WEB DASHBOARD ======
+	port: process.env.PORT || 3000, //- Port cho web dashboard
+	website: process.env.WEBSITE || "http://localhost:3000", //- URL website (đổi thành URL thật nếu deploy)
+	cookieSecret: process.env.COOKIE_SECRET || "YOUR_SECRET_KEY", //- Secret key cho session cookie
+	scopes: ["identify", "guilds"], //- Discord OAuth2 scopes
 };
