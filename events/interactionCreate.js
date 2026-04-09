@@ -1,3 +1,4 @@
+const { t } = require("../util/i18n");
 const Controller = require("../util/Controller");
 
 /**
@@ -12,12 +13,12 @@ module.exports = async (client, interaction) => {
         );
         if (!command || !command.run) {
             return interaction.reply(
-                "Xin lỗi, lệnh bạn đã sử dụng không có bất kỳ chức năng thực thi nào",
+                t("common.unknownCommand"),
             );
         }
         if (command.adminOnly && interaction.user.id !== client.config.adminId) {
             return interaction.reply({
-                content: "Bạn không có quyền sử dụng lệnh này!",
+                content: t("common.noPermission"),
                 ephemeral: true,
             });
         }
@@ -33,12 +34,12 @@ module.exports = async (client, interaction) => {
         );
         if (!command || !command.run) {
             return interaction.reply(
-                "Xin lỗi, lệnh bạn vừa sử dụng không có bất kỳ chức năng thực thi nào",
+                t("common.unknownContextCommand"),
             );
         }
         if (command.adminOnly && interaction.user.id !== client.config.adminId) {
             return interaction.reply({
-                content: "Bạn không có quyền sử dụng lệnh này!",
+                content: t("common.noPermission"),
                 ephemeral: true,
             });
         }

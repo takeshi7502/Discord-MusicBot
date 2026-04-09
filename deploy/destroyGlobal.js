@@ -1,28 +1,28 @@
-const { Client, GatewayIntentBits } = require("discord.js");
+const { t } = require("../util/i18n");
+const {
+  Client,
+  GatewayIntentBits
+} = require("discord.js");
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]
 });
 const config = require("../config");
-
 client.login(config.token);
-
 client.on("ready", async () => {
   const commands = await client.application.commands.fetch();
-
   if (commands.size === 0) {
-    console.log("Không tìm thấy bất kỳ lệnh nào toàn cầu.");
+    console.log(t("deploy.auto_324"));
     process.exit();
   }
-
   let deletedCount = 0;
-
-  commands.forEach(async (command) => {
+  commands.forEach(async command => {
     await client.application.commands.delete(command.id);
-    console.log(`Lệnh Slash với ID ${command.id} đã được xóa.`);
+    console.log(t("deploy.auto_325", {
+      var1: command.id
+    }));
     deletedCount++;
-
     if (deletedCount === commands.size) {
-      console.log(`Đã xóa thành công tất cả các lệnh Slash toàn cầu.`);
+      console.log(t("deploy.auto_326"));
       process.exit();
     }
   });

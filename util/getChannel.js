@@ -1,3 +1,4 @@
+const { t } = require("./i18n");
 /**
  *
  * @param {import("../lib/DiscordMusicBot")} client
@@ -9,7 +10,7 @@ module.exports = async (client, interaction) => {
 		if (!interaction.member.voice.channel) {
 			const replyData = { ephemeral: true, 
 				embeds: [
-					client.ErrorEmbed("Bạn phải ở trong một kênh thoại để sử dụng lệnh này!"),
+					client.ErrorEmbed(t("common.noVoiceChannel")),
 				],
 			};
 			interaction.deferred || interaction.replied ? await interaction.editReply(replyData).catch(()=>{}) : await interaction.reply(replyData).catch(()=>{});
@@ -21,7 +22,7 @@ module.exports = async (client, interaction) => {
 		) {
 			const replyData = { ephemeral: true, 
 				embeds: [
-					client.ErrorEmbed("Bạn phải ở trong cùng một kênh thoại với tôi để sử dụng lệnh này!"),
+					client.ErrorEmbed(t("common.sameVoiceChannel")),
 				],
 			};
 			interaction.deferred || interaction.replied ? await interaction.editReply(replyData).catch(()=>{}) : await interaction.reply(replyData).catch(()=>{});
@@ -30,7 +31,7 @@ module.exports = async (client, interaction) => {
 		if (!interaction.member.voice.channel.joinable) {
 			const replyData = { ephemeral: true, 
 				embeds: [
-					client.ErrorEmbed("Tôi không có đủ quyền để tham gia vào kênh thoại của bạn!"),
+					client.ErrorEmbed(t("common.noPermissionJoin")),
 				],
 			};
 			interaction.deferred || interaction.replied ? await interaction.editReply(replyData).catch(()=>{}) : await interaction.reply(replyData).catch(()=>{});

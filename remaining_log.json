@@ -1,0 +1,544 @@
+{
+  "commands/slash/247.js": [
+    "Giữ cho bot luôn luôn kết nối với VC (bật/tắt)",
+    "Không có gì để phát 24/7.",
+    "**Chế độ 24/7 hiện tại là** \\",
+    "BẬT",
+    "TẮT",
+    "bây giờ sẽ",
+    " sẽ ko còn",
+    ",\r\n\t\t\t)}] đã được [${colors.blue(\r\n\t\t\t\t!twentyFourSeven ? ",
+    "TẮT",
+    "một server"
+  ],
+  "commands/slash/autoleave.js": [
+    "Tự động rời đi khi mọi người rời khỏi kênh thoại (bật/tắt)",
+    "Không có gì đang phát trong hàng đợi",
+    "**Chế độ Tự Động Rời** \\",
+    "BẬT",
+    "TẮT",
+    "Bot sẽ ${!autoLeave ? ",
+    "không tự động",
+    "\r\n        )}] đã được [${colors.blue(!autoLeave ? ",
+    "TẮT",
+    "một server"
+  ],
+  "commands/slash/autopause.js": [
+    "Tự động tạm dừng khi mọi người rời khỏi kênh thoại (bật/tắt)",
+    "Không có gì đang phát trong hàng đợi",
+    "**Chế độ Tự Động Tạm Dừng** \\",
+    "BẬT",
+    "TẮT",
+    "Trình phát sẽ ${!autoPause ? ",
+    "ko còn bị",
+    "\r\n        )}] đã được [${colors.blue(!autoPause ? ",
+    "TẮT",
+    "một server"
+  ],
+  "commands/slash/autoqueue.js": [
+    "Tự động thêm bài hát vào hàng đợi (bật/tắt)",
+    "Không có gì đang phát trong hàng đợi.",
+    "**Chế độ Tự Động Thêm vào Hàng Đợi** \\",
+    "BẬT",
+    "TẮT",
+    "Âm nhạc liên quan sẽ ${!autoQueue ? ",
+    "không",
+    ",\r\n\t\t\t) }] đã được [${ colors.blue(!autoQueue? ",
+    "TẮT",
+    "một server"
+  ],
+  "commands/slash/broadcast.js": [
+    "Phóng thanh thông báo (Chỉ dành cho Admin Bot)",
+    "Nội dung tin nhắn cần thông báo",
+    "Nhập ID Server để gửi riêng, chữ ",
+    " gửi toàn bộ, dấu ",
+    " gửi Server này",
+    ");\r\n\r\n    // Hỗ trợ gõ \\n để xuống dòng trong Embed\r\n    messageContent = messageContent.replace(/\\\\n/g, ",
+    ");\r\n\r\n    // Nếu nhập có khoảng trắng ở đầu đuôi thì cắt đi\r\n    if (targetOpt) targetOpt = targetOpt.trim();\r\n\r\n    let guildsToProcess = new Map();\r\n\r\n    if (!targetOpt || targetOpt === ",
+    ") {\r\n      // Trường hợp 1: Không tải target hoặc gõ ",
+    " -> Chỉ gửi ở Server hiện tại (Để Test)\r\n      const guild = client.guilds.cache.get(interaction.guildId);\r\n      if (guild) guildsToProcess.set(guild.id, guild);\r\n    } else if (targetOpt.toLowerCase() === ",
+    ") {\r\n      // Trường hợp 3: Nhập ",
+    " -> Gửi toàn bộ server\r\n      guildsToProcess = client.guilds.cache;\r\n    } else {\r\n      // Trường hợp 2: Có ID Server cụ thể -> Chỉ móc đúng Server đó ra\r\n      const guild = client.guilds.cache.get(targetOpt);\r\n      if (guild) {\r\n        guildsToProcess.set(guild.id, guild);\r\n      } else {\r\n        return interaction.editReply({\r\n          embeds: [client.ErrorEmbed(t(",
+    "📢 Thông báo từ ${client.user.username}",
+    "Nhấn nút bên dưới để thêm bot mới nhé!",
+    "THÊM BOT",
+    "SERVER CÁ NHÂN",
+    ")\r\n        if (guild.channels.cache.size === 0) {\r\n          await guild.channels.fetch().catch(() => { });\r\n        }\r\n\r\n        // Ưu tiên Số 1: Lấy kênh đã set trong File Database\r\n        const savedChannelId = await client.database.get(",
+    ");\r\n        if (savedChannelId) {\r\n          targetChannel = guild.channels.cache.get(savedChannelId);\r\n          // Nếu cache miss, thử fetch trực tiếp kênh đó\r\n          if (!targetChannel) {\r\n            try {\r\n              targetChannel = await guild.channels.fetch(savedChannelId);\r\n            } catch (e) {\r\n              targetChannel = null;\r\n            }\r\n          }\r\n        }\r\n\r\n        // Ưu tiên Số 2 (Fallback vét máng): Tìm kênh text đầu tiên bot có chìa khóa gửi tin\r\n        let isFallback = false;\r\n        if (!targetChannel) {\r\n          targetChannel = guild.channels.cache.find(c =>\r\n            c.type === ChannelType.GuildText &&\r\n            c.permissionsFor(guild.members.me)?.has(",
+    ")\r\n          );\r\n          isFallback = true;\r\n        }\r\n\r\n        // Phóng tên lửa tin nhắn!\r\n        if (targetChannel) {\r\n          await targetChannel.send({ embeds: [embed], components: [row] }).catch(() => { failCount++; });\r\n          if (isFallback) fallbackCount++;\r\n          else successCount++;\r\n        } else {\r\n          failCount++;\r\n        }\r\n      } catch (err) {\r\n        failCount++;\r\n      }\r\n    }\r\n\r\n    const resultEmbed = new EmbedBuilder()\r\n      .setColor(",
+    "Chiến dịch Phóng Thanh hoàn tất!",
+    "Đã loan tin rải thảm đến toàn bộ Server!",
+    "Đã báo cáo mục tiêu thành công!",
+    "✅ Đã setup kênh",
+    "${successCount} kênh",
+    "⚠️ Rải ngẫu nhiên",
+    "${fallbackCount} kênh",
+    "❌ Thất bại",
+    "${failCount} kênh"
+  ],
+  "commands/slash/clean.js": [
+    "Làm sạch 100 tin nhắn cuối cùng của bot từ kênh.",
+    "Số lượng tin nhắn cần xóa.",
+    "Đang xóa [${messages.size}] tin nhắn cũ hơn 14 ngày.",
+    ":white_check_mark: | Đã xóa ${botMessages.length} tin nhắn của bot."
+  ],
+  "commands/slash/clear.js": [
+    "Xóa tất cả các bài hát khỏi hàng đợi.",
+    "Hiện tại không có bài hát nào đang phát.",
+    "❌ | **Không hợp lệ, không đủ bài hát để xóa.**"
+  ],
+  "commands/slash/cmd.js": [
+    "Hiển thị danh sách lệnh ẩn của hệ thống (Chỉ dành cho Admin)",
+    "Lệnh Admin của ${client.user.username}",
+    "Phiên Bản Discord Music Bot: v${\r\n          require(",
+    "Phiên Bản Discord Music Bot: v${\r\n            require("
+  ],
+  "commands/slash/filters.js": [
+    "thêm hoặc xóa bộ lọc",
+    "bộ cài đặt để thêm vào"
+  ],
+  "commands/slash/guildleave.js": [
+    "Rời khỏi máy chủ",
+    "Nhập ID máy chủ để rời đi | ",
+    " = danh sách | ",
+    " = rời tất cả máy chủ",
+    ") {\r\n        // Sắp xếp các server theo thời gian ",
+    " mới nhất lên đầu\r\n        const guildsArray = [...client.guilds.cache.values()].sort((a, b) => b.joinedTimestamp - a.joinedTimestamp);\r\n\r\n        if (guildsArray.length === 0) {\r\n          return interaction.reply({\r\n            ephemeral: true,\r\n            embeds: [new EmbedBuilder().setColor(client.config.embedColor).setDescription(t(",
+    ") (${g.memberCount} bé)",
+    "Trống.",
+    "Bạn sắp ra lệnh cho Bot rời khỏi **tất cả ${count} máy chủ** hiện tại!\\n\\n",
+    "**Danh sách:**\\n",
+    "\\n\\n⚠️ **Hành động này không thể hoàn tác!**",
+    "Xác nhận trong vòng 30 giây",
+    "✅ Xác nhận — Rời tất cả",
+    "❌ Huỷ bỏ",
+    ")),\r\n              ],\r\n              components: [],\r\n            });\r\n          }\r\n\r\n          // Xác nhận → rời tất cả\r\n          const guilds = [...client.guilds.cache.values()];\r\n          let success = 0, failed = 0;\r\n\r\n          await interaction.editReply({\r\n            embeds: [\r\n              new EmbedBuilder()\r\n                .setColor(0xFFA500)\r\n                .setDescription(t(",
+    ", { count: guilds.length })),\r\n            ],\r\n            components: [],\r\n          });\r\n\r\n          for (const guild of guilds) {\r\n            // KHÔNG BAO GIỜ rời khỏi Server Admin/Trụ sở\r\n            if (guild.id === client.config.adminGuildId) {\r\n              console.log(",
+    "[GuildLeave:ALL] Rời: ${guild.name} (${guild.id})",
+    "[GuildLeave:ALL] Lỗi rời: ${guild.name} (${guild.id})",
+    "🚪 Hoàn tất rời máy chủ",
+    "✅ Rời thành công: **${success}** máy chủ\\n",
+    "❌ Thất bại: **${failed}** máy chủ",
+    "⏰ Hết thời gian xác nhận. Đã huỷ thao tác.",
+    "[GuildLeave] Không tìm thấy máy chủ: ${id}",
+    " không phải là một ID máy chủ hợp lệ hoặc Bot chưa tham gia.",
+    "[GuildLeave] Rời: ${guild.name} (${id})",
+    "✅ Đã rời khỏi máy chủ **${guild.name}** (\\",
+    "[GuildLeave] Lỗi:"
+  ],
+  "commands/slash/help.js": [
+    "Hiển thị danh sách này",
+    "Lệnh của ${client.user.username}",
+    "Phiên Bản Discord Music Bot: v${\r\n          require(",
+    "Phiên Bản Discord Music Bot: v${\r\n            require("
+  ],
+  "commands/slash/invite.js": [
+    "Mời tớ vào máy chủ của bạn",
+    "Mời tớ vào máy chủ của bạn!",
+    "Mời luôn"
+  ],
+  "commands/slash/lavalink.js": [
+    ");\r\n\r\nconst MAX_NODES = 10;\r\n\r\n// ====== HELPER: Ghi nodes vào config.js ======\r\nfunction writeNodesToConfig(nodes) {\r\n  const configPath = path.resolve(__dirname, ",
+    ");\r\n}\r\n\r\n// ====== HELPER: Tìm slot ID trống nhỏ nhất ======\r\nfunction findNextNodeId(existingNodes) {\r\n  for (let i = 1; i < MAX_NODES; i++) {\r\n    const id = ",
+    "Quản lý Lavalink Nodes (add/remove/replace/list/test)",
+    "Hành động cần thực hiện",
+    "📋 list — Xem danh sách nodes",
+    "➕ add — Thêm node mới",
+    "➖ remove — Xoá node",
+    "🔄 replace — Thay thế node",
+    "♻️ reload — Tải lại cấu hình nodes",
+    "[add/test] Địa chỉ máy chủ (VD: lavalink.example.com)",
+    "[add/test] Cổng kết nối (VD: 443, 80, 2333)",
+    "[add/test] Mật khẩu Authorization",
+    "[add/test] Dùng SSL? (true = HTTPS)",
+    "[remove/replace] ID node cần xoá hoặc thay thế (VD: node1, node2)",
+    "Bạn không có quyền sử dụng lệnh này!",
+    "📋 **Danh Sách Lavalink Nodes** (${configNodes.length}/${MAX_NODES})\\n\\n",
+    " | Mất kết nối",
+    "🔍 Đang ping \\",
+    "➕ Thêm Node này",
+    "Đây không phải lệnh của bạn!",
+    " đã tồn tại!",
+    "✅ **Đã thêm node thành công!**\\n**ID:** \\",
+    "})\\n**Tổng nodes:** ${configNodes.length}/${MAX_NODES}",
+    "➕ **Node Mới Đã Thêm**\\n**ID:** \\",
+    "\\n**Tổng nodes:** ${configNodes.length}",
+    "❌ **Không thể kết nối!**\\n",
+    "**Lỗi:** \\",
+    "))],\r\n        });\r\n      }\r\n\r\n      const configNodes = client.config.nodes || [];\r\n\r\n      // Kiểm tra giới hạn\r\n      if (configNodes.length >= MAX_NODES) {\r\n        return interaction.editReply({\r\n          embeds: [new EmbedBuilder().setColor(",
+    "❌ Đã đạt giới hạn **${MAX_NODES} nodes**! Xoá bot 1 node trước.",
+    " đã tồn tại!",
+    "❌ **Không thể kết nối!** Node này không hoạt động.\\n",
+    "**Lỗi:** \\",
+    "Dùng \\",
+    " để kiểm tra lại.",
+    "))],\r\n        });\r\n      }\r\n\r\n      // Thêm vào config\r\n      const newNodeConfig = {\r\n        id: newId,\r\n        host,\r\n        port,\r\n        authorization: password,\r\n        retryAmount: 200,\r\n        retryDelay: 40,\r\n        secure,\r\n        requestTimeout: 60000,\r\n      };\r\n\r\n      configNodes.push(newNodeConfig);\r\n\r\n      try {\r\n        // Ghi file config\r\n        writeNodesToConfig(configNodes);\r\n\r\n        // Cập nhật runtime config\r\n        client.config.nodes = configNodes;\r\n        client.manager.options.nodes = configNodes;\r\n\r\n        // Tạo + kết nối node mới\r\n        client.manager.nodeManager.createNode(newNodeConfig);\r\n        await client.manager.nodeManager.connectAll();\r\n\r\n        // Reset cờ thông báo\r\n        if (client.lavalinkNotified) client.lavalinkNotified.delete(newId);\r\n\r\n        const embed = new EmbedBuilder()\r\n          .setColor(",
+    "✅ **Đã thêm node thành công!**\\n",
+    "**Tổng nodes:** ${configNodes.length}/${MAX_NODES}",
+    "➕ **Node Mới Đã Thêm**\\n",
+    "**Tổng nodes:** ${configNodes.length}",
+    "))],\r\n        });\r\n      }\r\n\r\n      // Không cho xoá node0\r\n      if (idnode === ",
+    "❌ Không tìm thấy node \\",
+    "!\\n**Nodes hiện có:** ${available}",
+    "))\r\n                  .setTimestamp()\r\n                ],\r\n              }).catch(() => {});\r\n            }\r\n            await player.destroy().catch(() => {});\r\n          } catch (e) {}\r\n        }\r\n\r\n        // Ngắt kết nối node\r\n        const liveNode = client.manager.nodeManager.nodes.get(removedNode.id);\r\n        if (liveNode) {\r\n          try {\r\n            await liveNode.destroy();\r\n          } catch (e) {\r\n            client.manager.nodeManager.nodes.delete(removedNode.id);\r\n          }\r\n        }\r\n\r\n        // Xoá khỏi config\r\n        configNodes.splice(nodeIndex, 1);\r\n        writeNodesToConfig(configNodes);\r\n        client.config.nodes = configNodes;\r\n        client.manager.options.nodes = configNodes;\r\n\r\n        // Xoá cờ thông báo\r\n        if (client.lavalinkNotified) client.lavalinkNotified.delete(removedNode.id);\r\n\r\n        const embed = new EmbedBuilder()\r\n          .setColor(",
+    "✅ **Đã xoá node thành công!**\\n",
+    "**Players bị ảnh hưởng:** ${playersOnNode.length}\\n",
+    "**Nodes còn lại:** ${configNodes.length}/${MAX_NODES}",
+    "➖ **Node Đã Xoá**\\n",
+    "**Nodes còn lại:** ${configNodes.length}",
+    "❌ Không tìm thấy node \\",
+    "!\\n**Nodes hiện có:** ${available}",
+    "❌ **Không thể kết nối node mới!**\\n",
+    "**Lỗi:** \\",
+    " giữ nguyên không thay đổi.",
+    "))\r\n                  .setTimestamp()\r\n                ],\r\n              }).catch(() => {});\r\n            }\r\n            await player.destroy().catch(() => {});\r\n          } catch (e) {}\r\n        }\r\n\r\n        // Ngắt kết nối node cũ\r\n        const liveNode = client.manager.nodeManager.nodes.get(oldNode.id);\r\n        if (liveNode) {\r\n          try {\r\n            await liveNode.destroy();\r\n          } catch (e) {\r\n            client.manager.nodeManager.nodes.delete(oldNode.id);\r\n          }\r\n        }\r\n\r\n        // Cập nhật config — giữ nguyên ID cũ, thay thông số mới\r\n        const newNodeConfig = {\r\n          id: oldNode.id, // giữ nguyên ID\r\n          host,\r\n          port,\r\n          authorization: password,\r\n          retryAmount: 200,\r\n          retryDelay: 40,\r\n          secure,\r\n          requestTimeout: 60000,\r\n        };\r\n\r\n        configNodes[nodeIndex] = newNodeConfig;\r\n        writeNodesToConfig(configNodes);\r\n        client.config.nodes = configNodes;\r\n        client.manager.options.nodes = configNodes;\r\n\r\n        // Tạo + kết nối node mới\r\n        client.manager.nodeManager.createNode(newNodeConfig);\r\n        await client.manager.nodeManager.connectAll();\r\n\r\n        // Reset cờ thông báo\r\n        if (client.lavalinkNotified) client.lavalinkNotified.delete(oldNode.id);\r\n\r\n        const embed = new EmbedBuilder()\r\n          .setColor(",
+    "✅ **Đã thay thế node thành công!**\\n",
+    "**Cũ:** \\",
+    "**Mới:** \\",
+    "**Players bị ảnh hưởng:** ${playersOnNode.length}\\n",
+    ")\r\n          )\r\n          .setTimestamp();\r\n\r\n        await interaction.editReply({ embeds: [embed] });\r\n\r\n        // Thông báo kênh setlog\r\n        if (client.sendLavalinkNotification) {\r\n          client.sendLavalinkNotification(\r\n            new EmbedBuilder()\r\n              .setColor(",
+    "🔄 **Node Đã Thay Thế**\\n",
+    "**Cũ:** \\",
+    "**Mới:** \\",
+    "🔄 **Nodes đã thay đổi:** ",
+    "+${added.length} Thêm | ",
+    "-${removed.length} Xoá | ",
+    "=${kept.length} Giữ lại",
+    "🔄 **Không có thay đổi mới.** Kết nối lại ${newNodes.length} nodes...",
+    "✅ **Tải lại Lavalink thành công!**\\n**Đã kết nối:** \\",
+    "**Dọn dẹp:** \\",
+    " player bị gián đoạn.",
+    "🔄 **Lavalink Đã Thay Đổi (Reload)**\\n",
+    "**Kết nối:** ${connected} node",
+    "❌ Lỗi Reload Lavalink: \\"
+  ],
+  "commands/slash/loop.js": [
+    "Lặp lại bài hát hiện tại",
+    "Hiện tại không có bài hát nào đang phát.",
+    "👍 | **Lặp đã được kích hoạt \\"
+  ],
+  "commands/slash/loopq.js": [
+    "Không có bài hát đang phát.",
+    ":thumbsup: | **Lặp hàng đợi đã kích hoạt \\"
+  ],
+  "commands/slash/lyrics.js": [
+    "Lấy lời bài hát của một bài hát",
+    "Bài hát để lấy lời bài hát",
+    "Chọn một bài hát",
+    "Dưới đây là một số kết quả mà tôi tìm thấy cho \\",
+    ". Vui lòng chọn một bài hát để hiển thị lời trong \\",
+    "Lời bài hát được cung cấp bởi MusixMatch.",
+    "**Rất tiếc, chúng tôi không được ủy quyền để hiển thị lời bài hát này.**",
+    "Lời bài hát bị hạn chế bởi MusixMatch.",
+    "\\nBị cắt bớt, lời bài hát quá dài.",
+    "Không có bài hát được chọn. Bạn đã mất quá nhiều thời gian để chọn một bản nhạc.",
+    "Một lỗi không xác định đã xảy ra, vui lòng kiểm tra console của bạn.",
+    "Mẹo Lấy Lời Bài Hát",
+    "Dưới đây là một số mẹo để lấy lời bài hát của bạn một cách chính xác \\n\\n\\\r\n        \t\t\t\t\t\t1. Thử thêm tên nghệ sĩ phía trước tên bài hát.\\n\\\r\n        \t\t\t\t\t\t2. Thử tìm lời bài hát bằng cách nhập trực tiếp truy vấn bài hát bằng bàn phím.\\n\\\r\n        \t\t\t\t\t\t3. Tránh tìm kiếm lời bài hát trong các ngôn ngữ khác ngoài tiếng Anh."
+  ],
+  "commands/slash/move.js": [
+    "Di chuyển bài hát đến một vị trí khác",
+    "Số thứ tự của bài hát để di chuyển",
+    "Vị trí để di chuyển bài hát đến",
+    ":x: | **Số thứ tự bài hát không hợp lệ**",
+    ":x: | **Số thứ tự vị trí không hợp lệ**"
+  ],
+  "commands/slash/nowplaying.js": [
+    "Hiển thị bài hát đang phát hiện tại trong kênh thoại.",
+    "Đang Phát",
+    "Được yêu cầu bởi"
+  ],
+  "commands/slash/pause.js": [
+    "Tạm dừng bài hát đang phát",
+    "⏸ | **Đã Dừng**"
+  ],
+  "commands/slash/ping.js": [
+    "Xem độ trễ của bot",
+    ";\r\n\r\n    let botState = zap;\r\n    let apiState = zap;\r\n\r\n    if (apiPing >= 40 && apiPing < 200) {\r\n      apiState = green;\r\n    } else if (apiPing >= 200 && apiPing < 400) {\r\n      apiState = yellow;\r\n    } else if (apiPing >= 400) {\r\n      apiState = red;\r\n    }\r\n\r\n    if (botPing >= 40 && botPing < 200) {\r\n      botState = green;\r\n    } else if (botPing >= 200 && botPing < 400) {\r\n      botState = yellow;\r\n    } else if (botPing >= 400) {\r\n      botState = red;\r\n    }\r\n\r\n    // Chọn màu cho viền embed: dùng client.config.embedColor nếu có, nếu không mặc định ",
+    ";\r\n\r\n    // Tạo embed với bố cục gọn gàng\r\n    const embed = new EmbedBuilder()\r\n      .setColor(embedColor)\r\n      .setTitle("
+  ],
+  "commands/slash/play.js": [
+    "Tìm kiếm và phát bài hát từ YouTube",
+    "Bạn đang tìm gì?"
+  ],
+  "commands/slash/previous.js": [
+    "Quay lại bài hát trước đó.",
+    "⏮ | Bài hát trước đó: **${ previousSong.info.title }**"
+  ],
+  "commands/slash/queue.js": [
+    "Hiển thị hàng đợi hiện tại",
+    "**♪ | Đang phát:** [${title}](${song.info.uri})",
+    "Âm lượng",
+    "Tổng Số Bài Hát",
+    "**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? ",
+    "}]\\n\\n**Số bài hát trong hàng đợi**\\n${pages[page]}",
+    "Thời lượng của bài hát",
+    "Tổng thời lượng của tất cả các bài hát",
+    "Tổng số bài hát",
+    "**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? ",
+    "}]\\n\\n**Số bài hát trong hàng đợi**\\n${pages[page]}",
+    "Thời lượng của bài hát",
+    "Tổng thời lượng của tất cả các bài hát",
+    "Tổng số bài hát",
+    "**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? ",
+    "}]\\n\\n**Số bài hát trong hàng đợi**\\n${pages[page]}",
+    "Thời lượng của bài hát",
+    "Tổng thời lượng của tất cả các bài hát",
+    "Tổng số bài hát",
+    "**♪ | Đang phát:** [${title}](${song.info.uri}) [${song.requester ? ",
+    "}]\\n\\n**Số bài hát trong hàng đợi**\\n${pages[page]}",
+    "Thời lượng của bài hát",
+    "Tổng thời lượng của tất cả các bài hát",
+    "Tổng số bài hát"
+  ],
+  "commands/slash/reload.js": [
+    "Tải lại tất cả các lệnh và cấu hình Lavalink",
+    ")),\r\n\t\t\t\t],\r\n\t\t\t\tephemeral: true,\r\n\t\t\t});\r\n\t\t}\r\n\r\n\t\tawait interaction.deferReply({ ephemeral: true });\r\n\r\n\t\ttry {\r\n\t\t\tlet reloadLog = [];\r\n\r\n\t\t\t// ======== BƯỚC 1: TẢI LẠI TẤT CẢ LỆNH ========\r\n\t\t\tlet ContextCommandsDirectory = path.join(__dirname, ",
+    "✅ Đã tải lại \\",
+    " lệnh",
+    ");\r\n\t\t\t// Nếu có dev-config thì ưu tiên\r\n\t\t\tconst devConfigPath = path.resolve(__dirname, ",
+    ");\r\n\r\n\t\t\tlet newConfig;\r\n\t\t\tif (fs.existsSync(devConfigPath)) {\r\n\t\t\t\tdelete require.cache[require.resolve(devConfigPath)];\r\n\t\t\t\tnewConfig = require(devConfigPath);\r\n\t\t\t} else {\r\n\t\t\t\tdelete require.cache[require.resolve(configPath)];\r\n\t\t\t\tnewConfig = require(configPath);\r\n\t\t\t}\r\n\r\n\t\t\t// Cập nhật config mới vào client\r\n\t\t\tclient.config = newConfig;\r\n\t\t\treloadLog.push(",
+    ");\r\n\r\n\t\t\t// ======== BƯỚC 4: TẢI LẠI EVENTS ========\r\n\t\t\tconst eventsDir = path.join(__dirname, ",
+    "✅ Đã xoá cache Events",
+    "Reload bởi ${interaction.user.tag}: ${reloadLog.join(",
+    "♻️ Reload Hoàn Tất!",
+    "Thực hiện bởi ${interaction.user.username}",
+    "❌ Lỗi khi Reload: \\"
+  ],
+  "commands/slash/remove.js": [
+    "Xóa bài hát bạn không muốn khỏi hàng đợi",
+    "Nhập số thứ tự của bài hát.",
+    "Hàng đợi hiện tại chỉ có **${player.queue.tracks.length}** bài hát."
+  ],
+  "commands/slash/replay.js": [
+    "Phát lại bài hát đang phát"
+  ],
+  "commands/slash/resume.js": [
+    "Tiếp tục phát bài hát hiện tại.",
+    "Không có bài hát nào đang phát hiện tại.",
+    "⏯ **Đã tiếp tục phát!**"
+  ],
+  "commands/slash/save.js": [
+    "Lưu bài hát hiện tại vào DM.",
+    "Hiện tại không có bài hát nào đang phát.",
+    "Bài hát đã lưu",
+    "**Đã lưu [${player.queue.current.info.title}](${player.queue.current.info.uri}) vào tin nhắn riêng của bạn.**",
+    "Thời lượng của bài hát",
+    "Tác giả của bài hát",
+    "Server được yêu cầu",
+    "Vui lòng kiểm tra **DMs** của bạn. Nếu bạn không nhận được bất kỳ tin nhắn nào từ tôi, hãy đảm bảo rằng **DMs** của bạn đang mở."
+  ],
+  "commands/slash/search.js": [
+    "Tìm kiếm một bài hát",
+    "Bài hát để tìm kiếm",
+    "Có lỗi xảy ra trong quá trình tìm kiếm bài hát",
+    "Chọn một bài hát",
+    "Dưới đây là một số kết quả mà tôi tìm thấy cho \\",
+    ". Vui lòng chọn bài hát trong vòng \\",
+    "Đã thêm vào hàng đợi",
+    "Không có Tiêu đề",
+    "Đã thêm bởi",
+    "Không có bài hát nào được chọn. Bạn đã mất quá nhiều thời gian để chọn một bài hát."
+  ],
+  "commands/slash/seek.js": [
+    "Chuyển đến một thời điểm cụ thể trong bài hát hiện tại.",
+    "Chuyển đến thời điểm mà bạn muốn. Ví dụ: 1h 30m | 2h | 80m | 53s",
+    "⏩ | **${player.queue.current.info.title}** đã được ${\r\n\t\t\t\t\t\t\t\ttime < position ? ",
+    "chuyển đến",
+    "Không thể chuyển đến một thời điểm cụ thể của bài hát đang phát hiện tại. Điều này có thể do vượt quá thời lượng của bài hát hoặc định dạng thời gian không đúng. Hãy kiểm tra và thử lại."
+  ],
+  "commands/slash/setlog.js": [
+    "Thiết lập kênh báo cáo Bot Join/Leave Server (Chỉ dành cho Admin Bot)",
+    "Chọn một kênh để bot spam báo cáo mỗi khi có người Invite bot",
+    ");\r\n\r\n    // Lưu vào db.json cái ID của kênh log\r\n    await client.database.set(",
+    "✅ | Đã quy hoạch trạm tình báo! Từ nay mỗi khi Bot chui vào Server lạ hoặc bị sút khỏi Server nào, nó sẽ bẩm báo về <#${channel.id}>"
+  ],
+  "commands/slash/setup.js": [
+    "Thiết lập kênh nhận thông báo riêng tư từ Bot",
+    "Chọn kênh để nhận thông báo update",
+    ");\r\n\r\n    // Lưu vào db.json\r\n    await client.database.set(",
+    "✅ | Kênh nhận thông báo cập nhật đã được thiết lập thành <#${channel.id}>"
+  ],
+  "commands/slash/shuffle.js": [
+    "Ngẫu nhiên hoá hàng đợi"
+  ],
+  "commands/slash/skip.js": [
+    "Bỏ qua bài hát hiện tại"
+  ],
+  "commands/slash/skipto.js": [
+    "bỏ qua đến một bài hát cụ thể trong hàng đợi",
+    "Số lượng bản nhạc để bỏ qua đến",
+    "✅ | Đã bỏ qua đến vị trí chỉ định ",
+    "✅ | Đã bỏ qua đến vị trí chỉ định "
+  ],
+  "commands/slash/stats.js": [
+    "Nhận thông tin về bot",
+    ")\r\n        .toString()\r\n        .trim();\r\n    } catch (e) {}\r\n\r\n    // Đếm player riêng của bot\r\n    const allPlayers = [...client.manager.players.values()];\r\n    const totalBotPlayers = allPlayers.length;\r\n    const playingBotPlayers = allPlayers.filter(p => p.playing && !p.paused).length;\r\n\r\n    const statsEmbed = new EmbedBuilder()\r\n      .setColor(client.config.embedColor)\r\n      .setTitle(",
+    "• **Đang phát**: ${playingBotPlayers} phòng • **Kết nối**: ${totalBotPlayers} phòng\\n"
+  ],
+  "commands/slash/status.js": [
+    ":bar_chart: **Trạng Thái Hệ Thống**\\n",
+    "\\n:warning: **Không có node Lavalink nào!**",
+    "Đang hoạt động",
+    "Mất kết nối",
+    "🔄 Đang tự động cập nhật mỗi 5s • ${timeStr}",
+    "Cập nhật lúc ${timeStr}",
+    "Auto Làm mới",
+    "🔄 Auto Làm mới",
+    "Tắt Auto",
+    "⏹ Tắt Auto",
+    "Xem trạng thái Bot & Lavalink"
+  ],
+  "commands/slash/stop.js": [
+    "Dừng lại những gì bot đang phát và rời khỏi kênh thoại\\n(Lưu ý: Lệnh này sẽ xóa toàn bộ hàng đợi)",
+    "Tôi không ở trong một kênh thoại.",
+    "đang suy nghĩ",
+    "**👋 | Tạm biệt nha!** (Đã dừng bởi <@${interaction.user.id}>)"
+  ],
+  "commands/slash/summon.js": [
+    "Gọi bot vào kênh.",
+    "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này.**",
+    ":thumbsup: | **Đã tham gia thành công <#${ channel.id }>!**"
+  ],
+  "commands/slash/volume.js": [
+    "Thay đổi âm lượng của bài hát hiện tại.",
+    "Lượng âm lượng mà bạn muốn thay đổi. Ví dụ: 10",
+    ":loud_sound: | Âm lượng hiện tại **${ player.volume }**",
+    ":loud_sound: | Đã thiết lập âm lượng thành **${ player.volume }**"
+  ],
+  "commands/context/play.js": [
+    "Phát Bài Hát"
+  ],
+  "events/guildCreate.js": [
+    "Bot vừa được mời vào máy chủ mới: ${guild.name} (ID: ${guild.id}) - Bề tôi: ${guild.memberCount}",
+    ");\r\n\r\n        if (logChannelId) {\r\n            const logChannel = client.channels.cache.get(logChannelId);\r\n            if (logChannel) {\r\n                // Lấy thông tin người chủ của Server mới bế bot vào (tuỳ chọn)\r\n                let ownerStr = ",
+    ") // Màu xanh lá: Vào mới\r\n                    .setAuthor({ name: ",
+    "Tên Server",
+    "Số thành viên",
+    "Chủ Server",
+    "Tổng Server Bot đang ở",
+    ", inline: false }\r\n                    )\r\n                    .setTimestamp();\r\n\r\n                await logChannel.send({ embeds: [embed] }).catch(() => { });\r\n            }\r\n        }\r\n\r\n        // ----------------------------------------------------\r\n        // GỬI LỜI CHÀO MỜI ĐẾN MÁY CHỦ VỪA THAM GIA\r\n        // ----------------------------------------------------\r\n        const targetChannel = guild.channels.cache.find(c =>\r\n            c.type === ChannelType.GuildText &&\r\n            c.permissionsFor(guild.members.me).has(",
+    "Cảm ơn vì đã sử dụng Bot!",
+    "👋 Xin chào!",
+    "Chào mn! Tekisha Music là một Bot Nghe nhạc miễn phí với đầy đủ tính năng, không quảng cáo, không tính phí, không giới hạn thời gian sử dụng.\\n",
+    "*Cảm ơn bạn đã sử dụng Bot. Gõ \\",
+    " để khám phá các lệnh nhé!*\\n\\n",
+    "**Bạn Admin Server gõ lệnh sau để chỉ định kênh nhận tin nhé:**\\n",
+    "👉 Gõ lệnh: \\",
+    "Lỗi guildCreate: ${error.message}"
+  ],
+  "events/guildDelete.js": [
+    "Bot vừa bị đuổi khỏi máy chủ: ${guild.name} (ID: ${guild.id})",
+    ") // Màu đỏ: Bị kick/ẩn\r\n                    .setAuthor({ name: ",
+    "Tên Server",
+    "Tổng Server Bot đang ở",
+    "Lỗi guildDelete: ${error.message}"
+  ],
+  "events/messageCreate.js": [
+    "Mời tớ",
+    "Dùng \\",
+    " trong máy chủ để sử dụng lệnh.\\nBạn có thể bắt đầu với \\",
+    " để xem tất cả lệnh.\\nNếu bạn thấy bot có vấn đề, hãy báo cáo cho <@648036769769717760>.\\nCám ơn bạn đã sử dụng bot!"
+  ],
+  "events/ready.js": [
+    "Lavalink init lỗi: ${err.message}",
+    "⚠️ **Lavalink Gặp Lỗi Khi Khởi Động**\\n**Lỗi:** \\",
+    "Đã đăng nhập thành công với tư cách là "
+  ],
+  "events/voiceStateUpdate.js": [
+    "Tiếp Tục!",
+    "Bản nhạc hiện tại đã được tiếp tục",
+    "Tạm Dừng!",
+    "Bản nhạc hiện tại đã bị tạm dừng vì không có ai trong kênh thoại.",
+    "Tạm Dừng!",
+    "Bản nhạc hiện tại đã bị tạm dừng vì không có ai trong kênh thoại."
+  ],
+  "util/Controller.js": [
+    "Người chơi: ${ player.guildId } | Đã dừng trình phát nhạc.",
+    "Không có bài hát trước đó được phát.",
+    "Người chơi: ${player.guildId} | ${player.paused ? ",
+    "Tiếp tục",
+    "Người chơi: ${player.guildId} | Đã bật/tắt lặp ${player.repeatMode === ",
+    "bài hát",
+    "hàng đợi",
+    "tất cả"
+  ],
+  "util/getConfig.js": [
+    "Không tìm thấy tệp cấu hình."
+  ],
+  "util/guildDb.js": [
+    "[ERROR] Không thể tạo thư mục cơ sở dữ liệu cho máy chủ, có thể module sẽ không hoạt động đúng cách.",
+    "Không có cơ sở dữ liệu với tên đó ",
+    "[ERROR] Lỗi không mong đợi:"
+  ],
+  "util/i18n.js": [
+    ");\nconst locales = {};\n\n// Load tất cả file .json trong locales/\nfunction loadLocales() {\n  if (!fs.existsSync(localesDir)) return;\n  fs.readdirSync(localesDir)\n    .filter((f) => f.endsWith(",
+    "[i18n] Lỗi đọc file ${f}: ${e.message}",
+    ";\n\n/**\n * Đặt ngôn ngữ hiện tại\n * @param {string} lang - Mã ngôn ngữ (vi, en, ja, ...)\n */\nfunction setLanguage(lang) {\n  if (locales[lang]) {\n    currentLang = lang;\n  } else {\n    console.warn(\n      ",
+    " không tồn tại, giữ nguyên ",
+    "\n    );\n  }\n}\n\n/**\n * Tải lại file ngôn ngữ (dùng khi /cmd reload)\n */\nfunction reloadLocales() {\n  // Xoá cache cũ\n  Object.keys(locales).forEach((k) => delete locales[k]);\n  loadLocales();\n}\n\n/**\n * Lấy text theo key, hỗ trợ biến {name}, {value}, ...\n * @param {string} key - Key dạng ",
+    "\n * @param {Object} vars - Biến thay thế { title: ",
+    ");\n\n  // Tìm trong ngôn ngữ hiện tại\n  let text = keys.reduce((obj, k) => obj?.[k], locales[currentLang]);\n\n  // Fallback về tiếng Việt nếu không tìm thấy\n  if (text === undefined || text === null) {\n    text = keys.reduce((obj, k) => obj?.[k], locales[",
+    "]);\n  }\n\n  // Nếu vẫn không có, trả về key gốc (để dễ debug)\n  if (text === undefined || text === null) return key;\n\n  // Thay thế biến {name} → giá trị thực\n  return text.replace(/\\{(\\w+)\\}/g, (_, k) =>\n    vars[k] !== undefined ? String(vars[k]) : "
+  ],
+  "util/loadCommands.js": [
+    "Không thể tải lệnh: ",
+    ", Tệp không có lệnh nào"
+  ],
+  "lib/DiscordMusicBot.js": [
+    ");\r\n            if (!autoQueue) return;\r\n            if (!lastTrack) return;\r\n\r\n            // YouTube autoplay - tìm mix dựa trên bài cuối\r\n            const search = ",
+    ");\r\n                return null;\r\n              });\r\n\r\n            if (res && res.tracks && res.tracks.length > 0) {\r\n              await player.queue.add(res.tracks.slice(0, 5));\r\n              if (!player.playing && !player.paused) await player.play();\r\n            }\r\n          },\r\n        },\r\n      },\r\n    });\r\n\r\n    // ==========================================\r\n    // Node events (via nodeManager)\r\n    // + Gửi thông báo vào kênh /setlog\r\n    // ==========================================\r\n    // Hàm gửi thông báo Lavalink → Public trên client để reload/lavalink gọi được\r\n    client.sendLavalinkNotification = async (embed) => {\r\n      try {\r\n        const logChannelId = await client.database.get(",
+    "[Lavalink Notify] Chưa set /setlog, bỏ qua thông báo.",
+    ", { error: e.message }));\r\n      }\r\n    };\r\n    const sendLavalinkNotification = client.sendLavalinkNotification;\r\n\r\n    // Trạng thái đã thông báo — mỗi node chỉ báo 1 lần cho đến khi kết nối lại\r\n    client.lavalinkNotified = new Map(); // nodeId → true khi đã báo lỗi/ngắt\r\n    const lavalinkNotified = client.lavalinkNotified;\r\n\r\n    this.manager.nodeManager\r\n      .on(",
+    ", { id: node.id, host: h, port: p }));\r\n        // Reset trạng thái → cho phép báo lại nếu lỗi/ngắt lần sau\r\n        lavalinkNotified.delete(node.id);\r\n        sendLavalinkNotification(\r\n          new EmbedBuilder()\r\n            .setColor(",
+    ", { id: node.id, host: h, port: p }));\r\n        // Chỉ báo 1 lần, đến khi connect lại mới báo tiếp\r\n        if (lavalinkNotified.has(node.id)) return;\r\n        lavalinkNotified.set(node.id, true);\r\n\r\n        // Auto-failover: thông báo player bị ảnh hưởng\r\n        const affectedPlayers = [...client.manager.players.values()].filter(\r\n          (pl) => pl.node?.id === node.id\r\n        );\r\n        for (const player of affectedPlayers) {\r\n          try {\r\n            const nowPlayingMsg = player.get(",
+    "))\r\n                  .setTimestamp()\r\n                ],\r\n              }).catch(() => {});\r\n            }\r\n            player.destroy().catch(() => {});\r\n          } catch (e) {}\r\n        }\r\n\r\n        // Kiểm tra có node nào còn sống không\r\n        const aliveNodes = [...client.manager.nodeManager.nodes.values()].filter(n => n.connected);\r\n        let failoverMsg = ",
+    "\\n**Players bị ảnh hưởng:** ${affectedPlayers.length}",
+    "\\n✅ **Node còn sống:** ${aliveNodes.map(n => ",
+    "\\n→ Players mới sẽ tự động dùng node còn sống.",
+    "\\n❌ **Không còn node nào hoạt động!**",
+    ", { id: node.id, error: err.message }));\r\n        // Chỉ báo 1 lần, đến khi connect lại mới báo tiếp\r\n        if (lavalinkNotified.has(node.id)) return;\r\n        lavalinkNotified.set(node.id, true);\r\n        sendLavalinkNotification(\r\n          new EmbedBuilder()\r\n            .setColor(",
+    "Bot: ${player.guildId} | Bài hát gặp lỗi: ${payload?.exception?.message || ",
+    ", client.config.autoLeave);\r\n        // Áp dụng âm lượng mặc định từ config\r\n        if (client.config.defaultVolume) {\r\n          player.setVolume(client.config.defaultVolume);\r\n        }\r\n        this.warn(\r\n          ",
+    "một máy chủ",
+    "Bot: ${player.guildId} | Một Bot mới đã bị hủy trong ${client.guilds.cache.get(player.guildId)\r\n            ? client.guilds.cache.get(player.guildId).name\r\n            : ",
+    ");\r\n        if (prevInterval) clearInterval(prevInterval);\r\n\r\n        // Huỷ bỏ timer disconnect cũ (nếu có) để tránh tin nhắn treo\r\n        const oldDisconnectTimer = player.get(",
+    ", null);\r\n\r\n        // Nếu có tin nhắn cũ đang treo (từ lượt Stop trước), xoá nó đi\r\n        if (player.get(",
+    "Bot: ${player.guildId} | Bài hát đã bắt đầu phát [${colors.blue(track.info.title)}]",
+    ");\r\n        let nowPlaying = null;\r\n\r\n        if (!forceNew && existingMsg && !client.isMessageDeleted(existingMsg)) {\r\n          try {\r\n            nowPlaying = await existingMsg.edit(messagePayload);\r\n          } catch {\r\n            // Edit failed (message deleted externally, etc.), send new one\r\n            nowPlaying = await client.channels.cache\r\n              .get(player.textChannelId)\r\n              ?.send(messagePayload)\r\n              .catch((e) => client.warn(e));\r\n          }\r\n        } else {\r\n          nowPlaying = await client.channels.cache\r\n            .get(player.textChannelId)\r\n            ?.send(messagePayload)\r\n            .catch((e) => client.warn(e));\r\n          // Xoá cờ sau khi đã tạo tin nhắn mới\r\n          player.set(",
+    ");\r\n        const tracksAdded = player.queue.tracks.length > 0;\r\n\r\n        // Nếu không có autoQueue hoặc autoQueue không tìm thấy bài hát nào mới\r\n        if (!autoQueue || !tracksAdded) {\r\n          const twentyFourSeven = player.get(",
+    ") })\r\n              .setTimestamp();\r\n\r\n            // Sửa tin nhắn thành t(",
+    ");\r\n                    if (currentMsg && !client.isMessageDeleted(currentMsg)) {\r\n                      try {\r\n                        const m = await currentMsg.edit({ embeds: [disconnectedEmbed], components: [] });\r\n                        setTimeout(() => m.delete().catch(() => { }), 5000);\r\n                      } catch {\r\n                        const ch = client.channels.cache.get(player.textChannelId);\r\n                        if (ch) ch.send({ embeds: [disconnectedEmbed] }).then(m => setTimeout(() => m.delete().catch(() => { }), 5000)).catch(() => { });\r\n                      }\r\n                    } else {\r\n                      const ch = client.channels.cache.get(player.textChannelId);\r\n                      if (ch) ch.send({ embeds: [disconnectedEmbed] }).then(m => setTimeout(() => m.delete().catch(() => { }), 5000)).catch(() => { });\r\n                    }\r\n                    player.destroy();\r\n                  }\r\n                }, client.config.disconnectTime);\r\n                // Lưu lại timer ID để có thể huỷ nếu user /play bài mới\r\n                player.set(",
+    ", false);\r\n            // Đánh cờ: lần /play tiếp theo phải tạo tin nhắn mới, không edit lại tin nhắn Stop cũ\r\n            player.set(",
+    ");\r\n            if (existingMsg && !client.isMessageDeleted(existingMsg)) {\r\n              await existingMsg.edit({ embeds: [stopEmbed], components: [] }).catch(() => { });\r\n            }\r\n            // Delay 5 seconds then show queue end logic\r\n            setTimeout(() => {\r\n              showQueueEndAndDisconnect();\r\n            }, 5000);\r\n          } else {\r\n            showQueueEndAndDisconnect();\r\n          }\r\n        }\r\n      });\r\n  }\r\n\r\n  /**\r\n   * Đặt trạng thái cho voice channel hiện tại khi phát bài\r\n   * Gửi trực tiếp thông tin vào endpoint channel voice-status\r\n   */\r\n  async setVoiceStatus(channelId, message) {\r\n    if (!channelId) return;\r\n    const status = message && message.trim().length > 0 ? message : null;\r\n    try {\r\n      await this.rest.put(",
+    "Không thể tải lệnh: ",
+    ", Tệp không có một lệnh hợp lệ với chức năng chạy",
+    "Không thể tải lệnh: ",
+    ", Tệp không chứa lệnh command/run",
+    ");\r\n  if (msg && !client.isMessageDeleted(msg)) {\r\n    // Xoá buttons khỏi message trước khi xoá (hoặc khi destroy mà không qua queueEnd)\r\n    msg.edit({ components: [] }).catch(() => { });\r\n    client.markMessageAsDeleted(msg);\r\n  }\r\n  player.set("
+  ],
+  "deploy/deployGlobal.js": [
+    " }).setToken(config.token);\r\n\tconst allCommands = await LoadCommands().then((cmds) => {\r\n\t\treturn { slash: cmds.slash, context: cmds.context };\r\n\t});\r\n\r\n\t// Tách lệnh Admin ra khỏi lệnh Toàn Cầu\r\n\tconst globalSlash = allCommands.slash.filter((cmd) => !cmd.adminOnly);\r\n\tconst adminSlash = allCommands.slash.filter((cmd) => cmd.adminOnly);\r\n\r\n\t// ====== DEPLOY LỆNH TOÀN CẦU (Tất cả Server đều thấy) ======\r\n\tconst globalCommands = [].concat(globalSlash).concat(allCommands.context);\r\n\tconsole.log(",
+    "✅ Lệnh toàn cầu đã được triển khai thành công!",
+    "Triển khai ${adminSlash.length} lệnh Admin vào Server trụ sở (${config.adminGuildId})...",
+    "✅ Lệnh Admin đã được triển khai vào Server trụ sở thành công!",
+    "⚠️ Không có adminGuildId trong config hoặc không có lệnh Admin nào."
+  ],
+  "deploy/deployGuild.js": [
+    "Nhập ID server bạn muốn triển khai lệnh: ",
+    "Đang triển khai lệnh cho server...",
+    "Đã triển khai lệnh thành công!"
+  ],
+  "deploy/destroyGlobal.js": [
+    "Không tìm thấy bất kỳ lệnh nào toàn cầu.",
+    "Lệnh Slash với ID ${command.id} đã được xóa.",
+    "Đã xóa thành công tất cả các lệnh Slash toàn cầu."
+  ],
+  "deploy/destroyGuild.js": [
+    "Nhập ID server bạn muốn xóa lệnh: ",
+    "Bot đã được khởi động để xóa lệnh...",
+    "Bot đã hoàn thành nhiệm vụ, đang thoát...",
+    "Bot đã được khởi động để xóa lệnh toàn cầu...",
+    "Bot đã hoàn thành nhiệm vụ, đang thoát..."
+  ]
+}

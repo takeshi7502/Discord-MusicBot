@@ -1,0 +1,1657 @@
+[
+  {
+    "dir": "247",
+    "key": "auto_1",
+    "value": "Giữ cho bot luôn luôn kết nối với VC (bật/tắt)"
+  },
+  {
+    "dir": "247",
+    "key": "auto_2",
+    "value": "Không có gì để phát 24/7."
+  },
+  {
+    "dir": "247",
+    "key": "auto_3",
+    "value": "**Chế độ 24/7 hiện tại là** `{var1}`"
+  },
+  {
+    "dir": "247",
+    "key": "auto_4",
+    "value": "Bot {var1} duy trì kết nối với kênh thoại 24/7."
+  },
+  {
+    "dir": "247",
+    "key": "auto_5",
+    "value": "Bot: {var1} | [{var2}] đã được [{var3}] trong {var4}"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_169",
+    "value": "Hiển thị hàng đợi hiện tại"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_170",
+    "value": "**♪ | Đang phát:** [{var1}]({var2})"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_171",
+    "value": "Âm lượng"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_172",
+    "value": "Tổng Số Bài Hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_173",
+    "value": "**♪ | Đang phát:** [{var1}]({var2}) [{var3}]\n\n**Số bài hát trong hàng đợi**\n{var4}"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_174",
+    "value": "Thời lượng của bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_175",
+    "value": "Tổng thời lượng của tất cả các bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_176",
+    "value": "Tổng số bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_177",
+    "value": "**♪ | Đang phát:** [{var1}]({var2}) [{var3}]\n\n**Số bài hát trong hàng đợi**\n{var4}"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_178",
+    "value": "Thời lượng của bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_179",
+    "value": "Tổng thời lượng của tất cả các bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_180",
+    "value": "Tổng số bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_181",
+    "value": "**♪ | Đang phát:** [{var1}]({var2}) [{var3}]\n\n**Số bài hát trong hàng đợi**\n{var4}"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_182",
+    "value": "Thời lượng của bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_183",
+    "value": "Tổng thời lượng của tất cả các bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_184",
+    "value": "Tổng số bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_185",
+    "value": "**♪ | Đang phát:** [{var1}]({var2}) [{var3}]\n\n**Số bài hát trong hàng đợi**\n{var4}"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_186",
+    "value": "Thời lượng của bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_187",
+    "value": "Tổng thời lượng của tất cả các bài hát"
+  },
+  {
+    "dir": "queue",
+    "key": "auto_188",
+    "value": "Tổng số bài hát"
+  },
+  {
+    "dir": "filters",
+    "key": "auto_48",
+    "value": "thêm hoặc xóa bộ lọc"
+  },
+  {
+    "dir": "filters",
+    "key": "auto_49",
+    "value": "bộ cài đặt để thêm vào"
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_142",
+    "value": "Lấy lời bài hát của một bài hát"
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_143",
+    "value": "Bài hát để lấy lời bài hát"
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_144",
+    "value": "Chọn một bài hát"
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_145",
+    "value": "Dưới đây là một số kết quả mà tôi tìm thấy cho `{var1}`. Vui lòng chọn một bài hát để hiển thị lời trong `30 giây`."
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_146",
+    "value": "Lời bài hát được cung cấp bởi MusixMatch."
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_147",
+    "value": "**Rất tiếc, chúng tôi không được ủy quyền để hiển thị lời bài hát này.**"
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_148",
+    "value": "Lời bài hát bị hạn chế bởi MusixMatch."
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_149",
+    "value": "\nBị cắt bớt, lời bài hát quá dài."
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_150",
+    "value": "Không có bài hát được chọn. Bạn đã mất quá nhiều thời gian để chọn một bản nhạc."
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_151",
+    "value": "Một lỗi không xác định đã xảy ra, vui lòng kiểm tra console của bạn."
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_152",
+    "value": "Mẹo Lấy Lời Bài Hát"
+  },
+  {
+    "dir": "lyrics",
+    "key": "auto_153",
+    "value": "Dưới đây là một số mẹo để lấy lời bài hát của bạn một cách chính xác \n\n        \t\t\t\t\t\t1. Thử thêm tên nghệ sĩ phía trước tên bài hát.\n        \t\t\t\t\t\t2. Thử tìm lời bài hát bằng cách nhập trực tiếp truy vấn bài hát bằng bàn phím.\n        \t\t\t\t\t\t3. Tránh tìm kiếm lời bài hát trong các ngôn ngữ khác ngoài tiếng Anh."
+  },
+  {
+    "dir": "save",
+    "key": "auto_204",
+    "value": "Lưu bài hát hiện tại vào DM."
+  },
+  {
+    "dir": "save",
+    "key": "auto_205",
+    "value": "Hiện tại không có bài hát nào đang phát."
+  },
+  {
+    "dir": "save",
+    "key": "auto_206",
+    "value": "Bài hát đã lưu"
+  },
+  {
+    "dir": "save",
+    "key": "auto_207",
+    "value": "**Đã lưu [{var1}]({var2}) vào tin nhắn riêng của bạn.**"
+  },
+  {
+    "dir": "save",
+    "key": "auto_208",
+    "value": "Thời lượng của bài hát"
+  },
+  {
+    "dir": "save",
+    "key": "auto_209",
+    "value": "Tác giả của bài hát"
+  },
+  {
+    "dir": "save",
+    "key": "auto_210",
+    "value": "Server được yêu cầu"
+  },
+  {
+    "dir": "save",
+    "key": "auto_211",
+    "value": "Vui lòng kiểm tra **DMs** của bạn. Nếu bạn không nhận được bất kỳ tin nhắn nào từ tôi, hãy đảm bảo rằng **DMs** của bạn đang mở."
+  },
+  {
+    "dir": "search",
+    "key": "auto_212",
+    "value": "Tìm kiếm một bài hát"
+  },
+  {
+    "dir": "search",
+    "key": "auto_213",
+    "value": "Bài hát để tìm kiếm"
+  },
+  {
+    "dir": "search",
+    "key": "auto_214",
+    "value": "Có lỗi xảy ra trong quá trình tìm kiếm bài hát"
+  },
+  {
+    "dir": "search",
+    "key": "auto_215",
+    "value": "Chọn một bài hát"
+  },
+  {
+    "dir": "search",
+    "key": "auto_216",
+    "value": "Dưới đây là một số kết quả mà tôi tìm thấy cho `{var1}`. Vui lòng chọn bài hát trong vòng `30 giây`"
+  },
+  {
+    "dir": "search",
+    "key": "auto_217",
+    "value": "Đã thêm vào hàng đợi"
+  },
+  {
+    "dir": "search",
+    "key": "auto_218",
+    "value": "Không có Tiêu đề"
+  },
+  {
+    "dir": "search",
+    "key": "auto_219",
+    "value": "Đã thêm bởi"
+  },
+  {
+    "dir": "search",
+    "key": "auto_220",
+    "value": "Không có bài hát nào được chọn. Bạn đã mất quá nhiều thời gian để chọn một bài hát."
+  },
+  {
+    "dir": "seek",
+    "key": "auto_221",
+    "value": "Chuyển đến một thời điểm cụ thể trong bài hát hiện tại."
+  },
+  {
+    "dir": "seek",
+    "key": "auto_222",
+    "value": "Chuyển đến thời điểm mà bạn muốn. Ví dụ: 1h 30m | 2h | 80m | 53s"
+  },
+  {
+    "dir": "seek",
+    "key": "auto_223",
+    "value": "⏩ | **{var1}** đã được {var2} tới **{var3}**"
+  },
+  {
+    "dir": "seek",
+    "key": "auto_224",
+    "value": "Không thể chuyển đến một thời điểm cụ thể của bài hát đang phát hiện tại. Điều này có thể do vượt quá thời lượng của bài hát hoặc định dạng thời gian không đúng. Hãy kiểm tra và thử lại."
+  },
+  {
+    "dir": "volume",
+    "key": "auto_255",
+    "value": "Thay đổi âm lượng của bài hát hiện tại."
+  },
+  {
+    "dir": "volume",
+    "key": "auto_256",
+    "value": "Lượng âm lượng mà bạn muốn thay đổi. Ví dụ: 10"
+  },
+  {
+    "dir": "volume",
+    "key": "auto_257",
+    "value": ":loud_sound: | Âm lượng hiện tại **{var1}**"
+  },
+  {
+    "dir": "volume",
+    "key": "auto_258",
+    "value": ":loud_sound: | Đã thiết lập âm lượng thành **{var1}**"
+  },
+  {
+    "dir": "invite",
+    "key": "auto_76",
+    "value": "Mời tớ vào máy chủ của bạn"
+  },
+  {
+    "dir": "invite",
+    "key": "auto_77",
+    "value": "Mời tớ vào máy chủ của bạn!"
+  },
+  {
+    "dir": "invite",
+    "key": "auto_78",
+    "value": "Mời luôn"
+  },
+  {
+    "dir": "help",
+    "key": "auto_72",
+    "value": "Hiển thị danh sách này"
+  },
+  {
+    "dir": "help",
+    "key": "auto_73",
+    "value": "Lệnh của {var1}"
+  },
+  {
+    "dir": "help",
+    "key": "auto_74",
+    "value": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}"
+  },
+  {
+    "dir": "help",
+    "key": "auto_75",
+    "value": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_21",
+    "value": "Phóng thanh thông báo (Chỉ dành cho Admin Bot)"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_22",
+    "value": "Nội dung tin nhắn cần thông báo"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_23",
+    "value": "Nhập ID Server để gửi riêng, chữ 'all' gửi toàn bộ, dấu '.' gửi Server này"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_24",
+    "value": "📢 Thông báo từ {var1}"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_25",
+    "value": "Nhấn nút bên dưới để thêm bot mới nhé!"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_26",
+    "value": "THÊM BOT"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_27",
+    "value": "SERVER CÁ NHÂN"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_28",
+    "value": "Chiến dịch Phóng Thanh hoàn tất!"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_29",
+    "value": "Đã loan tin rải thảm đến toàn bộ Server!"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_30",
+    "value": "Đã báo cáo mục tiêu thành công!"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_31",
+    "value": "✅ Đã setup kênh"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_32",
+    "value": "{var1} kênh"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_33",
+    "value": "⚠️ Rải ngẫu nhiên"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_34",
+    "value": "{var1} kênh"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_35",
+    "value": "❌ Thất bại"
+  },
+  {
+    "dir": "broadcast",
+    "key": "auto_36",
+    "value": "{var1} kênh"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_50",
+    "value": "Rời khỏi máy chủ"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_51",
+    "value": "Nhập ID máy chủ để rời đi | `list` = danh sách | `all` = rời tất cả máy chủ"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_52",
+    "value": "**{var1}.** **{var2}** - (`{var3}`) ({var4} bé)"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_53",
+    "value": "Trống."
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_54",
+    "value": "Bạn sắp ra lệnh cho Bot rời khỏi **tất cả {var1} máy chủ** hiện tại!\n\n"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_55",
+    "value": "**Danh sách:**\n"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_56",
+    "value": "\n\n⚠️ **Hành động này không thể hoàn tác!**"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_57",
+    "value": "Xác nhận trong vòng 30 giây"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_58",
+    "value": "✅ Xác nhận — Rời tất cả"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_59",
+    "value": "❌ Huỷ bỏ"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_60",
+    "value": "[GuildLeave:ALL] Bỏ qua Server Trụ Sở Admin: {var1}"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_61",
+    "value": "[GuildLeave:ALL] Rời: {var1} ({var2})"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_62",
+    "value": "[GuildLeave:ALL] Lỗi rời: {var1} ({var2})"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_63",
+    "value": "🚪 Hoàn tất rời máy chủ"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_64",
+    "value": "✅ Rời thành công: **{var1}** máy chủ\n"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_65",
+    "value": "❌ Thất bại: **{var1}** máy chủ"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_66",
+    "value": "⏰ Hết thời gian xác nhận. Đã huỷ thao tác."
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_67",
+    "value": "[GuildLeave] Không tìm thấy máy chủ: {var1}"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_68",
+    "value": "`{var1}` không phải là một ID máy chủ hợp lệ hoặc Bot chưa tham gia."
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_69",
+    "value": "[GuildLeave] Rời: {var1} ({var2})"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_70",
+    "value": "✅ Đã rời khỏi máy chủ **{var1}** (`{var2}`)"
+  },
+  {
+    "dir": "guildleave",
+    "key": "auto_71",
+    "value": "[GuildLeave] Lỗi:"
+  },
+  {
+    "dir": "cmd",
+    "key": "auto_44",
+    "value": "Hiển thị danh sách lệnh ẩn của hệ thống (Chỉ dành cho Admin)"
+  },
+  {
+    "dir": "cmd",
+    "key": "auto_45",
+    "value": "Lệnh Admin của {var1}"
+  },
+  {
+    "dir": "cmd",
+    "key": "auto_46",
+    "value": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}"
+  },
+  {
+    "dir": "cmd",
+    "key": "auto_47",
+    "value": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_189",
+    "value": "Tải lại tất cả các lệnh và cấu hình Lavalink"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_190",
+    "value": "✅ Đã tải lại `{var1}` lệnh"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_191",
+    "value": "✅ Đã nạp lại cấu hình (config.js)"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_192",
+    "value": "✅ Đã xoá cache Events"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_193",
+    "value": "Reload bởi {var1}: {var2}"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_194",
+    "value": "♻️ Reload Hoàn Tất!"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_195",
+    "value": "Thực hiện bởi {var1}"
+  },
+  {
+    "dir": "reload",
+    "key": "auto_196",
+    "value": "❌ Lỗi khi Reload: `{var1}`"
+  },
+  {
+    "dir": "setlog",
+    "key": "auto_225",
+    "value": "Thiết lập kênh báo cáo Bot Join/Leave Server (Chỉ dành cho Admin Bot)"
+  },
+  {
+    "dir": "setlog",
+    "key": "auto_226",
+    "value": "Chọn một kênh để bot spam báo cáo mỗi khi có người Invite bot"
+  },
+  {
+    "dir": "setlog",
+    "key": "auto_227",
+    "value": "✅ | Đã quy hoạch trạm tình báo! Từ nay mỗi khi Bot chui vào Server lạ hoặc bị sút khỏi Server nào, nó sẽ bẩm báo về <#{var1}>"
+  },
+  {
+    "dir": "setup",
+    "key": "auto_228",
+    "value": "Thiết lập kênh nhận thông báo riêng tư từ Bot"
+  },
+  {
+    "dir": "setup",
+    "key": "auto_229",
+    "value": "Chọn kênh để nhận thông báo update"
+  },
+  {
+    "dir": "setup",
+    "key": "auto_230",
+    "value": "✅ | Kênh nhận thông báo cập nhật đã được thiết lập thành <#{var1}>"
+  },
+  {
+    "dir": "stats",
+    "key": "auto_237",
+    "value": "Nhận thông tin về bot"
+  },
+  {
+    "dir": "stats",
+    "key": "auto_238",
+    "value": "{var1} Thông Tin"
+  },
+  {
+    "dir": "stats",
+    "key": "auto_239",
+    "value": "• **Đang phát**: {var1} phòng • **Kết nối**: {var2} phòng\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_79",
+    "value": "Quản lý Lavalink Nodes (add/remove/replace/list/test)"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_80",
+    "value": "Hành động cần thực hiện"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_81",
+    "value": "📋 list — Xem danh sách nodes"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_82",
+    "value": "➕ add — Thêm node mới"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_83",
+    "value": "➖ remove — Xoá node"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_84",
+    "value": "🔄 replace — Thay thế node"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_85",
+    "value": "♻️ reload — Tải lại cấu hình nodes"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_86",
+    "value": "[add/test] Địa chỉ máy chủ (VD: lavalink.example.com)"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_87",
+    "value": "[add/test] Cổng kết nối (VD: 443, 80, 2333)"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_88",
+    "value": "[add/test] Mật khẩu Authorization"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_89",
+    "value": "[add/test] Dùng SSL? (true = HTTPS)"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_90",
+    "value": "[remove/replace] ID node cần xoá hoặc thay thế (VD: node1, node2)"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_91",
+    "value": "Bạn không có quyền sử dụng lệnh này!"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_92",
+    "value": "📋 **Danh Sách Lavalink Nodes** ({var1}/{var2})\n\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_93",
+    "value": " | Mất kết nối"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_94",
+    "value": "🔍 Đang ping `{var1}://{var2}:{var3}`..."
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_95",
+    "value": "➕ Thêm Node này"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_96",
+    "value": "Đây không phải lệnh của bạn!"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_97",
+    "value": "❌ Node `{var1}:{var2}` đã tồn tại!"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_98",
+    "value": "✅ **Đã thêm node thành công!**\n**ID:** `{var1}`\n**Host:** `{var2}:{var3}` ({var4})\n**Tổng nodes:** {var5}/{var6}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_99",
+    "value": "➕ **Node Mới Đã Thêm**\n**ID:** `{var1}` | **Host:** `{var2}:{var3}`\n**Tổng nodes:** {var4}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_100",
+    "value": "❌ **Không thể kết nối!**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_101",
+    "value": "**Lỗi:** `{var1}`"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_102",
+    "value": "❌ Đã đạt giới hạn **{var1} nodes**! Xoá bot 1 node trước."
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_103",
+    "value": "❌ Node `{var1}:{var2}` đã tồn tại!"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_104",
+    "value": "❌ **Không thể kết nối!** Node này không hoạt động.\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_105",
+    "value": "**Lỗi:** `{var1}`\n\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_106",
+    "value": "Dùng `/lavalink action:test` để kiểm tra lại."
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_107",
+    "value": "✅ **Đã thêm node thành công!**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_108",
+    "value": "**Tổng nodes:** {var1}/{var2}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_109",
+    "value": "➕ **Node Mới Đã Thêm**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_110",
+    "value": "**Tổng nodes:** {var1}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_111",
+    "value": "❌ Không tìm thấy node `{var1}`!\n**Nodes hiện có:** {var2}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_112",
+    "value": "✅ **Đã xoá node thành công!**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_113",
+    "value": "**Players bị ảnh hưởng:** {var1}\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_114",
+    "value": "**Nodes còn lại:** {var1}/{var2}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_115",
+    "value": "➖ **Node Đã Xoá**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_116",
+    "value": "**Nodes còn lại:** {var1}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_117",
+    "value": "❌ Không tìm thấy node `{var1}`!\n**Nodes hiện có:** {var2}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_118",
+    "value": "❌ **Không thể kết nối node mới!**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_119",
+    "value": "**Lỗi:** `{var1}`\n\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_120",
+    "value": "Node `{var1}` giữ nguyên không thay đổi."
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_121",
+    "value": "✅ **Đã thay thế node thành công!**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_122",
+    "value": "**Cũ:** `{var1}:{var2}`\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_123",
+    "value": "**Mới:** `{var1}:{var2}` ({var3})\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_124",
+    "value": "**Players bị ảnh hưởng:** {var1}\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_125",
+    "value": "🔄 **Node Đã Thay Thế**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_126",
+    "value": "**Cũ:** `{var1}:{var2}`\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_127",
+    "value": "**Mới:** `{var1}:{var2}`"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_128",
+    "value": "🔄 **Nodes đã thay đổi:** "
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_129",
+    "value": "+{var1} Thêm | "
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_130",
+    "value": "-{var1} Xoá | "
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_131",
+    "value": "={var1} Giữ lại"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_132",
+    "value": "🔄 **Không có thay đổi mới.** Kết nối lại {var1} nodes..."
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_133",
+    "value": "✅ **Tải lại Lavalink thành công!**\n**Đã kết nối:** `{var1}` nodes.\n{var2}"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_134",
+    "value": "🔄 **Lavalink Đã Thay Đổi (Reload)**\n"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_135",
+    "value": "**Kết nối:** {var1} node"
+  },
+  {
+    "dir": "lavalink",
+    "key": "auto_136",
+    "value": "❌ Lỗi Reload Lavalink: `{var1}`"
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_316",
+    "value": "Triển khai {var1} lệnh ra toàn cầu..."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_317",
+    "value": "✅ Lệnh toàn cầu đã được triển khai thành công!"
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_318",
+    "value": "Triển khai {var1} lệnh Admin vào Server trụ sở ({var2})..."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_319",
+    "value": "✅ Lệnh Admin đã được triển khai vào Server trụ sở thành công!"
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_320",
+    "value": "⚠️ Không có adminGuildId trong config hoặc không có lệnh Admin nào."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_321",
+    "value": "Nhập ID server bạn muốn triển khai lệnh: "
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_322",
+    "value": "Đang triển khai lệnh cho server..."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_323",
+    "value": "Đã triển khai lệnh thành công!"
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_324",
+    "value": "Không tìm thấy bất kỳ lệnh nào toàn cầu."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_325",
+    "value": "Lệnh Slash với ID {var1} đã được xóa."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_326",
+    "value": "Đã xóa thành công tất cả các lệnh Slash toàn cầu."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_327",
+    "value": "Nhập ID server bạn muốn xóa lệnh: "
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_328",
+    "value": "Bot đã được khởi động để xóa lệnh..."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_329",
+    "value": "Bot đã hoàn thành nhiệm vụ, đang thoát..."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_330",
+    "value": "Bot đã được khởi động để xóa lệnh toàn cầu..."
+  },
+  {
+    "dir": "deploy",
+    "key": "auto_331",
+    "value": "Bot đã hoàn thành nhiệm vụ, đang thoát..."
+  },
+  {
+    "dir": "autoleave",
+    "key": "auto_6",
+    "value": "Tự động rời đi khi mọi người rời khỏi kênh thoại (bật/tắt)"
+  },
+  {
+    "dir": "autoleave",
+    "key": "auto_7",
+    "value": "Không có gì đang phát trong hàng đợi"
+  },
+  {
+    "dir": "autoleave",
+    "key": "auto_8",
+    "value": "**Chế độ Tự Động Rời** `{var1}`"
+  },
+  {
+    "dir": "autoleave",
+    "key": "auto_9",
+    "value": "Bot sẽ {var1} rời đi khi kênh thoại trống."
+  },
+  {
+    "dir": "autoleave",
+    "key": "auto_10",
+    "value": "Bot: {var1} | [{var2}] đã được [{var3}] trong {var4}"
+  },
+  {
+    "dir": "autopause",
+    "key": "auto_11",
+    "value": "Tự động tạm dừng khi mọi người rời khỏi kênh thoại (bật/tắt)"
+  },
+  {
+    "dir": "autopause",
+    "key": "auto_12",
+    "value": "Không có gì đang phát trong hàng đợi"
+  },
+  {
+    "dir": "autopause",
+    "key": "auto_13",
+    "value": "**Chế độ Tự Động Tạm Dừng** `{var1}`"
+  },
+  {
+    "dir": "autopause",
+    "key": "auto_14",
+    "value": "Trình phát sẽ {var1} dừng khi mọi người rời khỏi kênh thoại."
+  },
+  {
+    "dir": "autopause",
+    "key": "auto_15",
+    "value": "Bot: {var1} | [{var2}] đã được [{var3}] trong {var4}"
+  },
+  {
+    "dir": "autoqueue",
+    "key": "auto_16",
+    "value": "Tự động thêm bài hát vào hàng đợi (bật/tắt)"
+  },
+  {
+    "dir": "autoqueue",
+    "key": "auto_17",
+    "value": "Không có gì đang phát trong hàng đợi."
+  },
+  {
+    "dir": "autoqueue",
+    "key": "auto_18",
+    "value": "**Chế độ Tự Động Thêm vào Hàng Đợi** `{var1}`"
+  },
+  {
+    "dir": "autoqueue",
+    "key": "auto_19",
+    "value": "Âm nhạc liên quan sẽ {var1} được thêm vào hàng đợi."
+  },
+  {
+    "dir": "autoqueue",
+    "key": "auto_20",
+    "value": "Bot: {var1} | [{var2}] đã được [{var3}] trong {var4}"
+  },
+  {
+    "dir": "clean",
+    "key": "auto_37",
+    "value": "Làm sạch 100 tin nhắn cuối cùng của bot từ kênh."
+  },
+  {
+    "dir": "clean",
+    "key": "auto_38",
+    "value": "Số lượng tin nhắn cần xóa."
+  },
+  {
+    "dir": "clean",
+    "key": "auto_39",
+    "value": "Đang xóa [{var1}] tin nhắn cũ hơn 14 ngày."
+  },
+  {
+    "dir": "clean",
+    "key": "auto_40",
+    "value": ":white_check_mark: | Đã xóa {var1} tin nhắn của bot."
+  },
+  {
+    "dir": "clear",
+    "key": "auto_41",
+    "value": "Xóa tất cả các bài hát khỏi hàng đợi."
+  },
+  {
+    "dir": "clear",
+    "key": "auto_42",
+    "value": "Hiện tại không có bài hát nào đang phát."
+  },
+  {
+    "dir": "clear",
+    "key": "auto_43",
+    "value": "❌ | **Không hợp lệ, không đủ bài hát để xóa.**"
+  },
+  {
+    "dir": "loop",
+    "key": "auto_137",
+    "value": "Lặp lại bài hát hiện tại"
+  },
+  {
+    "dir": "loop",
+    "key": "auto_138",
+    "value": "Hiện tại không có bài hát nào đang phát."
+  },
+  {
+    "dir": "loop",
+    "key": "auto_139",
+    "value": "👍 | **Lặp đã được kích hoạt `{var1}`**"
+  },
+  {
+    "dir": "loopq",
+    "key": "auto_140",
+    "value": "Không có bài hát đang phát."
+  },
+  {
+    "dir": "loopq",
+    "key": "auto_141",
+    "value": ":thumbsup: | **Lặp hàng đợi đã kích hoạt `{var1}`**"
+  },
+  {
+    "dir": "move",
+    "key": "auto_154",
+    "value": "Di chuyển bài hát đến một vị trí khác"
+  },
+  {
+    "dir": "move",
+    "key": "auto_155",
+    "value": "Số thứ tự của bài hát để di chuyển"
+  },
+  {
+    "dir": "move",
+    "key": "auto_156",
+    "value": "Vị trí để di chuyển bài hát đến"
+  },
+  {
+    "dir": "move",
+    "key": "auto_157",
+    "value": ":x: | **Số thứ tự bài hát không hợp lệ**"
+  },
+  {
+    "dir": "move",
+    "key": "auto_158",
+    "value": ":x: | **Số thứ tự vị trí không hợp lệ**"
+  },
+  {
+    "dir": "nowplaying",
+    "key": "auto_159",
+    "value": "Hiển thị bài hát đang phát hiện tại trong kênh thoại."
+  },
+  {
+    "dir": "nowplaying",
+    "key": "auto_160",
+    "value": "Đang Phát"
+  },
+  {
+    "dir": "nowplaying",
+    "key": "auto_161",
+    "value": "Được yêu cầu bởi"
+  },
+  {
+    "dir": "pause",
+    "key": "auto_162",
+    "value": "Tạm dừng bài hát đang phát"
+  },
+  {
+    "dir": "pause",
+    "key": "auto_163",
+    "value": "⏸ | **Đã Dừng**"
+  },
+  {
+    "dir": "ping",
+    "key": "auto_164",
+    "value": "Xem độ trễ của bot"
+  },
+  {
+    "dir": "play",
+    "key": "auto_165",
+    "value": "Tìm kiếm và phát bài hát từ YouTube"
+  },
+  {
+    "dir": "play",
+    "key": "auto_166",
+    "value": "Bạn đang tìm gì?"
+  },
+  {
+    "dir": "play",
+    "key": "auto_259",
+    "value": "Phát Bài Hát"
+  },
+  {
+    "dir": "previous",
+    "key": "auto_167",
+    "value": "Quay lại bài hát trước đó."
+  },
+  {
+    "dir": "previous",
+    "key": "auto_168",
+    "value": "⏮ | Bài hát trước đó: **{var1}**"
+  },
+  {
+    "dir": "remove",
+    "key": "auto_197",
+    "value": "Xóa bài hát bạn không muốn khỏi hàng đợi"
+  },
+  {
+    "dir": "remove",
+    "key": "auto_198",
+    "value": "Nhập số thứ tự của bài hát."
+  },
+  {
+    "dir": "remove",
+    "key": "auto_199",
+    "value": "Hàng đợi hiện tại chỉ có **{var1}** bài hát."
+  },
+  {
+    "dir": "replay",
+    "key": "auto_200",
+    "value": "Phát lại bài hát đang phát"
+  },
+  {
+    "dir": "resume",
+    "key": "auto_201",
+    "value": "Tiếp tục phát bài hát hiện tại."
+  },
+  {
+    "dir": "resume",
+    "key": "auto_202",
+    "value": "Không có bài hát nào đang phát hiện tại."
+  },
+  {
+    "dir": "resume",
+    "key": "auto_203",
+    "value": "⏯ **Đã tiếp tục phát!**"
+  },
+  {
+    "dir": "shuffle",
+    "key": "auto_231",
+    "value": "Ngẫu nhiên hoá hàng đợi"
+  },
+  {
+    "dir": "skip",
+    "key": "auto_232",
+    "value": "Bỏ qua bài hát hiện tại"
+  },
+  {
+    "dir": "skipto",
+    "key": "auto_233",
+    "value": "bỏ qua đến một bài hát cụ thể trong hàng đợi"
+  },
+  {
+    "dir": "skipto",
+    "key": "auto_234",
+    "value": "Số lượng bản nhạc để bỏ qua đến"
+  },
+  {
+    "dir": "skipto",
+    "key": "auto_235",
+    "value": "✅ | Đã bỏ qua đến vị trí chỉ định "
+  },
+  {
+    "dir": "skipto",
+    "key": "auto_236",
+    "value": "✅ | Đã bỏ qua đến vị trí chỉ định "
+  },
+  {
+    "dir": "status",
+    "key": "auto_240",
+    "value": ":bar_chart: **Trạng Thái Hệ Thống**\n"
+  },
+  {
+    "dir": "status",
+    "key": "auto_241",
+    "value": "\n:warning: **Không có node Lavalink nào!**"
+  },
+  {
+    "dir": "status",
+    "key": "auto_242",
+    "value": "Đang hoạt động"
+  },
+  {
+    "dir": "status",
+    "key": "auto_243",
+    "value": "Mất kết nối"
+  },
+  {
+    "dir": "status",
+    "key": "auto_244",
+    "value": "🔄 Đang tự động cập nhật mỗi 5s • {var1}"
+  },
+  {
+    "dir": "status",
+    "key": "auto_245",
+    "value": "Cập nhật lúc {var1}"
+  },
+  {
+    "dir": "status",
+    "key": "auto_246",
+    "value": "🔄 Auto Làm mới"
+  },
+  {
+    "dir": "status",
+    "key": "auto_247",
+    "value": "⏹ Tắt Auto"
+  },
+  {
+    "dir": "status",
+    "key": "auto_248",
+    "value": "Xem trạng thái Bot & Lavalink"
+  },
+  {
+    "dir": "stop",
+    "key": "auto_249",
+    "value": "Dừng lại những gì bot đang phát và rời khỏi kênh thoại\n(Lưu ý: Lệnh này sẽ xóa toàn bộ hàng đợi)"
+  },
+  {
+    "dir": "stop",
+    "key": "auto_250",
+    "value": "Tôi không ở trong một kênh thoại."
+  },
+  {
+    "dir": "stop",
+    "key": "auto_251",
+    "value": "**👋 | Tạm biệt nha!** (Đã dừng bởi <@{var1}>)"
+  },
+  {
+    "dir": "summon",
+    "key": "auto_252",
+    "value": "Gọi bot vào kênh."
+  },
+  {
+    "dir": "summon",
+    "key": "auto_253",
+    "value": "❌ | **Bạn phải ở trong một kênh thoại để sử dụng lệnh này.**"
+  },
+  {
+    "dir": "summon",
+    "key": "auto_254",
+    "value": ":thumbsup: | **Đã tham gia thành công <#{var1}>!**"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_260",
+    "value": "Bot vừa được mời vào máy chủ mới: {var1} (ID: {var2}) - Bề tôi: {var3}"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_261",
+    "value": "Không rõ"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_262",
+    "value": "🚀 BOT VỪA CẬP BẾN MÁY CHỦ MỚI!"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_263",
+    "value": "Tên Server"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_264",
+    "value": "Số thành viên"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_265",
+    "value": "Chủ Server"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_266",
+    "value": "Tổng Server Bot đang ở"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_267",
+    "value": "Cảm ơn vì đã sử dụng Bot!"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_268",
+    "value": "👋 Xin chào!"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_269",
+    "value": "Chào mn! Tekisha Music là một Bot Nghe nhạc miễn phí với đầy đủ tính năng, không quảng cáo, không tính phí, không giới hạn thời gian sử dụng.\n"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_270",
+    "value": "*Cảm ơn bạn đã sử dụng Bot. Gõ `/help` để khám phá các lệnh nhé!*\n\n"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_271",
+    "value": "**Bạn Admin Server gõ lệnh sau để chỉ định kênh nhận tin nhé:**\n"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_272",
+    "value": "👉 Gõ lệnh: `/setup`\n"
+  },
+  {
+    "dir": "guildCreate",
+    "key": "auto_273",
+    "value": "Lỗi guildCreate: {var1}"
+  },
+  {
+    "dir": "guildDelete",
+    "key": "auto_274",
+    "value": "Bot vừa bị đuổi khỏi máy chủ: {var1} (ID: {var2})"
+  },
+  {
+    "dir": "guildDelete",
+    "key": "auto_275",
+    "value": "💔 BOT ĐÃ RỜI KHỎI MÁY CHỦ!"
+  },
+  {
+    "dir": "guildDelete",
+    "key": "auto_276",
+    "value": "Tên Server"
+  },
+  {
+    "dir": "guildDelete",
+    "key": "auto_277",
+    "value": "Tổng Server Bot đang ở"
+  },
+  {
+    "dir": "guildDelete",
+    "key": "auto_278",
+    "value": "Lỗi guildDelete: {var1}"
+  },
+  {
+    "dir": "messageCreate",
+    "key": "auto_279",
+    "value": "Mời tớ"
+  },
+  {
+    "dir": "messageCreate",
+    "key": "auto_280",
+    "value": "Dùng `/` trong máy chủ để sử dụng lệnh.\nBạn có thể bắt đầu với `/help` để xem tất cả lệnh.\nNếu bạn thấy bot có vấn đề, hãy báo cáo cho <@648036769769717760>.\nCám ơn bạn đã sử dụng bot!"
+  },
+  {
+    "dir": "ready",
+    "key": "auto_281",
+    "value": "Lavalink init lỗi: {var1}"
+  },
+  {
+    "dir": "ready",
+    "key": "auto_282",
+    "value": "⚠️ **Lavalink Gặp Lỗi Khi Khởi Động**\n**Lỗi:** `{var1}`"
+  },
+  {
+    "dir": "ready",
+    "key": "auto_283",
+    "value": "Đã đăng nhập thành công với tư cách là "
+  },
+  {
+    "dir": "voiceStateUpdate",
+    "key": "auto_284",
+    "value": "Tiếp Tục!"
+  },
+  {
+    "dir": "voiceStateUpdate",
+    "key": "auto_285",
+    "value": "Bản nhạc hiện tại đã được tiếp tục"
+  },
+  {
+    "dir": "voiceStateUpdate",
+    "key": "auto_286",
+    "value": "Tạm Dừng!"
+  },
+  {
+    "dir": "voiceStateUpdate",
+    "key": "auto_287",
+    "value": "Bản nhạc hiện tại đã bị tạm dừng vì không có ai trong kênh thoại."
+  },
+  {
+    "dir": "voiceStateUpdate",
+    "key": "auto_288",
+    "value": "Tạm Dừng!"
+  },
+  {
+    "dir": "voiceStateUpdate",
+    "key": "auto_289",
+    "value": "Bản nhạc hiện tại đã bị tạm dừng vì không có ai trong kênh thoại."
+  },
+  {
+    "dir": "Controller",
+    "key": "auto_290",
+    "value": "Người chơi: {var1} | Đã dừng trình phát nhạc."
+  },
+  {
+    "dir": "Controller",
+    "key": "auto_291",
+    "value": "Không có bài hát trước đó được phát."
+  },
+  {
+    "dir": "Controller",
+    "key": "auto_292",
+    "value": "Người chơi: {var1} | {var2} người chơi thành công"
+  },
+  {
+    "dir": "Controller",
+    "key": "auto_293",
+    "value": "Người chơi: {var1} | Đã bật/tắt lặp {var2} thành công"
+  },
+  {
+    "dir": "getConfig",
+    "key": "auto_294",
+    "value": "Không tìm thấy tệp cấu hình."
+  },
+  {
+    "dir": "guildDb",
+    "key": "auto_295",
+    "value": "[ERROR] Không thể tạo thư mục cơ sở dữ liệu cho máy chủ, có thể module sẽ không hoạt động đúng cách."
+  },
+  {
+    "dir": "guildDb",
+    "key": "auto_296",
+    "value": "Không có cơ sở dữ liệu với tên đó "
+  },
+  {
+    "dir": "guildDb",
+    "key": "auto_297",
+    "value": "[ERROR] Lỗi không mong đợi:"
+  },
+  {
+    "dir": "i18n",
+    "key": "auto_298",
+    "value": "[i18n] Lỗi đọc file {var1}: {var2}"
+  },
+  {
+    "dir": "i18n",
+    "key": "auto_299",
+    "value": "[i18n] Ngôn ngữ \"{var1}\" không tồn tại, giữ nguyên \"{var2}\""
+  },
+  {
+    "dir": "loadCommands",
+    "key": "auto_300",
+    "value": "Không thể tải lệnh: "
+  },
+  {
+    "dir": "loadCommands",
+    "key": "auto_301",
+    "value": ", Tệp không có lệnh nào"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_302",
+    "value": "[Lavalink Notify] Chưa set /setlog, bỏ qua thông báo."
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_303",
+    "value": "🔴 **Lavalink Đã Ngắt Kết Nối**\n**Node:** `{var1}`|`{var2}:{var3}`|`{var4}`"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_304",
+    "value": "\n**Players bị ảnh hưởng:** {var1}"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_305",
+    "value": "\n✅ **Node còn sống:** {var1}"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_306",
+    "value": "\n→ Players mới sẽ tự động dùng node còn sống."
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_307",
+    "value": "\n❌ **Không còn node nào hoạt động!**"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_308",
+    "value": "Bot: {var1} | Bài hát gặp lỗi: {var2}."
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_309",
+    "value": "Bot: {var1} | Một Bot mới đã được tạo trong {var2}"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_310",
+    "value": "Bot: {var1} | Một Bot mới đã bị hủy trong {var2}"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_311",
+    "value": "Bot: {var1} | Bài hát đã bắt đầu phát [{var2}]"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_312",
+    "value": "Không thể tải lệnh: "
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_313",
+    "value": ", Tệp không có một lệnh hợp lệ với chức năng chạy"
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_314",
+    "value": "Không thể tải lệnh: "
+  },
+  {
+    "dir": "DiscordMusicBot",
+    "key": "auto_315",
+    "value": ", Tệp không chứa lệnh command/run"
+  }
+]
