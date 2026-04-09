@@ -69,7 +69,7 @@ async function pingNode(host, port, password, secure) {
 
 const command = new SlashCommand()
   .setName("lavalink")
-  .setDescription("Quản lý Lavalink Nodes (add/remove/list/test)")
+  .setDescription("Quản lý Lavalink Nodes (add/remove/replace/list/test)")
   .setAdminOnly(true)
   .addStringOption((option) =>
     option
@@ -80,6 +80,7 @@ const command = new SlashCommand()
         { name: "📋 list — Xem danh sách nodes", value: "list" },
         { name: "➕ add — Thêm node mới", value: "add" },
         { name: "➖ remove — Xoá node", value: "remove" },
+        { name: "🔄 replace — Thay thế node", value: "replace" },
         { name: "🔍 test — Test 1 node", value: "test" },
         { name: "♻️ reload — Tải lại cấu hình nodes", value: "reload" },
       )
@@ -97,7 +98,7 @@ const command = new SlashCommand()
     option.setName("secure").setDescription("[add/test] Dùng SSL? (true = HTTPS)").setRequired(false)
   )
   .addStringOption((option) =>
-    option.setName("idnode").setDescription("[remove] ID node cần xoá (VD: node1, node2)").setRequired(false)
+    option.setName("idnode").setDescription("[remove/replace] ID node cần xoá hoặc thay thế (VD: node1, node2)").setRequired(false)
   )
   .setRun(async (client, interaction, options) => {
     if (interaction.user.id !== client.config.adminId) {
@@ -473,6 +474,152 @@ const command = new SlashCommand()
                 `➖ **Node Đã Xoá**\n` +
                 `**ID:** \`${removedNode.id}\` | **Host:** \`${removedNode.host}:${removedNode.port}\`\n` +
                 `**Nodes còn lại:** ${configNodes.length}`
+              )
+              .setTimestamp()
+          );
+        }
+
+      } catch (err) {
+        return interaction.editReply({
+          embeds: [new EmbedBuilder().setColor("#FF0000").setDescription(`❌ Lỗi: \`${err.message}\``)],
+        });
+      }
+    }
+
+    // ================================================================
+    // ACTION: REPLACE
+    // ================================================================
+    if (action === "replace") {
+      const idnode = options.getString("idnode")?.trim().toLowerCase();
+      const host = options.getString("host")?.trim();
+      const port = options.getInteger("port");
+      const password = options.getString("password");
+      const secure = options.getBoolean("secure") ?? false;
+
+      if (!idnode) {
+        return interaction.editReply({
+          embeds: [new EmbedBuilder().setColor("#FF0000").setDescription("❌ Cần nhập `idnode` — ID node cần thay thế (VD: node1, node2)")],
+        });
+      }
+
+      if (!host || !port || !password) {
+        return interaction.editReply({
+          embeds: [new EmbedBuilder().setColor("#FF0000").setDescription("❌ Cần nhập đầy đủ: `host`, `port`, `password` cho node thay thế")],
+        });
+      }
+
+      const configNodes = client.config.nodes || [];
+      const nodeIndex = configNodes.findIndex(n => n.id.toLowerCase() === idnode);
+
+      if (nodeIndex === -1) {
+        const available = configNodes.map(n => `\`${n.id}\``).join(", ");
+        return interaction.editReply({
+          embeds: [new EmbedBuilder().setColor("#FF0000").setDescription(
+            `❌ Không tìm thấy node \`${idnode}\`!\n**Nodes hiện có:** ${available}`
+          )],
+        });
+      }
+
+      const oldNode = configNodes[nodeIndex];
+
+      // Test node mới trước
+      await interaction.editReply({
+        embeds: [new EmbedBuilder().setColor("#FFAA00").setDescription(
+          `🔍 Đang test node mới \`${host}:${port}\` trước khi thay thế \`${oldNode.id}\`...`
+        )],
+      });
+
+      const result = await pingNode(host, port, password, secure);
+      if (!result.success) {
+        return interaction.editReply({
+          embeds: [new EmbedBuilder().setColor("#FF0000").setDescription(
+            `❌ **Không thể kết nối node mới!**\n` +
+            `**Host:** \`${host}:${port}\`\n` +
+            `**Lỗi:** \`${result.error}\`\n\n` +
+            `Node \`${oldNode.id}\` giữ nguyên không thay đổi.`
+          )],
+        });
+      }
+
+      try {
+        // Xoá player đang chạy trên node cũ
+        const playersOnNode = [...client.manager.players.values()].filter(p => p.node?.id?.toLowerCase() === idnode);
+        for (const player of playersOnNode) {
+          try {
+            const nowPlayingMsg = player.get("nowPlayingMessage");
+            if (nowPlayingMsg) await nowPlayingMsg.delete().catch(() => {});
+            const textChannel = client.channels.cache.get(player.textChannelId);
+            if (textChannel) {
+              await textChannel.send({
+                embeds: [new EmbedBuilder()
+                  .setColor("#FF8800")
+                  .setDescription(`⚠️ **Server nhạc đang được thay thế!**\nBạn dùng \`/play\` để phát lại nhạc nhé.`)
+                  .setTimestamp()
+                ],
+              }).catch(() => {});
+            }
+            await player.destroy().catch(() => {});
+          } catch (e) {}
+        }
+
+        // Ngắt kết nối node cũ
+        const liveNode = client.manager.nodeManager.nodes.get(oldNode.id);
+        if (liveNode) {
+          try {
+            await liveNode.destroy();
+          } catch (e) {
+            client.manager.nodeManager.nodes.delete(oldNode.id);
+          }
+        }
+
+        // Cập nhật config — giữ nguyên ID cũ, thay thông số mới
+        const newNodeConfig = {
+          id: oldNode.id, // giữ nguyên ID
+          host,
+          port,
+          authorization: password,
+          retryAmount: 200,
+          retryDelay: 40,
+          secure,
+          requestTimeout: 60000,
+        };
+
+        configNodes[nodeIndex] = newNodeConfig;
+        writeNodesToConfig(configNodes);
+        client.config.nodes = configNodes;
+        client.manager.options.nodes = configNodes;
+
+        // Tạo + kết nối node mới
+        client.manager.nodeManager.createNode(newNodeConfig);
+        await client.manager.nodeManager.connectAll();
+
+        // Reset cờ thông báo
+        if (client.lavalinkNotified) client.lavalinkNotified.delete(oldNode.id);
+
+        const embed = new EmbedBuilder()
+          .setColor("#00FF00")
+          .setDescription(
+            `✅ **Đã thay thế node thành công!**\n` +
+            `**ID:** \`${oldNode.id}\`\n` +
+            `**Cũ:** \`${oldNode.host}:${oldNode.port}\`\n` +
+            `**Mới:** \`${host}:${port}\` (${secure ? "SSL" : "Non-SSL"})\n` +
+            `**Latency:** ${result.latency}ms\n` +
+            (playersOnNode.length > 0 ? `**Players bị ảnh hưởng:** ${playersOnNode.length}\n` : "")
+          )
+          .setTimestamp();
+
+        await interaction.editReply({ embeds: [embed] });
+
+        // Thông báo kênh setlog
+        if (client.sendLavalinkNotification) {
+          client.sendLavalinkNotification(
+            new EmbedBuilder()
+              .setColor("#00AAFF")
+              .setDescription(
+                `🔄 **Node Đã Thay Thế**\n` +
+                `**ID:** \`${oldNode.id}\`\n` +
+                `**Cũ:** \`${oldNode.host}:${oldNode.port}\`\n` +
+                `**Mới:** \`${host}:${port}\``
               )
               .setTimestamp()
           );
