@@ -21,17 +21,18 @@ const command = new SlashCommand().setName("clean").setDescription(t("clean.auto
       return m.author.id === client.user.id && !isPlayingMessage;
     }).forEach(msg => botMessages.push(msg));
     botMessages.shift();
+    // Thủ thuật dùng cả 2: Ưu tiên bulkDelete vì nó siêu tốc
     interaction.channel.bulkDelete(botMessages, true).then(async deletedMessages => {
-      //Filtering out messages that did not get deleted.
-      messages = messages.filter(msg => {
-        !deletedMessages.some(deletedMsg => deletedMsg == msg);
+      // Dọn dẹp những tin nhắn quá cộc cằn (cổ đại > 14 ngày) bị bulkDelete từ chối xoá
+      const remainingMessages = botMessages.filter(msg => {
+        return !deletedMessages.has(msg.id);
       });
-      if (messages.size > 0) {
+      if (remainingMessages.length > 0) {
         client.log(t("clean.auto_39", {
-          var1: messages.size
+          var1: remainingMessages.length
         }));
-        for (const msg of messages) {
-          await msg.delete();
+        for (const msg of remainingMessages) {
+          await msg.delete().catch(() => {});
         }
       }
       await interaction.editReply({
@@ -40,7 +41,21 @@ const command = new SlashCommand().setName("clean").setDescription(t("clean.auto
         }))]
       });
       setTimeout(() => {
-        interaction.deleteReply();
+        interaction.deleteReply().catch(() => {});
+      }, 5000);
+    }).catch(async (error) => {
+      // Nếu không có quyền Quản lý tin nhắn (Manage Messages), bulkDelete sẽ sập.
+      // Giải pháp Backup dự phòng: Lấy từng cái tự xóa bằng tay (tốc độ chậm hơn xíu nhưng luôn thành công)
+      for (const msg of botMessages) {
+        await msg.delete().catch(() => {});
+      }
+      await interaction.editReply({
+        embeds: [client.Embed(t("clean.auto_40", {
+          var1: botMessages.length
+        }))]
+      });
+      setTimeout(() => {
+        interaction.deleteReply().catch(() => {});
       }, 5000);
     });
   });
