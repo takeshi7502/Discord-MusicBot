@@ -9,20 +9,20 @@ const {
   escapeMarkdown
 } = require("discord.js");
 const command = new SlashCommand().setName("play").setDescription(t("play.auto_165")).addStringOption(option => option.setName("query").setDescription(t("play.auto_166")).setAutocomplete(true).setRequired(true)).setRun(async (client, interaction, options) => {
-  // Ngăn chặn lỗi timeout 3 giây của Discord bằng cách defer trước
-  await interaction.deferReply();
   let channel = await client.getChannel(client, interaction);
   if (!channel) {
     return;
   }
   let node = await client.getLavalink(client);
   if (!node) {
-    const errMsg = await interaction.editReply({
-      embeds: [client.ErrorEmbed(t("common.noLavalink"))]
+    return interaction.reply({
+      embeds: [client.ErrorEmbed(t("common.noLavalink"))],
+      ephemeral: true
     });
-    setTimeout(() => errMsg.delete().catch(() => {}), 10000);
-    return;
   }
+
+  // Ngăn chặn lỗi timeout 3 giây của Discord bằng cách defer trước
+  await interaction.deferReply();
   let player = client.manager.getPlayer(interaction.guild.id);
   if (!player) {
     player = client.createPlayer(interaction.channel, channel, node);

@@ -35,7 +35,6 @@ const command = new SlashCommand().setName("resume").setDescription(t("resume.au
   }
   player.resume();
   return interaction.reply({
-    ephemeral: true,
     embeds: [new EmbedBuilder().setColor(client.config.embedColor).setDescription(t("resume.auto_203"))]
   });
 });

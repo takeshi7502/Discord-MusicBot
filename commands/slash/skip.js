@@ -39,7 +39,6 @@ const command = new SlashCommand().setName("skip").setDescription(t("skip.auto_2
   }
   player.stopPlaying(false, false);
   interaction.reply({
-    ephemeral: true,
     embeds: [new EmbedBuilder().setColor(client.config.embedColor).setDescription(t("player.skipped"))]
   });
 });

@@ -35,7 +35,6 @@ const command = new SlashCommand().setName("pause").setDescription(t("pause.auto
   }
   player.pause();
   return interaction.reply({
-    ephemeral: true,
     embeds: [new EmbedBuilder().setColor(client.config.embedColor).setDescription(t("pause.auto_163"))]
   });
 });
