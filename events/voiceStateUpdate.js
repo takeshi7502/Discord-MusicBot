@@ -5,6 +5,16 @@ const {
   t
 } = require("../util/i18n");
 
+// Helper: xoá tin nhắn trình phát khi bot ngắt kết nối
+async function deleteNowPlayingMsg(client, player) {
+  const nowPlayingMsg = player.get("nowPlayingMessage");
+  if (nowPlayingMsg && !client.isMessageDeleted(nowPlayingMsg)) {
+    await nowPlayingMsg.delete().catch(() => {});
+    client.markMessageAsDeleted(nowPlayingMsg);
+  }
+  player.set("nowPlayingMessage", null);
+}
+
 /**
  *
  * @param {import("../lib/DiscordMusicBot")} client
@@ -129,6 +139,7 @@ module.exports = async (client, oldState, newState) => {
               }).setFooter({
                 text: t("voice.disconnectedNoMembers")
               }).setTimestamp();
+              await deleteNowPlayingMsg(client, player);
               let Disconnected = await client.channels.cache.get(player.textChannelId)?.send({ embeds: [leftEmbed] }).catch(() => null);
               if (Disconnected) setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
               const pm = player.get("pausedMessage");
@@ -151,6 +162,7 @@ module.exports = async (client, oldState, newState) => {
               }).setFooter({
                 text: t("voice.disconnectedNoMembers")
               }).setTimestamp();
+              await deleteNowPlayingMsg(client, player);
               let Disconnected = await client.channels.cache.get(player.textChannelId)?.send({ embeds: [leftEmbed] }).catch(() => null);
               if (Disconnected) setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
               player.queue.tracks.splice(0);
@@ -178,6 +190,7 @@ module.exports = async (client, oldState, newState) => {
               }).setFooter({
                 text: t("voice.disconnectedNoMembers")
               }).setTimestamp();
+              await deleteNowPlayingMsg(client, player);
               let Disconnected = await client.channels.cache.get(player.textChannelId).send({
                 embeds: [leftEmbed]
               });
@@ -196,6 +209,7 @@ module.exports = async (client, oldState, newState) => {
             }).setFooter({
               text: t("voice.disconnectedNoMembers")
             }).setTimestamp();
+            await deleteNowPlayingMsg(client, player);
             let Disconnected = await client.channels.cache.get(player.textChannelId).send({
               embeds: [leftEmbed]
             });
