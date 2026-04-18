@@ -70,7 +70,6 @@ module.exports = async (client, interaction) => {
   if (property === "PlayAndPause") {
     if (!player || !player.queue.current) {
       const msg = await interaction.channel.send({
-        ephemeral: true,
         embeds: [new EmbedBuilder().setColor(0xFF0000).setDescription(t("common.noCurrentSong"))]
       });
       setTimeout(() => {
@@ -78,7 +77,6 @@ module.exports = async (client, interaction) => {
       }, 5000);
       return interaction.deferUpdate().catch(() => {});
     } else {
-      await interaction.deferUpdate().catch(() => {});
       if (player.paused) {
         player.resume();
       } else {
@@ -88,8 +86,8 @@ module.exports = async (client, interaction) => {
         var1: player.guildId,
         var2: player.paused ? "Tạm dừng" : "Tiếp tục"
       }));
-      return interaction.editReply({
-        components: [client.createController(player.guildId, player)]
+      return interaction.update({
+        components: client.createController(player.guildId, player)
       }).catch(() => {});
     }
   }
@@ -111,7 +109,6 @@ module.exports = async (client, interaction) => {
     }
   }
   if (property === "Loop") {
-    await interaction.deferUpdate().catch(() => {});
     if (player.repeatMode === "track") {
       player.setRepeatMode("queue");
     } else if (player.repeatMode === "queue") {
@@ -123,10 +120,24 @@ module.exports = async (client, interaction) => {
       var1: player.guildId,
       var2: player.repeatMode === "track" ? "bài hát" : player.repeatMode === "queue" ? "hàng đợi" : "tất cả"
     }));
-    await interaction.editReply({
-      components: [client.createController(player.guildId, player)]
+    return interaction.update({
+      components: client.createController(player.guildId, player)
     }).catch(() => {});
-    return;
+  }
+  if (property === "SelectQueue") {
+    const selectedValue = interaction.values?.[0]; // "queuejump:2"
+    if (!selectedValue) return interaction.deferUpdate().catch(() => {});
+    const index = parseInt(selectedValue.split(":")[1], 10);
+    if (isNaN(index) || index < 0 || index >= player.queue.tracks.length) {
+      return interaction.reply({
+        ephemeral: true,
+        embeds: [new EmbedBuilder().setColor(0xFF0000).setDescription("❌ Bài hát này không còn trong hàng đợi!")]
+      });
+    }
+    // Xóa các bài phía trước bài được chọn, sau đó chạy bài tiếp theo
+    player.queue.splice(0, index);
+    player.stopPlaying(false, false);
+    return interaction.deferUpdate().catch(() => {});
   }
   return interaction.reply({
     ephemeral: true,

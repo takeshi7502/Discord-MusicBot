@@ -75,7 +75,7 @@ const command = new SlashCommand().setName("nowplaying").setDescription(t("nowpl
 
   const messagePayload = {
     embeds: [embed],
-    components: [client.createController(player.guildId, player)],
+    components: client.createController(player.guildId, player),
     fetchReply: true
   };
 

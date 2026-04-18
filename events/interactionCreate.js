@@ -1,4 +1,4 @@
-const { t } = require("../util/i18n");
+﻿const { t } = require("../util/i18n");
 const Controller = require("../util/Controller");
 
 /**
@@ -50,6 +50,12 @@ module.exports = async (client, interaction) => {
     }
 
     if (interaction.isButton()) {
+        if (interaction.customId.startsWith("controller")) {
+            Controller(client, interaction);
+        }
+    }
+
+    if (interaction.isStringSelectMenu()) {
         if (interaction.customId.startsWith("controller")) {
             Controller(client, interaction);
         }
