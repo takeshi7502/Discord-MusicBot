@@ -139,6 +139,37 @@ module.exports = async (client, interaction) => {
     player.stopPlaying(false, false);
     return interaction.deferUpdate().catch(() => {});
   }
+  if (property === "Save") {
+    const song = player.queue.current;
+    if (!song) {
+      return interaction.reply({
+        ephemeral: true,
+        embeds: [new EmbedBuilder().setColor(0xFF0000).setDescription(t("common.noSongPlaying"))]
+      });
+    }
+    const prettyMilliseconds = require("pretty-ms");
+    const embedColor = client.config.embedColor || 0x5865F2;
+    const sendtoDmEmbed = new EmbedBuilder()
+      .setColor(embedColor)
+      .setAuthor({
+        name: t("save.auto_206"),
+        iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+      })
+      .setDescription(t("save.auto_207", {
+        var1: song.info.title,
+        var2: song.info.uri
+      }))
+      .addFields(
+        { name: t("save.auto_208"), value: `\`${prettyMilliseconds(song.info.duration, { colonNotation: true })}\``, inline: true },
+        { name: t("save.auto_209"), value: `\`${song.info.author}\``, inline: true },
+        { name: t("save.auto_210"), value: `\`${interaction.guild.name}\``, inline: true }
+      );
+    interaction.user.send({ embeds: [sendtoDmEmbed] }).catch(() => {});
+    return interaction.reply({
+      ephemeral: true,
+      embeds: [new EmbedBuilder().setColor(embedColor).setDescription(t("save.auto_211"))]
+    });
+  }
   return interaction.reply({
     ephemeral: true,
     content: t("common.unknownControl")
