@@ -118,43 +118,48 @@ module.exports = async (client, oldState, newState) => {
             resumeMsg.delete().catch(() => {});
             client.markMessageAsDeleted(resumeMsg);
           }
+
+          // Sau disconnectTime, nếu vẫn không có ai thì ngắt kết nối
+          setTimeout(async () => {
+            var currentMembers = stateChange.channel.members.filter(m => !m.user.bot).size;
+            if (currentMembers === 0 && player.connected) {
+              let leftEmbed = new EmbedBuilder().setColor(client.config.embedColor).setAuthor({
+                name: t("voice.disconnected"),
+                iconURL: client.config.iconURL
+              }).setFooter({
+                text: t("voice.disconnectedNoMembers")
+              }).setTimestamp();
+              let Disconnected = await client.channels.cache.get(player.textChannelId)?.send({ embeds: [leftEmbed] }).catch(() => null);
+              if (Disconnected) setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
+              const pm = player.get("pausedMessage");
+              if (pm && !client.isMessageDeleted(pm)) pm.delete().catch(() => {});
+              player.queue.tracks.splice(0);
+              player.destroy();
+              player.set("autoQueue", false);
+            }
+          }, client.config.disconnectTime);
+        }
+      } else if (player.get("autoLeave") === false && player.get("autoPause") === false) {
+        // autoLeave: false, autoPause: false → không pause, nhưng vẫn ngắt sau disconnectTime
+        if (members === 0) {
+          setTimeout(async () => {
+            var currentMembers = stateChange.channel.members.filter(m => !m.user.bot).size;
+            if (currentMembers === 0 && player.connected) {
+              let leftEmbed = new EmbedBuilder().setColor(client.config.embedColor).setAuthor({
+                name: t("voice.disconnected"),
+                iconURL: client.config.iconURL
+              }).setFooter({
+                text: t("voice.disconnectedNoMembers")
+              }).setTimestamp();
+              let Disconnected = await client.channels.cache.get(player.textChannelId)?.send({ embeds: [leftEmbed] }).catch(() => null);
+              if (Disconnected) setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
+              player.queue.tracks.splice(0);
+              player.destroy();
+              player.set("autoQueue", false);
+            }
+          }, client.config.disconnectTime);
         }
       } else if (player.get("autoLeave") === true && player.get("autoPause") === false) {
-        if (members === 0) {
-          if (twentyFourSeven) {
-            setTimeout(async () => {
-              var members = stateChange.channel.members.filter(member => !member.user.bot).size;
-              if (members === 0 && player.connected) {
-                let leftEmbed = new EmbedBuilder().setColor(client.config.embedColor).setAuthor({
-                  name: t("voice.disconnected"),
-                  iconURL: client.config.iconURL
-                }).setFooter({
-                  text: t("voice.disconnectedNoMembers")
-                }).setTimestamp();
-                let Disconnected = await client.channels.cache.get(player.textChannelId).send({
-                  embeds: [leftEmbed]
-                });
-                setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
-                player.queue.tracks.splice(0);
-                player.destroy();
-                player.set("autoQueue", false);
-              }
-            }, client.config.disconnectTime);
-          } else {
-            let leftEmbed = new EmbedBuilder().setColor(client.config.embedColor).setAuthor({
-              name: t("voice.disconnected"),
-              iconURL: client.config.iconURL
-            }).setFooter({
-              text: t("voice.disconnectedNoMembers")
-            }).setTimestamp();
-            let Disconnected = await client.channels.cache.get(player.textChannelId).send({
-              embeds: [leftEmbed]
-            });
-            setTimeout(() => Disconnected.delete().catch(() => {}), 5000);
-            player.destroy();
-          }
-        }
-      } else if (player.get("autoLeave") === true && player.get("autoPause") === true) {
         if (members === 0 && !player.paused && player.playing && twentyFourSeven) {
           player.pause();
           let playerPaused = new EmbedBuilder().setColor(client.config.embedColor).setTitle(t("voiceStateUpdate.auto_288"), client.config.iconURL).setFooter({
