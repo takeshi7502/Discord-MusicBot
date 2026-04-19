@@ -7,6 +7,17 @@ function sanitizeConfig(config) {
   if (config.iconURL && !/^https?:\/\//i.test(config.iconURL)) {
     config.iconURL = undefined;
   }
+
+  // Discord chỉ chấp nhận hex màu 6 ký tự (#RRGGBB)
+  // Nếu là 8 ký tự (#RRGGBBAA - RGBA) thì cắt bỏ 2 ký tự alpha
+  if (config.embedColor && typeof config.embedColor === "string") {
+    if (/^#[0-9a-f]{8}$/i.test(config.embedColor)) {
+      config.embedColor = config.embedColor.slice(0, 7); // #RRGGBB
+    } else if (!/^#[0-9a-f]{6}$/i.test(config.embedColor)) {
+      config.embedColor = "#5865F2"; // fallback: Discord blurple
+    }
+  }
+
   return config;
 }
 
