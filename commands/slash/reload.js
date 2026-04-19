@@ -7,6 +7,7 @@ const {
 const SlashCommand = require("../../lib/SlashCommand");
 const fs = require("fs");
 const path = require("path");
+const { sanitizeConfig } = require("../../util/getConfig");
 const command = new SlashCommand().setName("reload").setDescription(t("reload.auto_189")).setAdminOnly(true).setRun(async (client, interaction, options) => {
   if (interaction.user.id !== client.config.adminId) {
     return interaction.reply({
@@ -55,8 +56,8 @@ const command = new SlashCommand().setName("reload").setDescription(t("reload.au
       newConfig = require(configPath);
     }
 
-    // Cập nhật config mới vào client
-    client.config = newConfig;
+    // Cập nhật config mới vào client (có sanitize màu và iconURL)
+    client.config = sanitizeConfig(newConfig);
     reloadLog.push(t("reload.auto_191"));
 
     // ======== BƯỚC 4: TẢI LẠI EVENTS ========

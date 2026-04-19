@@ -3,16 +3,15 @@ const dotenv = require("dotenv").config();
 
 function sanitizeConfig(config) {
   // Discord chỉ chấp nhận HTTPS URL cho iconURL trong embed
-  // Nếu là đường dẫn local (./...) thì set về undefined để tránh crash
   if (config.iconURL && !/^https?:\/\//i.test(config.iconURL)) {
     config.iconURL = undefined;
   }
 
   // Discord chỉ chấp nhận hex màu 6 ký tự (#RRGGBB)
-  // Nếu là 8 ký tự (#RRGGBBAA - RGBA) thì cắt bỏ 2 ký tự alpha
+  // #RRGGBBAA (8 ký tự) → cắt bỏ 2 ký tự alpha
   if (config.embedColor && typeof config.embedColor === "string") {
     if (/^#[0-9a-f]{8}$/i.test(config.embedColor)) {
-      config.embedColor = config.embedColor.slice(0, 7); // #RRGGBB
+      config.embedColor = config.embedColor.slice(0, 7);
     } else if (!/^#[0-9a-f]{6}$/i.test(config.embedColor)) {
       config.embedColor = "#5865F2"; // fallback: Discord blurple
     }
@@ -21,7 +20,7 @@ function sanitizeConfig(config) {
   return config;
 }
 
-module.exports = () => {
+function ConfigFetcher() {
   return new Promise((res, rej) => {
     try {
       const config = require("../dev-config");
@@ -35,4 +34,7 @@ module.exports = () => {
       }
     }
   });
-};
+}
+
+module.exports = ConfigFetcher;
+module.exports.sanitizeConfig = sanitizeConfig;
