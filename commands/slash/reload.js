@@ -7,7 +7,6 @@ const {
 const SlashCommand = require("../../lib/SlashCommand");
 const fs = require("fs");
 const path = require("path");
-const { sanitizeConfig } = require("../../util/getConfig");
 const command = new SlashCommand().setName("reload").setDescription(t("reload.auto_189")).setAdminOnly(true).setRun(async (client, interaction, options) => {
   if (interaction.user.id !== client.config.adminId) {
     return interaction.reply({
@@ -55,6 +54,11 @@ const command = new SlashCommand().setName("reload").setDescription(t("reload.au
       delete require.cache[require.resolve(configPath)];
       newConfig = require(configPath);
     }
+
+    // Xoá cache getConfig để lấy version mới nhất (quan trọng sau git pull)
+    const getConfigPath = require.resolve("../../util/getConfig");
+    delete require.cache[getConfigPath];
+    const { sanitizeConfig } = require("../../util/getConfig");
 
     // Cập nhật config mới vào client (có sanitize màu và iconURL)
     client.config = sanitizeConfig(newConfig);
