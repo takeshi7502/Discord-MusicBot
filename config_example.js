@@ -37,8 +37,9 @@ module.exports = {
 		status: "online", //- You can have online, idle, dnd and invisible (Note: invisible makes people think the bot is offline)
 		activities: [
 			{
-				name: "ANIME", //- Status Text
-				type: 3, //- 0=Playing, 1=Streaming, 2=Listening, 3=Watching, 5=Competing
+				name: "Custom Status", //- Tên bắt buộc nội bộ (không hiển thị ra ngoài khi dùng type 4)
+				type: 4, //- 4=Custom (Bong bóng), 0=Playing, 1=Streaming, 2=Listening, 3=Watching, 5=Competing
+				state: "Playing Music | /play", //- Text hiển thị trong bong bóng (chỉ dùng cho type 4)
 			},
 		],
 	},

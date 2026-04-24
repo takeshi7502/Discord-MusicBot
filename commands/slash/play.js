@@ -55,22 +55,29 @@ const command = new SlashCommand()
     let channel = await client.getChannel(client, interaction);
     if (!channel) return;
 
-    // Lấy tất cả node available, shuffle ngẫu nhiên để load balance
-    const availableNodes = getShuffledNodes(client);
-    if (availableNodes.length === 0) {
-      return interaction.reply({
-        embeds: [client.ErrorEmbed(t("common.noLavalink"))],
-        ephemeral: true
-      });
-    }
-
     // Defer trước để tránh timeout 3 giây của Discord
     await interaction.deferReply();
 
     let player = client.manager.getPlayer(interaction.guild.id);
-    if (!player) {
-      player = client.createPlayer(interaction.channel, channel, availableNodes[0]);
+    let nodesToTry;
+
+    // Chỉ lấy random node khi chưa có player hoặc player đang không phát nhạc gì cả
+    if (!player || (!player.playing && !player.paused && !player.queue.current)) {
+      const availableNodes = getShuffledNodes(client);
+      if (availableNodes.length === 0) {
+        return interaction.editReply({
+          embeds: [client.ErrorEmbed(t("common.noLavalink"))]
+        });
+      }
+      if (!player) {
+        player = client.createPlayer(interaction.channel, channel, availableNodes[0]);
+      }
+      nodesToTry = availableNodes;
+    } else {
+      // Nếu đang phát nhạc, BẮT BUỘC dùng node hiện tại, không được đổi node ngang xương
+      nodesToTry = [player.node];
     }
+
     if (!player.connected) {
       await player.connect();
     }
@@ -93,8 +100,8 @@ const command = new SlashCommand()
 
     const query = options.getString("query", true);
 
-    // Thử search qua tất cả node, tự động failover sang node khác nếu thất bại
-    const result = await searchWithFallback(player, query, interaction.user, availableNodes, client);
+    // Thử search qua danh sách node hợp lệ (sẽ chỉ là 1 node nếu đang phát nhạc)
+    const result = await searchWithFallback(player, query, interaction.user, nodesToTry, client);
 
     if (!result) {
       console.log("Lavalink Search Error: All nodes failed for query:", query);
