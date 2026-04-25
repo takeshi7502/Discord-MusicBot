@@ -248,7 +248,7 @@
   "broadcast": {
     "noPermission": "You don't have permission to use this broadcast system!",
     "serverNotFound": "❌ No server found with ID: `{id}`",
-    "auto_21": "Raise notification bar (Only for Bot Admin)",
+    "auto_21": "Raise notification bar",
     "auto_22": "Message content needs notification",
     "auto_23": "Enter the Server ID to send separately, the word 'all' to send everything, the '.' send this Server",
     "auto_24": "📢 Notice from {var1}",
@@ -306,15 +306,18 @@
   "cmd": {
     "noPermission": "You are not authorized to use this command!",
     "noHiddenCommands": "No hidden system commands.",
-    "auto_44": "Show hidden system command list (Admin only)",
+    "auto_44": "Show hidden system command list",
     "auto_45": "Admin command of {var1}",
     "auto_46": "Discord Music Bot Version: v{var1}; Build: {var2}",
     "auto_47": "Discord Music Bot Version: v{var1}; Build: {var2}"
   },
   "setlang": {
-    "auto_1": "Change the bot system language (Admin only)",
+    "auto_1": "Change the bot system language",
     "selectLanguage": "🌐 Please select your preferred language below:",
     "changed": "✅ | Language has been changed to **{language}**!"
+  },
+  "activity": {
+    "auto_1": "Manage bot activity and presence status"
   },
   "reload": {
     "noPermission": "You are not authorized to use this command!",
@@ -332,7 +335,7 @@
   "setlog": {
     "noPermission": "You don't have permission to configure this internal feature!",
     "success": "✅ | Intelligence station set up! From now on, whenever the Bot joins a new server or gets kicked, it will report to <#{channel}>!",
-    "auto_225": "Set up Bot Join/Leave Server reporting channel (Only for Bot Admin)",
+    "auto_225": "Set up Bot Join/Leave Server reporting channel",
     "auto_226": "Choose a channel for the spam bot to report every time someone Invite the bot",
     "auto_227": "✅ | Intelligence station planned! From now on, every time the Bot enters a strange server or is removed from any server, it will report <#{var1}>"
   },

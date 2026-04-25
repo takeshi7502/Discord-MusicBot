@@ -47,7 +47,7 @@ const command = new SlashCommand().setName("help").setDescription(t("help.auto_7
   var tempArray = filteredCommands.slice(pageNo * client.config.helpCmdPerPage, pageNo * client.config.helpCmdPerPage + client.config.helpCmdPerPage);
   tempArray.forEach(cmd => {
     helpEmbed.addFields({
-      name: cmd.name,
+      name: `\`/${cmd.name}\``,
       value: cmd.description
     });
   });
@@ -87,7 +87,7 @@ const command = new SlashCommand().setName("help").setDescription(t("help.auto_7
     var tempArray = filteredCommands.slice(pageNo * client.config.helpCmdPerPage, pageNo * client.config.helpCmdPerPage + client.config.helpCmdPerPage);
     tempArray.forEach(cmd => {
       helpEmbed.addFields({
-        name: cmd.name,
+        name: `\`/${cmd.name}\``,
         value: cmd.description
       }).setFooter({
         text: `Trang ${pageNo + 1} / ${maxPages}`

@@ -11,9 +11,7 @@ const {
   EmbedBuilder
 } = require("discord.js");
 const LoadCommands = require("../../util/loadCommands");
-const {
-  filter
-} = require("lodash");
+const cleanDescription = description => String(description || "").replace(/\s*\([^)]*\)/g, "").trim();
 const command = new SlashCommand().setName("cmd").setDescription(t("cmd.auto_44")).setAdminOnly(true).setRun(async (client, interaction) => {
   await interaction.deferReply({
     ephemeral: true
@@ -51,8 +49,8 @@ const command = new SlashCommand().setName("cmd").setDescription(t("cmd.auto_44"
   if (tempArray.length > 0) {
     tempArray.forEach(cmd => {
       helpEmbed.addFields({
-        name: `/${cmd.name}`,
-        value: cmd.description
+        name: `\`/${cmd.name}\``,
+        value: cleanDescription(cmd.description)
       });
     });
   } else {
@@ -95,8 +93,8 @@ const command = new SlashCommand().setName("cmd").setDescription(t("cmd.auto_44"
     if (tempArray.length > 0) {
       tempArray.forEach(cmd => {
         helpEmbed.addFields({
-          name: `/${cmd.name}`,
-          value: cmd.description
+          name: `\`/${cmd.name}\``,
+          value: cleanDescription(cmd.description)
         }).setFooter({
           text: `Trang ${pageNo + 1} / ${maxPages}`
         });

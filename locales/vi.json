@@ -248,7 +248,7 @@
   "broadcast": {
     "noPermission": "Bạn không có đặc quyền để sử dụng hệ thống phóng thanh tột đỉnh này!",
     "serverNotFound": "❌ Không tìm thấy Server nào có ID: `{id}`",
-    "auto_21": "Phóng thanh thông báo (Chỉ dành cho Admin Bot)",
+    "auto_21": "Phóng thanh thông báo",
     "auto_22": "Nội dung tin nhắn cần thông báo",
     "auto_23": "Nhập ID Server để gửi riêng, chữ 'all' gửi toàn bộ, dấu '.' gửi Server này",
     "auto_24": "📢 Thông báo từ {var1}",
@@ -306,15 +306,18 @@
   "cmd": {
     "noPermission": "Bạn không được ủy quyền để sử dụng lệnh này!",
     "noHiddenCommands": "Không có lệnh tác vụ ẩn nào.",
-    "auto_44": "Hiển thị danh sách lệnh ẩn của hệ thống (Chỉ dành cho Admin)",
+    "auto_44": "Hiển thị danh sách lệnh ẩn của hệ thống",
     "auto_45": "Lệnh Admin của {var1}",
     "auto_46": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}",
     "auto_47": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}"
   },
   "setlang": {
-    "auto_1": "Thay đổi ngôn ngữ hệ thống của bot (Chỉ dành cho Admin)",
+    "auto_1": "Thay đổi ngôn ngữ hệ thống của bot",
     "selectLanguage": "🌐 Vui lòng chọn ngôn ngữ bạn muốn dùng bên dưới:",
     "changed": "✅ | Đã đổi ngôn ngữ sang **{language}**!"
+  },
+  "activity": {
+    "auto_1": "Quản lý activity và trạng thái hiển thị của bot"
   },
   "reload": {
     "noPermission": "Bạn không được ủy quyền để sử dụng lệnh này!",
@@ -332,7 +335,7 @@
   "setlog": {
     "noPermission": "Bạn không có đặc quyền để quy hoạch tính năng nội bộ này!",
     "success": "✅ | Đã quy hoạch trạm tình báo! Từ nay mỗi khi Bot chui vào Server lạ hoặc bị sút khỏi Server nào, nó sẽ báo về kênh <#{channel}> cho mình!",
-    "auto_225": "Thiết lập kênh báo cáo Bot Join/Leave Server (Chỉ dành cho Admin Bot)",
+    "auto_225": "Thiết lập kênh báo cáo Bot Join/Leave Server",
     "auto_226": "Chọn một kênh để bot spam báo cáo mỗi khi có người Invite bot",
     "auto_227": "✅ | Đã quy hoạch trạm tình báo! Từ nay mỗi khi Bot chui vào Server lạ hoặc bị sút khỏi Server nào, nó sẽ bẩm báo về <#{var1}>"
   },
