@@ -134,7 +134,7 @@ const command = new SlashCommand().setName("queue").setDescription(t("queue.auto
     }).catch(() => {});
     const shortCollector = interaction.channel.createMessageComponentCollector({
       filter: b => b.user.id === interaction.user.id,
-      time: 60000 * 5,
+      time: 60000 * 10,
       idle: 30e3
     });
     shortCollector.on("collect", async button => {
@@ -143,6 +143,9 @@ const command = new SlashCommand().setName("queue").setDescription(t("queue.auto
         await button.deferUpdate().catch(() => {});
         await interaction.deleteReply().catch(() => {});
       }
+    });
+    shortCollector.on("end", () => {
+      interaction.deleteReply().catch(() => {});
     });
   } else {
     let song = player.queue.current;
@@ -196,7 +199,7 @@ const command = new SlashCommand().setName("queue").setDescription(t("queue.auto
           }).catch(() => {});
         }
       },
-      time: 60000 * 5,
+      time: 60000 * 10,
       idle: 30e3
     });
     collector.on("collect", async button => {
@@ -281,9 +284,10 @@ const command = new SlashCommand().setName("queue").setDescription(t("queue.auto
           embeds: [embedFive],
           components: [new ActionRowBuilder().addComponents(buttonTwo, buttonOne, buttonClose)]
         }).catch(() => {});
-      } else {
-        return;
       }
+    });
+    collector.on("end", () => {
+      interaction.deleteReply().catch(() => {});
     });
   }
 });

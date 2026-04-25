@@ -311,6 +311,11 @@
     "auto_46": "Discord 音楽ボットのバージョン: v{var1};ビルド: {var2}",
     "auto_47": "Discord 音楽ボットのバージョン: v{var1};ビルド: {var2}"
   },
+  "setlang": {
+    "auto_1": "ボットのシステム言語を変更する (管理者のみ)",
+    "selectLanguage": "🌐 使用する言語を以下から選択してください:",
+    "changed": "✅ | 言語を **{language}** に変更しました!"
+  },
   "reload": {
     "noPermission": "このコマンドを使用する権限がありません。",
     "reloadLog": "{user} によるリロード: {log}",

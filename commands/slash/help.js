@@ -105,5 +105,8 @@ const command = new SlashCommand().setName("help").setDescription(t("help.auto_7
       components: [getButtons(pageNo)]
     }).catch(() => {});
   });
+  collector.on("end", () => {
+    interaction.deleteReply().catch(() => {});
+  });
 });
 module.exports = command;

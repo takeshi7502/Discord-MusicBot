@@ -115,5 +115,8 @@ const command = new SlashCommand().setName("cmd").setDescription(t("cmd.auto_44"
       fetchReply: true
     });
   });
+  collector.on("end", () => {
+    interaction.deleteReply().catch(() => {});
+  });
 });
 module.exports = command;

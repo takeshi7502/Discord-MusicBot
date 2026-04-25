@@ -28,6 +28,9 @@ const LoadDirectory = dir => {
         if (!cmd || dir == "context" && !cmd.command) {
           return console.log(t("loadCommands.auto_300") + file.split(".")[0] + t("loadCommands.auto_301"));
         }
+        if (cmd.disabled) {
+          continue;
+        }
         if (dir == "context") {
           commands.push(cmd.command);
         } else {

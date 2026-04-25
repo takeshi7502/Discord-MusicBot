@@ -311,6 +311,11 @@
     "auto_46": "Discord Music Bot Version: v{var1}; Build: {var2}",
     "auto_47": "Discord Music Bot Version: v{var1}; Build: {var2}"
   },
+  "setlang": {
+    "auto_1": "Change the bot system language (Admin only)",
+    "selectLanguage": "🌐 Please select your preferred language below:",
+    "changed": "✅ | Language has been changed to **{language}**!"
+  },
   "reload": {
     "noPermission": "You are not authorized to use this command!",
     "reloadLog": "Reload by {user}: {log}",

@@ -311,6 +311,11 @@
     "auto_46": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}",
     "auto_47": "Phiên Bản Discord Music Bot: v{var1}; Build: {var2}"
   },
+  "setlang": {
+    "auto_1": "Thay đổi ngôn ngữ hệ thống của bot (Chỉ dành cho Admin)",
+    "selectLanguage": "🌐 Vui lòng chọn ngôn ngữ bạn muốn dùng bên dưới:",
+    "changed": "✅ | Đã đổi ngôn ngữ sang **{language}**!"
+  },
   "reload": {
     "noPermission": "Bạn không được ủy quyền để sử dụng lệnh này!",
     "reloadLog": "Reload bởi {user}: {log}",

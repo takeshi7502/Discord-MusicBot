@@ -132,4 +132,5 @@ const command = new SlashCommand().setName("lyrics").setDescription(t("lyrics.au
     ;
   });
 });
-module.exports = command;
+module.exports = command.setName("lyrics");
+module.exports.disabled = true;

@@ -12,7 +12,8 @@ const path = require("path");
 
 const command = new SlashCommand()
   .setName("setlang")
-  .setDescription("Change the bot system language")
+  .setDescription(t("setlang.auto_1"))
+  .setAdminOnly(true)
   .setRun(async (client, interaction, options) => {
     
     // Create an array of buttons based on available languages
@@ -37,7 +38,7 @@ const command = new SlashCommand()
 
     const embed = new EmbedBuilder()
         .setColor(client.config.embedColor)
-        .setDescription(`🌐 Please select your preferred language below:`);
+        .setDescription(t("setlang.selectLanguage"));
 
     const message = await interaction.reply({
         embeds: [embed],
@@ -47,8 +48,7 @@ const command = new SlashCommand()
     });
 
     const collector = message.createMessageComponentCollector({
-        componentType: ComponentType.Button,
-        time: 60000 
+        componentType: ComponentType.Button
     });
 
     collector.on('collect', async i => {
@@ -72,15 +72,10 @@ const command = new SlashCommand()
 
         const successEmbed = new EmbedBuilder()
             .setColor(client.config.embedColor)
-            .setDescription(`✅ | Language has been changed to **${langNames[lang] || lang}**!`);
+            .setDescription(t("setlang.changed", { language: langNames[lang] || lang }));
             
         await i.update({ embeds: [successEmbed], components: [] });
-    });
-
-    collector.on('end', collected => {
-        if (collected.size === 0) {
-            interaction.editReply({ components: [] }).catch(()=> {});
-        }
+        collector.stop();
     });
 });
 

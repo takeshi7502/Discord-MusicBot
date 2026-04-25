@@ -77,9 +77,7 @@ const command = new SlashCommand().setName("guildleave").setDescription(t("guild
         }).catch(() => {});
       });
       collector.on("end", () => {
-        interaction.editReply({
-          components: []
-        }).catch(() => {});
+        interaction.deleteReply().catch(() => {});
       });
       return;
     }
