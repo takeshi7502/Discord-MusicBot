@@ -11,5 +11,26 @@ services:
       - ./lib:/usr/src/app/lib
       - ./events:/usr/src/app/events
       - ./util:/usr/src/app/util
+      - ./api:/usr/src/app/api
       - ./index.js:/usr/src/app/index.js
       - ./data:/usr/src/app/data
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: musicbot-api-caddy
+    restart: always
+    depends_on:
+      - discordmusicbot
+    ports:
+      - "80:80"
+      - "443:443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
