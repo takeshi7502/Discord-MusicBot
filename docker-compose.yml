@@ -22,7 +22,7 @@ services:
     depends_on:
       - discordmusicbot
     ports:
-      - "80:80"
+      - "8075:80"
       - "443:443"
     extra_hosts:
       - "host.docker.internal:host-gateway"
